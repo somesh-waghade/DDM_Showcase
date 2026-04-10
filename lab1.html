@@ -1,0 +1,3211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Lab Tasks | Distributed Data Management</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=Outfit:wght@400;600;800&family=Fira+Code&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body { overflow-y: scroll; }
+        .page-container { max-width: 1200px; margin: 0 auto; padding: 0 20px; position: relative; z-index: 10; padding-top: 100px; }
+        .page-header { text-align: center; margin-bottom: 40px; }
+        .page-header h1 { font-family: var(--font-heading); font-size: 3.5rem; color: #fff; margin-bottom: 10px;}
+        .glass-panel { padding: 40px; border-radius: 20px; margin-bottom: 40px; background: rgba(24, 24, 27, 0.6); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.08); }
+        
+        .subtask-tabs { display: flex; gap: 15px; margin-bottom: 30px; border-bottom: 2px solid var(--glass-border); padding-bottom: 15px;}
+        .sb-tab { padding: 12px 24px; font-weight: bold; cursor: pointer; border-radius: 8px; border: 1px solid var(--glass-border); background: transparent; color: var(--text-main); font-family: var(--font-heading); font-size: 1.1rem; transition: 0.3s;}
+        .sb-tab:hover { background: rgba(255,255,255,0.05); }
+        .sb-tab.active { background: var(--primary); color: #000; border-color: var(--primary); }
+        
+        .subtask-pane { display: none; }
+        .subtask-pane.active { display: block; animation: fadeIn 0.4s; }
+        
+        .script-tabs { display: flex; gap: 10px; overflow-x: auto; margin-bottom: 25px; padding-bottom: 15px; }
+        .script-tabs::-webkit-scrollbar { height: 6px; }
+        .script-tabs::-webkit-scrollbar-thumb { background: var(--glass-border); border-radius: 10px; }
+        .s-tab { padding: 8px 16px; cursor: pointer; border-radius: 6px; border: 1px solid var(--glass-border); background: rgba(255,255,255,0.05); color: var(--text-muted); white-space: nowrap; transition: 0.3s; font-weight: 500;}
+        .s-tab:hover { background: rgba(255,255,255,0.1); }
+        .s-tab.active { background: var(--secondary); color: #fff; border-color: var(--secondary); }
+        
+        .script-pane { display: none; }
+        .script-pane.active { display: block; }
+
+        .co-tabs { display: inline-flex; gap: 5px; margin-bottom: 20px; background: rgba(0,0,0,0.4); padding: 6px; border-radius: 10px; border: 1px solid var(--glass-border);}
+        .co-tab { padding: 8px 20px; cursor: pointer; border: none; border-radius: 6px; background: transparent; color: var(--text-muted); font-weight: 500; transition: 0.3s;}
+        .co-tab.active { background: rgba(255,255,255,0.15); color: #fff; }
+        
+        .co-pane { display: none; background: #0d1117; border-radius: 12px; overflow: hidden; border: 1px solid var(--glass-border);}
+        .co-pane.active { display: block; }
+
+        .code-container { margin: 0; max-height: 600px; overflow-y: auto; }
+        .code-container pre { margin: 0 !important; background: transparent !important; }
+        
+        .img-output-container { padding: 40px; text-align: center; background: #111; overflow-y: auto; max-height: 600px; }
+        .img-output-container img { max-width: 100%; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 10px 30px rgba(0,0,0,0.5); margin-bottom: 20px; }
+
+        .terminal-output { padding: 25px; font-family: 'Fira Code', monospace; color: #56d364; max-height: 600px; overflow-y: auto; white-space: pre-wrap; font-size: 0.95rem; line-height: 1.6;}
+        
+        @keyframes fadeIn { from {opacity:0; transform: translateY(10px);} to {opacity:1; transform: translateY(0);} }
+    </style>
+</head>
+<body>
+    <div class="bg-orb orb-1"></div>
+    <div class="bg-orb orb-2"></div>
+    <div class="bg-orb orb-3"></div>
+
+    <nav class="navbar glass">
+        <div class="nav-content">
+            <div class="logo" style="display:flex; align-items:baseline;">
+                DDM<span>.</span> 
+                <span style="font-size:1.1rem; font-weight:400; color:var(--text-muted); margin-left:15px; letter-spacing:0px; text-transform:none; font-family:var(--font-main);">Somesh Waghade (252CS030)</span>
+            </div>
+            <ul class="nav-links"><li><a href="index.html#home">← Back to Home</a></li></ul>
+        </div>
+    </nav>
+    
+    <div class="page-container">
+        <header class="page-header fade-up">
+            <div class="badge fade-up" style="margin-bottom:15px; border-radius:50px; padding:8px 16px; background:var(--primary); color:#000; font-weight:bold; display:inline-block;">Project Archive</div>
+            <h1>All Subtasks & Scripts</h1>
+            <p style="color:var(--text-muted); font-size:1.1rem; max-width:600px; margin: 0 auto;">Select between the 3 major subtasks to dive into the executed Python scripts alongside the actual lab report execution screenshots.</p>
+        </header>
+
+        <div class="glass-panel fade-up delay-1">
+            <div class="subtask-tabs">
+                <button class="sb-tab active" onclick="showSubtask(event, 'sub1')">Phase 1: Lab 1 (ETL)</button>
+                <button class="sb-tab " onclick="showSubtask(event, 'sub2')">Phase 2: Lab 2 (EDA)</button>
+                <button class="sb-tab " onclick="showSubtask(event, 'sub3')">Phase 3: Lab 2 Part 2 (ML)</button>
+            </div>
+
+            <div id="sub1" class="subtask-pane active">
+                <div class="script-tabs">
+                    <button class="s-tab active" onclick="showScript(event, 'sub1', 'script_sub1_0')">e1_parse.py</button>
+                    <button class="s-tab " onclick="showScript(event, 'sub1', 'script_sub1_1')">e2_aggregation.py</button>
+                    <button class="s-tab " onclick="showScript(event, 'sub1', 'script_sub1_2')">exercise3_regex.py</button>
+                    <button class="s-tab " onclick="showScript(event, 'sub1', 'script_sub1_3')">exercise4_sql.py</button>
+                    <button class="s-tab " onclick="showScript(event, 'sub1', 'script_sub1_4')">exercise5_mongo.py</button>
+                    <button class="s-tab " onclick="showScript(event, 'sub1', 'script_sub1_5')">exercise6_numpy.py</button>
+                    <button class="s-tab " onclick="showScript(event, 'sub1', 'script_sub1_6')">exercise7_pandas.py</button>
+                </div>
+
+                <div id="script_sub1_0" class="script-pane active">
+                    <div style="margin-bottom:8px;"><span style="display:inline-block; padding:4px 12px; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.15); border-radius:50px; font-size:0.75rem; margin-right:8px; margin-bottom:8px; font-weight:600; font-family:var(--font-heading); color:var(--primary); letter-spacing:0.5px; text-transform:uppercase;">Pandas</span><span style="display:inline-block; padding:4px 12px; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.15); border-radius:50px; font-size:0.75rem; margin-right:8px; margin-bottom:8px; font-weight:600; font-family:var(--font-heading); color:var(--primary); letter-spacing:0.5px; text-transform:uppercase;">os</span></div>
+                    <p style="color:var(--text-main); font-size:1.05rem; margin-bottom:20px; font-style:italic; border-left: 3px solid var(--primary); padding-left: 15px; background:rgba(255,255,255,0.02); padding-top:10px; padding-bottom:10px; border-radius:0 8px 8px 0;">Multi-format data parsing and validation of coordinate geography.</p>
+                    <div class="co-tabs">
+                        <button class="co-tab active" onclick="showCO(event, 'script_sub1_0', 'code')">Source Code</button>
+                        <button class="co-tab" onclick="showCO(event, 'script_sub1_0', 'output')">Exec Screenshot / Output</button>
+                    </div>
+                    <div class="co-pane co-code active">
+                        <div class="code-container"><pre><code class="language-python">import pandas as pd
+
+df = pd.read_csv(&quot;./data/Accidents_small.csv&quot;)
+
+# Check missing values
+print(df.isnull().sum())
+
+# Validate coordinates
+df = df.dropna(subset=[&#x27;Latitude&#x27;,&#x27;Longitude&#x27;])
+df = df[(df[&#x27;Latitude&#x27;] != 0) &amp; (df[&#x27;Longitude&#x27;] != 0)]
+
+print(&quot;Clean records:&quot;, len(df))
+</code></pre></div>
+                    </div>
+                    <div class="co-pane co-output">
+                        <div class="img-output-container">                            <h3 style="color:#fff; margin-bottom:20px; font-family:var(--font-heading);">Results from the Detailed Lab Report</h3>                            <img src="./assets/a.png" onerror="this.src='https://via.placeholder.com/800x400/18181b/ef4444?text=Image+Load+Failed';">                        </div>
+                    </div>
+                </div>
+                <div id="script_sub1_1" class="script-pane ">
+                    <div style="margin-bottom:8px;"><span style="display:inline-block; padding:4px 12px; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.15); border-radius:50px; font-size:0.75rem; margin-right:8px; margin-bottom:8px; font-weight:600; font-family:var(--font-heading); color:var(--primary); letter-spacing:0.5px; text-transform:uppercase;">Pandas</span><span style="display:inline-block; padding:4px 12px; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.15); border-radius:50px; font-size:0.75rem; margin-right:8px; margin-bottom:8px; font-weight:600; font-family:var(--font-heading); color:var(--primary); letter-spacing:0.5px; text-transform:uppercase;">Pickle</span><span style="display:inline-block; padding:4px 12px; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.15); border-radius:50px; font-size:0.75rem; margin-right:8px; margin-bottom:8px; font-weight:600; font-family:var(--font-heading); color:var(--primary); letter-spacing:0.5px; text-transform:uppercase;">NumPy</span></div>
+                    <p style="color:var(--text-main); font-size:1.05rem; margin-bottom:20px; font-style:italic; border-left: 3px solid var(--primary); padding-left: 15px; background:rgba(255,255,255,0.02); padding-top:10px; padding-bottom:10px; border-radius:0 8px 8px 0;">Binary serialization and data aggregation operations.</p>
+                    <div class="co-tabs">
+                        <button class="co-tab active" onclick="showCO(event, 'script_sub1_1', 'code')">Source Code</button>
+                        <button class="co-tab" onclick="showCO(event, 'script_sub1_1', 'output')">Exec Screenshot / Output</button>
+                    </div>
+                    <div class="co-pane co-code active">
+                        <div class="code-container"><pre><code class="language-python">import pandas as pd
+
+df = pd.read_csv(&quot;./data/Accidents_small.csv&quot;)
+
+# Severity-wise accident count
+severity_count = df[&#x27;Accident_Severity&#x27;].value_counts()
+print(&quot;\nAccidents by Severity:&quot;)
+print(severity_count)
+
+# Road type vs accident count
+road_count = df[&#x27;Road_Type&#x27;].value_counts().head(10)
+print(&quot;\nTop Road Types:&quot;)
+print(road_count)
+
+# Weather conditions vs accident count
+weather_count = df[&#x27;Weather_Conditions&#x27;].value_counts().head(10)
+print(&quot;\nTop Weather Conditions:&quot;)
+print(weather_count)
+
+</code></pre></div>
+                    </div>
+                    <div class="co-pane co-output">
+                        <div class="img-output-container">                            <h3 style="color:#fff; margin-bottom:20px; font-family:var(--font-heading);">Results from the Detailed Lab Report</h3>                            <img src="./assets/b.png" onerror="this.src='https://via.placeholder.com/800x400/18181b/ef4444?text=Image+Load+Failed';">                        </div>
+                    </div>
+                </div>
+                <div id="script_sub1_2" class="script-pane ">
+                    <div style="margin-bottom:8px;"><span style="display:inline-block; padding:4px 12px; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.15); border-radius:50px; font-size:0.75rem; margin-right:8px; margin-bottom:8px; font-weight:600; font-family:var(--font-heading); color:var(--primary); letter-spacing:0.5px; text-transform:uppercase;">Pandas</span><span style="display:inline-block; padding:4px 12px; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.15); border-radius:50px; font-size:0.75rem; margin-right:8px; margin-bottom:8px; font-weight:600; font-family:var(--font-heading); color:var(--primary); letter-spacing:0.5px; text-transform:uppercase;">re</span></div>
+                    <p style="color:var(--text-main); font-size:1.05rem; margin-bottom:20px; font-style:italic; border-left: 3px solid var(--primary); padding-left: 15px; background:rgba(255,255,255,0.02); padding-top:10px; padding-bottom:10px; border-radius:0 8px 8px 0;">Regex-based text cleaning to standardize varying road definitions.</p>
+                    <div class="co-tabs">
+                        <button class="co-tab active" onclick="showCO(event, 'script_sub1_2', 'code')">Source Code</button>
+                        <button class="co-tab" onclick="showCO(event, 'script_sub1_2', 'output')">Exec Screenshot / Output</button>
+                    </div>
+                    <div class="co-pane co-code active">
+                        <div class="code-container"><pre><code class="language-python">import pandas as pd
+import re
+
+# Load the accidents dataset
+df = pd.read_csv(&quot;./data/Accidents_small.csv&quot;)
+
+print(&quot;=&quot;*60)
+print(&quot;Exercise 3: Regular Expressions&quot;)
+print(&quot;=&quot;*60)
+
+# 1. Pattern Matching - Find specific patterns in weather conditions
+print(&quot;\n1. PATTERN MATCHING - Weather conditions containing &#x27;Rain&#x27;&quot;)
+# Search for weather conditions with &#x27;Rain&#x27; pattern
+rain_pattern = r&#x27;Rain&#x27;
+rain_mask = df[&#x27;Weather_Conditions&#x27;].astype(str).str.contains(rain_pattern, case=False, na=False)
+rain_accidents = df[rain_mask]
+print(f&quot;Found {len(rain_accidents)} accidents in rainy conditions&quot;)
+print(df[rain_mask][&#x27;Weather_Conditions&#x27;].value_counts().head())
+
+# 2. String Splitting - Split composite fields
+print(&quot;\n2. STRING SPLITTING - Extracting time components from Date field&quot;)
+# Example: Split date/time if it exists in proper format
+df[&#x27;Date_str&#x27;] = df[&#x27;Date&#x27;].astype(str)
+# Pattern to split date components (assuming format like DD/MM/YYYY)
+date_pattern = r&#x27;(\d{2})/(\d{2})/(\d{4})&#x27;
+sample_dates = df[&#x27;Date_str&#x27;].head(10)
+print(&quot;Sample dates:&quot;)
+for date in sample_dates:
+    match = re.search(date_pattern, str(date))
+    if match:
+        day, month, year = match.groups()
+        print(f&quot;  {date} -&gt; Day: {day}, Month: {month}, Year: {year}&quot;)
+
+# 3. String Replacing - Clean and standardize text data
+print(&quot;\n3. STRING REPLACING - Cleaning weather conditions&quot;)
+# Remove special characters and numbers from weather conditions
+df[&#x27;Weather_Clean&#x27;] = df[&#x27;Weather_Conditions&#x27;].apply(
+    lambda x: re.sub(r&#x27;[^a-zA-Z\s]&#x27;, &#x27;&#x27;, str(x))
+)
+
+# Remove extra whitespace
+df[&#x27;Weather_Clean&#x27;] = df[&#x27;Weather_Clean&#x27;].apply(
+    lambda x: re.sub(r&#x27;\s+&#x27;, &#x27; &#x27;, str(x)).strip()
+)
+
+print(&quot;\nOriginal vs Cleaned Weather Conditions (sample):&quot;)
+comparison = df[[&#x27;Weather_Conditions&#x27;, &#x27;Weather_Clean&#x27;]].head(10)
+for idx, row in comparison.iterrows():
+    if row[&#x27;Weather_Conditions&#x27;] != row[&#x27;Weather_Clean&#x27;]:
+        print(f&quot;  Original: &#x27;{row[&#x27;Weather_Conditions&#x27;]}&#x27;&quot;)
+        print(f&quot;  Cleaned:  &#x27;{row[&#x27;Weather_Clean&#x27;]}&#x27;&quot;)
+        print()
+
+# Additional regex operations
+print(&quot;\n4. ADDITIONAL REGEX - Extracting severity level&quot;)
+# Extract numeric values from severity if stored as text
+severity_counts = df[&#x27;Accident_Severity&#x27;].value_counts()
+print(&quot;Accident Severity Distribution:&quot;)
+print(severity_counts)
+
+# Replace abbreviations in Road_Type
+print(&quot;\n5. STRING REPLACEMENT - Standardizing Road Type&quot;)
+df[&#x27;Road_Type_Clean&#x27;] = df[&#x27;Road_Type&#x27;].astype(str).apply(
+    lambda x: re.sub(r&#x27;\bSt\b&#x27;, &#x27;Street&#x27;, x)  # Replace St with Street
+)
+df[&#x27;Road_Type_Clean&#x27;] = df[&#x27;Road_Type_Clean&#x27;].apply(
+    lambda x: re.sub(r&#x27;\bRd\b&#x27;, &#x27;Road&#x27;, x)    # Replace Rd with Road
+)
+
+# Show unique road types before and after cleaning
+print(f&quot;Unique road types (original): {df[&#x27;Road_Type&#x27;].nunique()}&quot;)
+print(f&quot;Unique road types (cleaned): {df[&#x27;Road_Type_Clean&#x27;].nunique()}&quot;)
+
+print(&quot;\n&quot; + &quot;=&quot;*60)
+print(&quot;Exercise 3 Complete!&quot;)
+print(&quot;=&quot;*60)
+</code></pre></div>
+                    </div>
+                    <div class="co-pane co-output">
+                        <div class="img-output-container">                            <h3 style="color:#fff; margin-bottom:20px; font-family:var(--font-heading);">Results from the Detailed Lab Report</h3>                            <img src="./assets/c.png" onerror="this.src='https://via.placeholder.com/800x400/18181b/ef4444?text=Image+Load+Failed';">                        </div>
+                    </div>
+                </div>
+                <div id="script_sub1_3" class="script-pane ">
+                    <div style="margin-bottom:8px;"><span style="display:inline-block; padding:4px 12px; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.15); border-radius:50px; font-size:0.75rem; margin-right:8px; margin-bottom:8px; font-weight:600; font-family:var(--font-heading); color:var(--primary); letter-spacing:0.5px; text-transform:uppercase;">Pandas</span><span style="display:inline-block; padding:4px 12px; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.15); border-radius:50px; font-size:0.75rem; margin-right:8px; margin-bottom:8px; font-weight:600; font-family:var(--font-heading); color:var(--primary); letter-spacing:0.5px; text-transform:uppercase;">sqlite3</span></div>
+                    <p style="color:var(--text-main); font-size:1.05rem; margin-bottom:20px; font-style:italic; border-left: 3px solid var(--primary); padding-left: 15px; background:rgba(255,255,255,0.02); padding-top:10px; padding-bottom:10px; border-radius:0 8px 8px 0;">Architecting a relational schema with robust SQLite CRUD operations.</p>
+                    <div class="co-tabs">
+                        <button class="co-tab active" onclick="showCO(event, 'script_sub1_3', 'code')">Source Code</button>
+                        <button class="co-tab" onclick="showCO(event, 'script_sub1_3', 'output')">Exec Screenshot / Output</button>
+                    </div>
+                    <div class="co-pane co-code active">
+                        <div class="code-container"><pre><code class="language-python">import sqlite3
+import pandas as pd
+
+# Load the accidents dataset
+df = pd.read_csv(&quot;./data/Accidents_small.csv&quot;)
+
+print(&quot;=&quot;*60)
+print(&quot;Exercise 4: SQL Database - CRUD Operations&quot;)
+print(&quot;=&quot;*60)
+
+# Connect to SQLite database (creates if doesn&#x27;t exist)
+conn = sqlite3.connect(&quot;accidents.db&quot;)
+cursor = conn.cursor()
+
+# CREATE - Design schema and create table
+print(&quot;\n1. CREATE - Creating database schema&quot;)
+cursor.execute(&#x27;&#x27;&#x27;
+    CREATE TABLE IF NOT EXISTS accidents (
+        Accident_Index TEXT PRIMARY KEY,
+        Date TEXT,
+        Time TEXT,
+        Latitude REAL,
+        Longitude REAL,
+        Accident_Severity TEXT,
+        Road_Type TEXT,
+        Weather_Conditions TEXT
+    )
+&#x27;&#x27;&#x27;)
+print(&quot;[OK] Table &#x27;accidents&#x27; created successfully&quot;)
+
+# INSERT - Populate database from CSV (CREATE operation)
+print(&quot;\n2. INSERT - Populating database from CSV&quot;)
+df_clean = df.dropna(subset=[&#x27;Latitude&#x27;, &#x27;Longitude&#x27;])
+df_clean.to_sql(&#x27;accidents&#x27;, conn, if_exists=&#x27;replace&#x27;, index=False)
+print(f&quot;[OK] Inserted {len(df_clean)} records into database&quot;)
+
+# READ - Query data with SELECT (READ operation)
+print(&quot;\n3. READ - Querying data with SELECT&quot;)
+
+# Query 1: Get all fatal accidents
+print(&quot;\n  a) Fatal accidents:&quot;)
+query1 = &quot;SELECT Accident_Index, Date, Time, Accident_Severity FROM accidents WHERE Accident_Severity = &#x27;Fatal&#x27; LIMIT 5&quot;
+result1 = pd.read_sql(query1, conn)
+print(result1)
+
+# Query 2: Count accidents by severity
+print(&quot;\n  b) Count of accidents by severity:&quot;)
+query2 = &quot;SELECT Accident_Severity, COUNT(*) as Count FROM accidents GROUP BY Accident_Severity ORDER BY Count DESC&quot;
+result2 = pd.read_sql(query2, conn)
+print(result2)
+
+# Query 3: Accidents in specific weather conditions
+print(&quot;\n  c) Accidents in rainy weather:&quot;)
+query3 = &quot;SELECT Weather_Conditions, COUNT(*) as Count FROM accidents WHERE Weather_Conditions LIKE &#x27;%Rain%&#x27; GROUP BY Weather_Conditions LIMIT 5&quot;
+result3 = pd.read_sql(query3, conn)
+print(result3)
+
+# Query 4: Accidents on specific road types
+print(&quot;\n  d) Single carriageway accidents:&quot;)
+query4 = &quot;SELECT Accident_Index, Road_Type, Accident_Severity, Date FROM accidents WHERE Road_Type = &#x27;Single carriageway&#x27; LIMIT 5&quot;
+result4 = pd.read_sql(query4, conn)
+print(result4)
+
+# UPDATE - Modify existing records (UPDATE operation)
+print(&quot;\n4. UPDATE - Modifying existing records&quot;)
+
+# Update 1: Standardize road types
+update_query1 = &#x27;&#x27;&#x27;
+    UPDATE accidents 
+    SET Road_Type = &#x27;Dual carriageway&#x27; 
+    WHERE Road_Type LIKE &#x27;%Dual%&#x27;
+&#x27;&#x27;&#x27;
+cursor.execute(update_query1)
+rows_updated1 = cursor.rowcount
+print(f&quot;  a) Standardized {rows_updated1} dual carriageway records&quot;)
+
+# Update 2: Standardize weather conditions
+update_query2 = &#x27;&#x27;&#x27;
+    UPDATE accidents 
+    SET Weather_Conditions = &#x27;Fine&#x27;
+    WHERE Weather_Conditions LIKE &#x27;%Fine%&#x27; OR Weather_Conditions LIKE &#x27;%Clear%&#x27;
+&#x27;&#x27;&#x27;
+cursor.execute(update_query2)
+rows_updated2 = cursor.rowcount
+print(f&quot;  b) Standardized {rows_updated2} weather condition records to &#x27;Fine&#x27;&quot;)
+
+conn.commit()
+
+# Verify updates
+print(&quot;\n  Verification - Updated severity distribution:&quot;)
+verify_query = &quot;SELECT Accident_Severity, COUNT(*) as Count FROM accidents GROUP BY Accident_Severity&quot;
+verify_result = pd.read_sql(verify_query, conn)
+print(verify_result)
+
+# DELETE - Remove records (DELETE operation)
+print(&quot;\n5. DELETE - Removing records&quot;)
+
+# First, check how many records have missing data
+delete_check_query = &quot;SELECT COUNT(*) as Count FROM accidents WHERE Latitude IS NULL OR Longitude IS NULL&quot;
+delete_check = pd.read_sql(delete_check_query, conn)
+print(f&quot;  Records with missing coordinates: {delete_check[&#x27;Count&#x27;].iloc[0]}&quot;)
+
+# Delete records with missing coordinates
+delete_query = &quot;DELETE FROM accidents WHERE Latitude IS NULL OR Longitude IS NULL&quot;
+cursor.execute(delete_query)
+rows_deleted = cursor.rowcount
+conn.commit()
+print(f&quot;[OK] Deleted {rows_deleted} records with missing coordinates&quot;)
+
+# Final statistics
+print(&quot;\n6. FINAL STATISTICS&quot;)
+stats_query = &quot;SELECT COUNT(*) as Total_Records FROM accidents&quot;
+total_records = pd.read_sql(stats_query, conn)
+print(f&quot;  Total records in database: {total_records[&#x27;Total_Records&#x27;].iloc[0]}&quot;)
+
+stats_query2 = &#x27;&#x27;&#x27;
+    SELECT 
+        COUNT(DISTINCT Road_Type) as Unique_Road_Types,
+        COUNT(DISTINCT Weather_Conditions) as Unique_Weather
+    FROM accidents
+&#x27;&#x27;&#x27;
+data_stats = pd.read_sql(stats_query2, conn)
+print(&quot;\n  Data Diversity:&quot;)
+print(data_stats)
+
+# Close connection
+conn.close()
+
+print(&quot;\n&quot; + &quot;=&quot;*60)
+print(&quot;Exercise 4 Complete!&quot;)
+print(&quot;Database saved as: accidents.db&quot;)
+print(&quot;=&quot;*60)
+</code></pre></div>
+                    </div>
+                    <div class="co-pane co-output">
+                        <div class="img-output-container">                            <h3 style="color:#fff; margin-bottom:20px; font-family:var(--font-heading);">Results from the Detailed Lab Report</h3>                            <img src="./assets/d.png" onerror="this.src='https://via.placeholder.com/800x400/18181b/ef4444?text=Image+Load+Failed';">                        </div>
+                    </div>
+                </div>
+                <div id="script_sub1_4" class="script-pane ">
+                    <div style="margin-bottom:8px;"><span style="display:inline-block; padding:4px 12px; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.15); border-radius:50px; font-size:0.75rem; margin-right:8px; margin-bottom:8px; font-weight:600; font-family:var(--font-heading); color:var(--primary); letter-spacing:0.5px; text-transform:uppercase;">pymongo</span><span style="display:inline-block; padding:4px 12px; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.15); border-radius:50px; font-size:0.75rem; margin-right:8px; margin-bottom:8px; font-weight:600; font-family:var(--font-heading); color:var(--primary); letter-spacing:0.5px; text-transform:uppercase;">Pandas</span></div>
+                    <p style="color:var(--text-main); font-size:1.05rem; margin-bottom:20px; font-style:italic; border-left: 3px solid var(--primary); padding-left: 15px; background:rgba(255,255,255,0.02); padding-top:10px; padding-bottom:10px; border-radius:0 8px 8px 0;">Deploying NoSQL aggregations for flexible document queries.</p>
+                    <div class="co-tabs">
+                        <button class="co-tab active" onclick="showCO(event, 'script_sub1_4', 'code')">Source Code</button>
+                        <button class="co-tab" onclick="showCO(event, 'script_sub1_4', 'output')">Exec Screenshot / Output</button>
+                    </div>
+                    <div class="co-pane co-code active">
+                        <div class="code-container"><pre><code class="language-python">from pymongo import MongoClient
+from pymongo.errors import ConnectionFailure, ServerSelectionTimeoutError
+import pandas as pd
+
+print(&quot;=&quot;*60)
+print(&quot;Exercise 5: MongoDB Operations&quot;)
+print(&quot;=&quot;*60)
+
+# Load the accidents dataset
+df = pd.read_csv(&quot;./data/Accidents_small.csv&quot;)
+
+try:
+    # Setup MongoDB client connection
+    print(&quot;\n1. SETUP - Connecting to MongoDB&quot;)
+    client = MongoClient(&#x27;localhost&#x27;, 27017, serverSelectionTimeoutMS=5000)
+    # Test connection
+    client.admin.command(&#x27;ismaster&#x27;)
+    print(&quot;[OK] Connected to MongoDB successfully&quot;)
+    
+    # Select database and collection
+    db = client.road_safety
+    collection = db.accidents
+    
+    # Clear existing data for fresh start
+    collection.delete_many({})
+    print(&quot;[OK] Collection cleared for fresh start&quot;)
+    
+    # INSERT - Insert documents from dataset
+    print(&quot;\n2. INSERT - Inserting documents&quot;)
+    # Convert DataFrame to list of dictionaries
+    records = df.head(1000).to_dict(&#x27;records&#x27;)  # Using first 1000 records for demo
+    result = collection.insert_many(records)
+    print(f&quot;[OK] Inserted {len(result.inserted_ids)} documents&quot;)
+    
+    # SEARCH - Query documents using various filters
+    print(&quot;\n3. SEARCH - Querying documents&quot;)
+    
+    # Search 1: Find fatal accidents
+    print(&quot;\n  a) Fatal accidents:&quot;)
+    fatal_accidents = collection.find({&#x27;Accident_Severity&#x27;: &#x27;Fatal&#x27;}).limit(3)
+    for i, accident in enumerate(fatal_accidents, 1):
+        print(f&quot;     {i}. Index: {accident.get(&#x27;Accident_Index&#x27;)}, Time: {accident.get(&#x27;Time&#x27;)}&quot;)
+    
+    # Search 2: Count accidents by severity
+    print(&quot;\n  b) Count by severity:&quot;)
+    severity_counts = collection.aggregate([
+        {&#x27;$group&#x27;: {&#x27;_id&#x27;: &#x27;$Accident_Severity&#x27;, &#x27;count&#x27;: {&#x27;$sum&#x27;: 1}}},
+        {&#x27;$sort&#x27;: {&#x27;count&#x27;: -1}}
+    ])
+    for doc in severity_counts:
+        print(f&quot;     {doc[&#x27;_id&#x27;]}: {doc[&#x27;count&#x27;]} accidents&quot;)
+    
+    # Search 3: Find accidents with specific weather
+    print(&quot;\n  c) Accidents in rainy conditions:&quot;)
+    rain_count = collection.count_documents({&#x27;Weather_Conditions&#x27;: {&#x27;$regex&#x27;: &#x27;Rain&#x27;, &#x27;$options&#x27;: &#x27;i&#x27;}})
+    print(f&quot;     Found {rain_count} accidents in rainy weather&quot;)
+    
+    # Search 4: Complex query - northern accidents
+    print(&quot;\n  d) Northern accidents (lat &gt; 54):&quot;)
+    northern = collection.find(
+        {&#x27;Latitude&#x27;: {&#x27;$gt&#x27;: 54}},
+        {&#x27;Accident_Index&#x27;: 1, &#x27;Latitude&#x27;: 1, &#x27;Date&#x27;: 1, &#x27;_id&#x27;: 0}
+    ).sort(&#x27;Latitude&#x27;, -1).limit(3)
+    for accident in northern:
+        print(f&quot;     {accident}&quot;)
+    
+    # UPDATE - Modify existing documents
+    print(&quot;\n4. UPDATE - Updating documents&quot;)
+    
+    # Update 1: Update single document
+    update_result1 = collection.update_one(
+        {&#x27;Accident_Severity&#x27;: &#x27;Slight&#x27;},
+        {&#x27;$set&#x27;: {&#x27;Severity_Code&#x27;: 3}}
+    )
+    print(f&quot;  a) Updated {update_result1.modified_count} document with severity code&quot;)
+    
+    # Update 2: Update multiple documents
+    update_result2 = collection.update_many(
+        {&#x27;Accident_Severity&#x27;: &#x27;Fatal&#x27;},
+        {&#x27;$set&#x27;: {&#x27;Severity_Code&#x27;: 1, &#x27;Priority&#x27;: &#x27;Critical&#x27;}}
+    )
+    print(f&quot;  b) Updated {update_result2.modified_count} fatal accidents with labels&quot;)
+    
+    # Update 3: Add new field
+    update_result3 = collection.update_many(
+        {&#x27;Road_Type&#x27;: {&#x27;$exists&#x27;: True}},
+        {&#x27;$set&#x27;: {&#x27;Last_Updated&#x27;: &#x27;Lab Exercise 5&#x27;}}
+    )
+    print(f&quot;  c) Added update field to {update_result3.modified_count} documents&quot;)
+    
+    # REPLACE - Replace entire document
+    print(&quot;\n5. REPLACE - Replacing documents&quot;)
+    sample_doc = collection.find_one({&#x27;Accident_Severity&#x27;: &#x27;Serious&#x27;})
+    if sample_doc:
+        doc_id = sample_doc[&#x27;_id&#x27;]
+        new_doc = {
+            &#x27;Accident_Index&#x27;: sample_doc.get(&#x27;Accident_Index&#x27;),
+            &#x27;Accident_Severity&#x27;: &#x27;Serious&#x27;,
+            &#x27;Severity_Code&#x27;: 2,
+            &#x27;Replaced&#x27;: True,
+            &#x27;Note&#x27;: &#x27;This document was replaced in Exercise 5&#x27;
+        }
+        replace_result = collection.replace_one({&#x27;_id&#x27;: doc_id}, new_doc)
+        print(f&quot;  [OK] Replaced {replace_result.modified_count} document&quot;)
+    
+    # REMOVE - Delete documents based on conditions
+    print(&quot;\n6. REMOVE - Deleting documents&quot;)
+    
+    # Delete 1: Remove documents with missing data
+    delete_result1 = collection.delete_many({&#x27;$or&#x27;: [
+        {&#x27;Latitude&#x27;: None},
+        {&#x27;Longitude&#x27;: None}
+    ]})
+    print(f&quot;  a) Deleted {delete_result1.deleted_count} documents with missing coordinates&quot;)
+    
+    # Note: Not deleting more to preserve data
+    print(f&quot;  b) (Skipped bulk deletion to preserve data)&quot;)
+    
+    # AGGREGATION - Use aggregation pipeline for data analysis
+    print(&quot;\n7. AGGREGATION - Aggregation pipeline&quot;)
+    
+    # Aggregation 1: Average latitude by severity
+    print(&quot;\n  a) Average latitude by severity:&quot;)
+    agg_pipeline1 = [
+        {&#x27;$group&#x27;: {
+            &#x27;_id&#x27;: &#x27;$Accident_Severity&#x27;,
+            &#x27;avg_latitude&#x27;: {&#x27;$avg&#x27;: &#x27;$Latitude&#x27;},
+            &#x27;total_accidents&#x27;: {&#x27;$sum&#x27;: 1}
+        }},
+        {&#x27;$sort&#x27;: {&#x27;total_accidents&#x27;: -1}}
+    ]
+    agg_result1 = collection.aggregate(agg_pipeline1)
+    for doc in agg_result1:
+        print(f&quot;     {doc[&#x27;_id&#x27;]}: Avg lat {doc[&#x27;avg_latitude&#x27;]:.4f}, {doc[&#x27;total_accidents&#x27;]} accidents&quot;)
+    
+    # Aggregation 2: Top weather conditions
+    print(&quot;\n  b) Top 5 weather conditions:&quot;)
+    agg_pipeline2 = [
+        {&#x27;$group&#x27;: {&#x27;_id&#x27;: &#x27;$Weather_Conditions&#x27;, &#x27;count&#x27;: {&#x27;$sum&#x27;: 1}}},
+        {&#x27;$sort&#x27;: {&#x27;count&#x27;: -1}},
+        {&#x27;$limit&#x27;: 5}
+    ]
+    agg_result2 = collection.aggregate(agg_pipeline2)
+    for doc in agg_result2:
+        print(f&quot;     {doc[&#x27;_id&#x27;]}: {doc[&#x27;count&#x27;]} accidents&quot;)
+    
+    # Aggregation 3: Complex aggregation
+    print(&quot;\n  c) Accidents by severity and road type (top 5):&quot;)
+    agg_pipeline3 = [
+        {&#x27;$group&#x27;: {
+            &#x27;_id&#x27;: {
+                &#x27;severity&#x27;: &#x27;$Accident_Severity&#x27;,
+                &#x27;road&#x27;: &#x27;$Road_Type&#x27;
+            },
+            &#x27;count&#x27;: {&#x27;$sum&#x27;: 1}
+        }},
+        {&#x27;$sort&#x27;: {&#x27;count&#x27;: -1}},
+        {&#x27;$limit&#x27;: 5}
+    ]
+    agg_result3 = collection.aggregate(agg_pipeline3)
+    for doc in agg_result3:
+        print(f&quot;     {doc[&#x27;_id&#x27;][&#x27;severity&#x27;]}, {doc[&#x27;_id&#x27;][&#x27;road&#x27;]}: {doc[&#x27;count&#x27;]} accidents&quot;)
+    
+    # INDEXES - Create indexes for performance optimization
+    print(&quot;\n8. INDEXES - Creating indexes&quot;)
+    
+    # Index 1: Single field index
+    collection.create_index(&#x27;Accident_Severity&#x27;)
+    print(&quot;  a) [OK] Created index on &#x27;Accident_Severity&#x27;&quot;)
+    
+    # Index 2: Compound index
+    collection.create_index([(&#x27;Accident_Severity&#x27;, 1), (&#x27;Date&#x27;, -1)])
+    print(&quot;  b) [OK] Created compound index on &#x27;Accident_Severity&#x27; and &#x27;Date&#x27;&quot;)
+    
+    # Index 3: Geospatial index (2d)
+    collection.create_index([(&#x27;Latitude&#x27;, 1), (&#x27;Longitude&#x27;, 1)])
+    print(&quot;  c) [OK] Created index on coordinates&quot;)
+    
+    # List all indexes
+    print(&quot;\n  All indexes:&quot;)
+    for index in collection.list_indexes():
+        print(f&quot;     - {index[&#x27;name&#x27;]}&quot;)
+    
+    # Final statistics
+    print(&quot;\n9. FINAL STATISTICS&quot;)
+    total_docs = collection.count_documents({})
+    print(f&quot;  Total documents in collection: {total_docs}&quot;)
+    
+    # Close connection
+    client.close()
+    print(&quot;\n&quot; + &quot;=&quot;*60)
+    print(&quot;Exercise 5 Complete!&quot;)
+    print(&quot;=&quot;*60)
+
+except (ConnectionFailure, ServerSelectionTimeoutError) as e:
+    print(&quot;\n[ERROR] Cannot connect to MongoDB&quot;)
+    print(&quot;   Please ensure MongoDB is installed and running.&quot;)
+    print(f&quot;   Error details: {e}&quot;)
+    print(&quot;\n   To install MongoDB:&quot;)
+    print(&quot;   1. Download from: https://www.mongodb.com/try/download/community&quot;)
+    print(&quot;   2. Install and start the MongoDB service&quot;)
+    print(&quot;   3. Run this script again&quot;)
+    print(&quot;\n   Alternatively, install pymongo: pip install pymongo&quot;)
+    print(&quot;\n&quot; + &quot;=&quot;*60)
+    
+except Exception as e:
+    print(f&quot;\n[ERROR] {type(e).__name__}: {e}&quot;)
+    print(&quot;=&quot;*60)
+</code></pre></div>
+                    </div>
+                    <div class="co-pane co-output">
+                        <div class="img-output-container">                            <h3 style="color:#fff; margin-bottom:20px; font-family:var(--font-heading);">Results from the Detailed Lab Report</h3>                            <img src="./assets/e.png" onerror="this.src='https://via.placeholder.com/800x400/18181b/ef4444?text=Image+Load+Failed';">                        </div>
+                    </div>
+                </div>
+                <div id="script_sub1_5" class="script-pane ">
+                    <div style="margin-bottom:8px;"><span style="display:inline-block; padding:4px 12px; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.15); border-radius:50px; font-size:0.75rem; margin-right:8px; margin-bottom:8px; font-weight:600; font-family:var(--font-heading); color:var(--primary); letter-spacing:0.5px; text-transform:uppercase;">NumPy</span><span style="display:inline-block; padding:4px 12px; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.15); border-radius:50px; font-size:0.75rem; margin-right:8px; margin-bottom:8px; font-weight:600; font-family:var(--font-heading); color:var(--primary); letter-spacing:0.5px; text-transform:uppercase;">Pandas</span></div>
+                    <p style="color:var(--text-main); font-size:1.05rem; margin-bottom:20px; font-style:italic; border-left: 3px solid var(--primary); padding-left: 15px; background:rgba(255,255,255,0.02); padding-top:10px; padding-bottom:10px; border-radius:0 8px 8px 0;">High-performance vectorized mathematics on geographic matrices.</p>
+                    <div class="co-tabs">
+                        <button class="co-tab active" onclick="showCO(event, 'script_sub1_5', 'code')">Source Code</button>
+                        <button class="co-tab" onclick="showCO(event, 'script_sub1_5', 'output')">Exec Screenshot / Output</button>
+                    </div>
+                    <div class="co-pane co-code active">
+                        <div class="code-container"><pre><code class="language-python">import pandas as pd
+import numpy as np
+
+# Load the accidents dataset
+df = pd.read_csv(&quot;./data/Accidents_small.csv&quot;)
+
+print(&quot;=&quot;*60)
+print(&quot;Exercise 6: NumPy Array Operations&quot;)
+print(&quot;=&quot;*60)
+
+# 1. CREATE ARRAYS from different sources
+print(&quot;\n1. CREATE ARRAYS - From different sources&quot;)
+
+# From list
+print(&quot;\n  a) Array from list:&quot;)
+severity_list = [1, 2, 3, 1, 2, 3, 2, 1]
+arr_from_list = np.array(severity_list)
+print(f&quot;     {arr_from_list}&quot;)
+print(f&quot;     Shape: {arr_from_list.shape}, Dtype: {arr_from_list.dtype}&quot;)
+
+# From range
+print(&quot;\n  b) Array from range:&quot;)
+arr_range = np.arange(0, 100, 10)
+print(f&quot;     {arr_range}&quot;)
+
+# From CSV/DataFrame - coordinates
+print(&quot;\n  c) Array from DataFrame (coordinates):&quot;)
+df_clean = df.dropna(subset=[&#x27;Latitude&#x27;, &#x27;Longitude&#x27;])
+coords_array = np.array(df_clean[[&#x27;Latitude&#x27;, &#x27;Longitude&#x27;]])
+print(f&quot;     Shape: {coords_array.shape}&quot;)
+print(f&quot;     First 5 rows:\n{coords_array[:5]}&quot;)
+
+# Special arrays
+print(&quot;\n  d) Special arrays:&quot;)
+zeros_arr = np.zeros((3, 4))
+print(f&quot;     Zeros (3x4):\n{zeros_arr}&quot;)
+
+ones_arr = np.ones((2, 3))
+print(f&quot;     Ones (2x3):\n{ones_arr}&quot;)
+
+identity_arr = np.eye(4)
+print(f&quot;     Identity (4x4):\n{identity_arr}&quot;)
+
+# 2. RESHAPE arrays to different dimensions
+print(&quot;\n2. RESHAPE - Arrays to different dimensions&quot;)
+
+# Create base array
+base_arr = np.arange(24)
+print(f&quot;\n  a) Original array (24 elements):\n     {base_arr}&quot;)
+
+# Reshape to 2D
+reshaped_2d = base_arr.reshape(6, 4)
+print(f&quot;\n  b) Reshaped to 6x4:\n{reshaped_2d}&quot;)
+
+# Reshape to 3D
+reshaped_3d = base_arr.reshape(2, 3, 4)
+print(f&quot;\n  c) Reshaped to 2x3x4 (showing first 3D element):\n{reshaped_3d[0]}&quot;)
+
+# Flatten back
+flattened = reshaped_3d.flatten()
+print(f&quot;\n  d) Flattened back:\n     {flattened}&quot;)
+
+# Transpose
+lat_data = np.array(df_clean[&#x27;Latitude&#x27;].head(12)).reshape(3, 4)
+print(f&quot;\n  e) Latitude matrix (3x4):\n{lat_data}&quot;)
+transposed = lat_data.T
+print(f&quot;\n  f) Transposed (4x3):\n{transposed}&quot;)
+
+# 3. SLICE arrays - Extract subarrays
+print(&quot;\n3. SLICE - Extracting subarrays&quot;)
+
+# Create sample data array
+sample_data = coords_array[:20]  # Just coordinates
+print(f&quot;\n  a) Original data shape: {sample_data.shape}&quot;)
+print(f&quot;     First 3 rows:\n{sample_data[:3]}&quot;)
+
+# Row slicing
+print(f&quot;\n  b) Rows 5-10:\n{sample_data[5:10]}&quot;)
+
+# Column slicing
+print(f&quot;\n  c) First column (Latitude) - first 5:\n     {sample_data[:5, 0]}&quot;)
+
+# Fancy indexing
+indices = [0, 5, 10, 15]
+print(f&quot;\n  d) Rows at indices {indices}:\n{sample_data[indices]}&quot;)
+
+# Boolean indexing - find northern accidents (latitude &gt; 54)
+northern_mask = sample_data[:, 0] &gt; 54
+northern_accidents = sample_data[northern_mask]
+print(f&quot;\n  e) Northern accidents (lat &gt; 54): {len(northern_accidents)} found&quot;)
+if len(northern_accidents) &gt; 0:
+    print(f&quot;     First 3:\n{northern_accidents[:3]}&quot;)
+
+# 4. ARITHMETIC operations
+print(&quot;\n4. ARITHMETIC - Operations on arrays&quot;)
+
+# Extract latitude and longitude
+latitudes = coords_array[:100, 0]
+longitudes = coords_array[:100, 1]
+
+print(f&quot;\n  a) Latitudes (first 5): {latitudes[:5]}&quot;)
+print(f&quot;     Longitudes (first 5): {longitudes[:5]}&quot;)
+
+# Addition
+coord_sum = latitudes + np.abs(longitudes)  # Add absolute longitude
+print(f&quot;\n  b) Addition (lat + abs(lon), first 5):\n     {coord_sum[:5]}&quot;)
+
+# Subtraction
+coord_diff = latitudes - 50  # Normalize around 50
+print(f&quot;\n  c) Subtraction (lat - 50, first 5):\n     {coord_diff[:5]}&quot;)
+
+# Multiplication
+scaled_lat = latitudes * 2
+print(f&quot;\n  d) Multiplication (lat * 2, first 5):\n     {scaled_lat[:5]}&quot;)
+
+# Division
+normalized = (latitudes - latitudes.mean()) / latitudes.std()
+print(f&quot;\n  e) Normalization (first 5):\n     {normalized[:5]}&quot;)
+
+# Element-wise operations
+squared = latitudes ** 2
+print(f&quot;\n  f) Power (lat squared, first 5):\n     {squared[:5]}&quot;)
+
+# 5. LOGIC operations
+print(&quot;\n5. LOGIC - Boolean operations on arrays&quot;)
+
+print(f&quot;\n  a) Latitude array (first 20): {latitudes[:20]}&quot;)
+
+# Comparison operations
+northern = latitudes &gt; 54
+print(f&quot;\n  b) Northern locations (lat &gt; 54):\n     Count: {northern.sum()}&quot;)
+
+southern = latitudes &lt; 52
+print(f&quot;\n  c) Southern locations (lat &lt; 52):\n     Count: {southern.sum()}&quot;)
+
+# Combined logic
+midland = (latitudes &gt;= 52) &amp; (latitudes &lt;= 54)
+print(f&quot;\n  d) Midland locations (52 &lt;= lat &lt;= 54):\n     Count: {midland.sum()}&quot;)
+
+# Logical OR
+extreme = (latitudes &lt; 51) | (latitudes &gt; 55)
+print(f&quot;\n  e) Extreme north or south:\n     Count: {extreme.sum()}&quot;)
+
+# 6. AGGREGATION functions
+print(&quot;\n6. AGGREGATION - Statistical operations&quot;)
+
+# Basic stats on latitudes
+print(f&quot;\n  a) Latitude statistics:&quot;)
+print(f&quot;     Mean:     {np.mean(latitudes):.4f}&quot;)
+print(f&quot;     Median:   {np.median(latitudes):.4f}&quot;)
+print(f&quot;     Std Dev:  {np.std(latitudes):.4f}&quot;)
+print(f&quot;     Min:      {np.min(latitudes):.4f}&quot;)
+print(f&quot;     Max:      {np.max(latitudes):.4f}&quot;)
+print(f&quot;     Range:    {np.ptp(latitudes):.4f}&quot;)
+
+# Coordinate statistics
+print(f&quot;\n  b) Coordinate statistics (mean location):&quot;)
+mean_coords = np.mean(coords_array, axis=0)
+print(f&quot;     Mean Latitude:  {mean_coords[0]:.4f}&quot;)
+print(f&quot;     Mean Longitude: {mean_coords[1]:.4f}&quot;)
+
+# Percentiles
+print(f&quot;\n  c) Latitude percentiles:&quot;)
+percentiles = [25, 50, 75, 95]
+for p in percentiles:
+    val = np.percentile(latitudes, p)
+    print(f&quot;     {p}th percentile: {val:.4f}&quot;)
+
+# Multi-dimensional aggregation
+lat_matrix = coords_array[:20, 0].reshape(4, 5)
+print(f&quot;\n  d) Latitude matrix (4x5):\n{lat_matrix}&quot;)
+print(f&quot;\n     Row means (axis=1):   {np.mean(lat_matrix, axis=1)}&quot;)
+print(f&quot;     Column means (axis=0): {np.mean(lat_matrix, axis=0)}&quot;)
+
+# Cumulative operations
+print(f&quot;\n  e) Cumulative sum of differences (first 10):&quot;)
+lat_diffs = np.diff(latitudes[:11])  # Get 10 differences from 11 values
+print(f&quot;     Differences: {lat_diffs}&quot;)
+print(f&quot;     Cumulative:  {np.cumsum(lat_diffs)}&quot;)
+
+print(&quot;\n&quot; + &quot;=&quot;*60)
+print(&quot;Exercise 6 Complete!&quot;)
+print(&quot;=&quot;*60)
+</code></pre></div>
+                    </div>
+                    <div class="co-pane co-output">
+                        <div class="img-output-container">                            <h3 style="color:#fff; margin-bottom:20px; font-family:var(--font-heading);">Results from the Detailed Lab Report</h3>                            <img src="./assets/f.png" onerror="this.src='https://via.placeholder.com/800x400/18181b/ef4444?text=Image+Load+Failed';">                        </div>
+                    </div>
+                </div>
+                <div id="script_sub1_6" class="script-pane ">
+                    <div style="margin-bottom:8px;"><span style="display:inline-block; padding:4px 12px; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.15); border-radius:50px; font-size:0.75rem; margin-right:8px; margin-bottom:8px; font-weight:600; font-family:var(--font-heading); color:var(--primary); letter-spacing:0.5px; text-transform:uppercase;">Pandas</span><span style="display:inline-block; padding:4px 12px; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.15); border-radius:50px; font-size:0.75rem; margin-right:8px; margin-bottom:8px; font-weight:600; font-family:var(--font-heading); color:var(--primary); letter-spacing:0.5px; text-transform:uppercase;">Matplotlib</span></div>
+                    <p style="color:var(--text-main); font-size:1.05rem; margin-bottom:20px; font-style:italic; border-left: 3px solid var(--primary); padding-left: 15px; background:rgba(255,255,255,0.02); padding-top:10px; padding-bottom:10px; border-radius:0 8px 8px 0;">Multi-level dataframe aggregations capturing baseline data trends.</p>
+                    <div class="co-tabs">
+                        <button class="co-tab active" onclick="showCO(event, 'script_sub1_6', 'code')">Source Code</button>
+                        <button class="co-tab" onclick="showCO(event, 'script_sub1_6', 'output')">Exec Screenshot / Output</button>
+                    </div>
+                    <div class="co-pane co-code active">
+                        <div class="code-container"><pre><code class="language-python">import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+
+# Load the accidents dataset
+df = pd.read_csv(&quot;./data/Accidents_small.csv&quot;)
+
+print(&quot;=&quot;*60)
+print(&quot;Exercise 7: Pandas Comprehensive Operations&quot;)
+print(&quot;=&quot;*60)
+
+# 1. SINGLE-LEVEL INDEXING
+print(&quot;\n1. SINGLE-LEVEL INDEXING&quot;)
+
+# Set index
+df_indexed = df.set_index(&#x27;Accident_Index&#x27;)
+print(f&quot;  a) Set &#x27;Accident_Index&#x27; as index&quot;)
+print(f&quot;     Shape: {df_indexed.shape}&quot;)
+print(f&quot;     First 3 index values:&quot;)
+print(f&quot;     {df_indexed.index[:3].tolist()}&quot;)
+
+# Access by index
+if len(df_indexed) &gt; 0:
+    first_index = df_indexed.index[0]
+    print(f&quot;\n  b) Access by index:&quot;)
+    print(df_indexed.loc[first_index, [&#x27;Accident_Severity&#x27;, &#x27;Weather_Conditions&#x27;]])
+
+# 2. HIERARCHICAL INDEXING
+print(&quot;\n2. HIERARCHICAL INDEXING&quot;)
+
+# Create multi-level index
+df_multi = df.set_index([&#x27;Accident_Severity&#x27;, &#x27;Road_Type&#x27;])
+print(f&quot;  a) Multi-level index (Severity, Road Type)&quot;)
+print(f&quot;     Index levels: {df_multi.index.names}&quot;)
+print(f&quot;     First 5 index values:&quot;)
+for idx in df_multi.index[:5]:
+    print(f&quot;       {idx}&quot;)
+
+# Access multi-level
+print(f&quot;\n  b) Access fatal accidents:&quot;)
+if &#x27;Fatal&#x27; in df_multi.index.get_level_values(0):
+    fatal_data = df_multi.loc[&#x27;Fatal&#x27;]
+    print(f&quot;     Count: {len(fatal_data)}&quot;)
+    print(f&quot;     Road types: {fatal_data.index.unique().tolist()}&quot;)
+
+# 3. HANDLING MISSING DATA
+print(&quot;\n3. HANDLING MISSING DATA&quot;)
+
+# Detect missing values
+print(f&quot;  a) Missing values per column:&quot;)
+missing_counts = df.isnull().sum()
+if missing_counts.sum() &gt; 0:
+    print(missing_counts[missing_counts &gt; 0])
+else:
+    print(&quot;     No missing values detected!&quot;)
+
+# Drop rows with missing critical data
+df_clean = df.dropna(subset=[&#x27;Latitude&#x27;, &#x27;Longitude&#x27;])
+print(f&quot;\n  b) Dropped rows with missing coordinates:&quot;)
+print(f&quot;     Original: {len(df)} rows&quot;)
+print(f&quot;     After drop: {len(df_clean)} rows&quot;)
+print(f&quot;     Removed: {len(df) - len(df_clean)} rows&quot;)
+
+# Fill missing values (create synthetic missing data for demonstration)
+df_demo = df_clean.copy()
+df_demo.loc[df_demo.index[:100:10], &#x27;Time&#x27;] = None  # Add some missing values
+filled_time = df_demo[&#x27;Time&#x27;].fillna(&#x27;00:00&#x27;)
+print(f&quot;\n  c) Filled missing time values: {df_demo[&#x27;Time&#x27;].isnull().sum()} -&gt; 0&quot;)
+
+# 4. ARITHMETIC OPERATIONS on columns and tables
+print(&quot;\n4. ARITHMETIC OPERATIONS&quot;)
+
+# Create numeric column from latitude
+df_clean[&#x27;Lat_Normalized&#x27;] = (df_clean[&#x27;Latitude&#x27;] - 50) * 10
+print(f&quot;  a) Normalized latitude (first 5):&quot;)
+print(f&quot;     {df_clean[&#x27;Lat_Normalized&#x27;].head().tolist()}&quot;)
+
+# Column statistics
+print(f&quot;\n  b) Latitude statistics:&quot;)
+print(f&quot;     Mean:   {df_clean[&#x27;Latitude&#x27;].mean():.4f}&quot;)
+print(f&quot;     Median: {df_clean[&#x27;Latitude&#x27;].median():.4f}&quot;)
+print(f&quot;     Std:    {df_clean[&#x27;Latitude&#x27;].std():.4f}&quot;)
+
+# Operations between columns
+df_clean[&#x27;Lon_Lat_Sum&#x27;] = df_clean[&#x27;Longitude&#x27;] + df_clean[&#x27;Latitude&#x27;]
+print(f&quot;\n  c) Longitude + Latitude (first 5):&quot;)
+print(f&quot;     {df_clean[&#x27;Lon_Lat_Sum&#x27;].head().tolist()}&quot;)
+
+# 5. BOOLEAN OPERATIONS
+print(&quot;\n5. BOOLEAN OPERATIONS&quot;)
+
+# Filter data
+fatal_accidents = df_clean[df_clean[&#x27;Accident_Severity&#x27;] == &#x27;Fatal&#x27;]
+print(f&quot;  a) Fatal accidents: {len(fatal_accidents)}&quot;)
+
+serious_accidents = df_clean[df_clean[&#x27;Accident_Severity&#x27;] == &#x27;Serious&#x27;]
+print(f&quot;  b) Serious accidents: {len(serious_accidents)}&quot;)
+
+# Combined boolean - fatal or serious
+severe = df_clean[df_clean[&#x27;Accident_Severity&#x27;].isin([&#x27;Fatal&#x27;, &#x27;Serious&#x27;])]
+print(f&quot;  c) Fatal OR Serious: {len(severe)}&quot;)
+
+# Complex filter - rainy single carriageway
+rainy_single = df_clean[
+    (df_clean[&#x27;Weather_Conditions&#x27;].str.contains(&#x27;Rain&#x27;, na=False)) &amp;
+    (df_clean[&#x27;Road_Type&#x27;] == &#x27;Single carriageway&#x27;)
+]
+print(f&quot;  d) Rainy single carriageway accidents: {len(rainy_single)}&quot;)
+
+# 6. DATABASE-TYPE OPERATIONS (merging and aggregation)
+print(&quot;\n6. DATABASE-TYPE OPERATIONS&quot;)
+
+# Create sample severity reference table
+severity_ref = pd.DataFrame({
+    &#x27;Accident_Severity&#x27;: [&#x27;Fatal&#x27;, &#x27;Serious&#x27;, &#x27;Slight&#x27;],
+    &#x27;Severity_Code&#x27;: [1, 2, 3],
+    &#x27;Priority&#x27;: [&#x27;Critical&#x27;, &#x27;High&#x27;, &#x27;Medium&#x27;]
+})
+
+# Merge
+df_merged = df_clean.merge(severity_ref, on=&#x27;Accident_Severity&#x27;, how=&#x27;left&#x27;)
+print(f&quot;  a) Merged with severity reference:&quot;)
+print(df_merged[[&#x27;Accident_Severity&#x27;, &#x27;Severity_Code&#x27;, &#x27;Priority&#x27;]].head())
+
+# Create another sample dataset for concatenation
+df_sample1 = df_clean.head(100)
+df_sample2 = df_clean.tail(100)
+
+# Concatenate
+df_concat = pd.concat([df_sample1, df_sample2], ignore_index=True)
+print(f&quot;\n  b) Concatenated two samples: {len(df_concat)} rows&quot;)
+
+# Join (using index)
+df_indexed1 = df_clean.head(50).set_index(&#x27;Accident_Index&#x27;)
+df_indexed2 = df_clean.head(30).set_index(&#x27;Accident_Index&#x27;)[[&#x27;Weather_Conditions&#x27;]]
+df_joined = df_indexed1.join(df_indexed2, how=&#x27;inner&#x27;, rsuffix=&#x27;_check&#x27;)
+print(f&quot;\n  c) Joined on index: {len(df_joined)} rows&quot;)
+
+# 7. AGGREGATION operations
+print(&quot;\n7. AGGREGATION OPERATIONS&quot;)
+
+# GroupBy single column
+print(f&quot;  a) Accidents by severity:&quot;)
+severity_groups = df_clean.groupby(&#x27;Accident_Severity&#x27;).agg({
+    &#x27;Accident_Index&#x27;: &#x27;count&#x27;,
+    &#x27;Latitude&#x27;: [&#x27;mean&#x27;, &#x27;std&#x27;]
+})
+print(severity_groups)
+
+# GroupBy multiple columns
+print(f&quot;\n  b) Accidents by severity and road type (top 10):&quot;)
+multi_groups = df_clean.groupby([&#x27;Accident_Severity&#x27;, &#x27;Road_Type&#x27;]).size()
+print(multi_groups.head(10))
+
+# Custom aggregation
+print(f&quot;\n  c) Top weather conditions:&quot;)
+weather_agg = df_clean.groupby(&#x27;Weather_Conditions&#x27;).agg({
+    &#x27;Accident_Index&#x27;: &#x27;count&#x27;,
+    &#x27;Latitude&#x27;: &#x27;mean&#x27;
+}).sort_values(&#x27;Accident_Index&#x27;, ascending=False).head(5)
+weather_agg.columns = [&#x27;Count&#x27;, &#x27;Avg_Latitude&#x27;]
+print(weather_agg)
+
+# 8. PLOTTING individual columns and whole tables
+print(&quot;\n8. PLOTTING&quot;)
+
+# Create figure with multiple subplots
+fig, axes = plt.subplots(2, 2, figsize=(14, 10))
+fig.suptitle(&#x27;UK Road Accidents Analysis&#x27;, fontsize=16, fontweight=&#x27;bold&#x27;)
+
+# Plot 1: Scatter plot - Accident locations
+axes[0, 0].scatter(df_clean[&#x27;Longitude&#x27;], df_clean[&#x27;Latitude&#x27;], alpha=0.3, s=1, c=&#x27;red&#x27;)
+axes[0, 0].set_title(&#x27;Accident Locations (Scatter)&#x27;)
+axes[0, 0].set_xlabel(&#x27;Longitude&#x27;)
+axes[0, 0].set_ylabel(&#x27;Latitude&#x27;)
+axes[0, 0].grid(True, alpha=0.3)
+
+# Plot 2: Bar plot - Accidents by severity
+severity_counts = df_clean[&#x27;Accident_Severity&#x27;].value_counts()
+colors = {&#x27;Fatal&#x27;: &#x27;red&#x27;, &#x27;Serious&#x27;: &#x27;orange&#x27;, &#x27;Slight&#x27;: &#x27;yellow&#x27;}
+bar_colors = [colors.get(x, &#x27;gray&#x27;) for x in severity_counts.index]
+axes[0, 1].bar(range(len(severity_counts)), severity_counts.values, color=bar_colors)
+axes[0, 1].set_title(&#x27;Accidents by Severity&#x27;)
+axes[0, 1].set_xlabel(&#x27;Severity Level&#x27;)
+axes[0, 1].set_ylabel(&#x27;Count&#x27;)
+axes[0, 1].set_xticks(range(len(severity_counts)))
+axes[0, 1].set_xticklabels(severity_counts.index, rotation=45)
+axes[0, 1].grid(True, alpha=0.3, axis=&#x27;y&#x27;)
+
+# Plot 3: Histogram - Latitude distribution
+axes[1, 0].hist(df_clean[&#x27;Latitude&#x27;], bins=50, color=&#x27;steelblue&#x27;, edgecolor=&#x27;black&#x27;)
+axes[1, 0].set_title(&#x27;Distribution of Accident Latitudes&#x27;)
+axes[1, 0].set_xlabel(&#x27;Latitude&#x27;)
+axes[1, 0].set_ylabel(&#x27;Frequency&#x27;)
+axes[1, 0].grid(True, alpha=0.3, axis=&#x27;y&#x27;)
+
+# Plot 4: Pie chart - Road types
+road_counts = df_clean[&#x27;Road_Type&#x27;].value_counts().head(5)
+axes[1, 1].pie(road_counts.values, labels=road_counts.index, autopct=&#x27;%1.1f%%&#x27;, startangle=90)
+axes[1, 1].set_title(&#x27;Top 5 Road Types&#x27;)
+
+plt.tight_layout()
+
+# Save the plot
+plt.savefig(&#x27;./data/accident_analysis.png&#x27;, dpi=150, bbox_inches=&#x27;tight&#x27;)
+print(&quot;  [OK] Created 4-panel visualization&quot;)
+print(&quot;  [OK] Saved to: ./data/accident_analysis.png&quot;)
+
+# Additional individual column plot
+plt.figure(figsize=(10, 6))
+top_weather = df_clean[&#x27;Weather_Conditions&#x27;].value_counts().head(10)
+top_weather.plot(kind=&#x27;barh&#x27;, color=&#x27;skyblue&#x27;)
+plt.title(&#x27;Top 10 Weather Conditions&#x27;, fontsize=14, fontweight=&#x27;bold&#x27;)
+plt.xlabel(&#x27;Number of Accidents&#x27;)
+plt.ylabel(&#x27;Weather Condition&#x27;)
+plt.grid(True, alpha=0.3, axis=&#x27;x&#x27;)
+plt.tight_layout()
+plt.savefig(&#x27;./data/weather_conditions.png&#x27;, dpi=150, bbox_inches=&#x27;tight&#x27;)
+print(&quot;  [OK] Created weather conditions plot&quot;)
+print(&quot;  [OK] Saved to: ./data/weather_conditions.png&quot;)
+
+# 9. READING from and WRITING data to files
+print(&quot;\n9. FILE I/O OPERATIONS&quot;)
+
+# Write to different formats
+print(&quot;  a) Writing to files:&quot;)
+
+# CSV
+df_clean.head(100).to_csv(&#x27;./data/accidents_clean_sample.csv&#x27;, index=False)
+print(&quot;     [OK] CSV: ./data/accidents_clean_sample.csv&quot;)
+
+# Excel (requires openpyxl)
+try:
+    df_clean.head(100).to_excel(&#x27;./data/accidents_clean_sample.xlsx&#x27;, index=False, sheet_name=&#x27;Accidents&#x27;)
+    print(&quot;     [OK] Excel: ./data/accidents_clean_sample.xlsx&quot;)
+except ImportError:
+    print(&quot;     [SKIP] Excel: openpyxl not installed&quot;)
+
+# JSON
+df_clean.head(50).to_json(&#x27;./data/accidents_clean_sample.json&#x27;, orient=&#x27;records&#x27;, indent=2)
+print(&quot;     [OK] JSON: ./data/accidents_clean_sample.json&quot;)
+
+# Pickle (binary)
+df_clean.head(100).to_pickle(&#x27;./data/accidents_clean_sample.pkl&#x27;)
+print(&quot;     [OK] Pickle: ./data/accidents_clean_sample.pkl&quot;)
+
+# Read back from files
+print(&quot;\n  b) Reading from files:&quot;)
+
+# CSV
+df_from_csv = pd.read_csv(&#x27;./data/accidents_clean_sample.csv&#x27;)
+print(f&quot;     [OK] CSV loaded: {len(df_from_csv)} rows&quot;)
+
+# JSON
+df_from_json = pd.read_json(&#x27;./data/accidents_clean_sample.json&#x27;)
+print(f&quot;     [OK] JSON loaded: {len(df_from_json)} rows&quot;)
+
+# Pickle
+df_from_pickle = pd.read_pickle(&#x27;./data/accidents_clean_sample.pkl&#x27;)
+print(f&quot;     [OK] Pickle loaded: {len(df_from_pickle)} rows&quot;)
+
+# HTML (for web display)
+df_clean.head(20).to_html(&#x27;./data/accidents_table.html&#x27;, index=False)
+print(f&quot;     [OK] HTML table: ./data/accidents_table.html&quot;)
+
+print(&quot;\n&quot; + &quot;=&quot;*60)
+print(&quot;Exercise 7 Complete!&quot;)
+print(&quot;All plots saved to ./data/ directory&quot;)
+print(&quot;=&quot;*60)
+
+# Show plots
+print(&quot;\nDisplaying plots...&quot;)
+plt.show()
+</code></pre></div>
+                    </div>
+                    <div class="co-pane co-output">
+                        <div class="img-output-container">                            <h3 style="color:#fff; margin-bottom:20px; font-family:var(--font-heading);">Results from the Detailed Lab Report</h3>                            <img src="./assets/accident_analysis.png" onerror="this.src='https://via.placeholder.com/800x400/18181b/ef4444?text=Image+Load+Failed';"><br>                            <img src="./assets/weather_conditions.png" onerror="this.src='https://via.placeholder.com/800x400/18181b/ef4444?text=Image+Load+Failed';"><br>                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="sub2" class="subtask-pane ">
+                <div class="script-tabs">
+                    <button class="s-tab active" onclick="showScript(event, 'sub2', 'script_sub2_0')">exp1_loading_displaying_data.py</button>
+                    <button class="s-tab " onclick="showScript(event, 'sub2', 'script_sub2_1')">exp2_handling_missing_data.py</button>
+                    <button class="s-tab " onclick="showScript(event, 'sub2', 'script_sub2_2')">exp3_handling_categorical_data.py</button>
+                    <button class="s-tab " onclick="showScript(event, 'sub2', 'script_sub2_3')">exp4_data_visualization_eda.py</button>
+                </div>
+
+                <div id="script_sub2_0" class="script-pane active">
+                    <div style="margin-bottom:8px;"><span style="display:inline-block; padding:4px 12px; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.15); border-radius:50px; font-size:0.75rem; margin-right:8px; margin-bottom:8px; font-weight:600; font-family:var(--font-heading); color:var(--primary); letter-spacing:0.5px; text-transform:uppercase;">Pandas</span></div>
+                    <p style="color:var(--text-main); font-size:1.05rem; margin-bottom:20px; font-style:italic; border-left: 3px solid var(--primary); padding-left: 15px; background:rgba(255,255,255,0.02); padding-top:10px; padding-bottom:10px; border-radius:0 8px 8px 0;">Investigating dataframe structure and optimizing memory footprint.</p>
+                    <div class="co-tabs">
+                        <button class="co-tab active" onclick="showCO(event, 'script_sub2_0', 'code')">Source Code</button>
+                        <button class="co-tab" onclick="showCO(event, 'script_sub2_0', 'output')">Exec Screenshot / Output</button>
+                    </div>
+                    <div class="co-pane co-code active">
+                        <div class="code-container"><pre><code class="language-python">&quot;&quot;&quot;
+Experiment 1: Loading &amp; Displaying Data
+Description: Read a dataset from a CSV file into a DataFrame and view its content and structure
+&quot;&quot;&quot;
+
+import pandas as pd
+
+print(&quot;=&quot; * 70)
+print(&quot;Experiment 1: Loading &amp; Displaying Data&quot;)
+print(&quot;=&quot; * 70)
+
+# Load the dataset
+print(&quot;\n1. LOADING DATA FROM CSV&quot;)
+df = pd.read_csv(&#x27;./data/Accidents_small.csv&#x27;)
+print(f&quot;[OK] Dataset loaded successfully&quot;)
+print(f&quot;     Dataset shape: {df.shape} (rows, columns)&quot;)
+
+# Display basic information
+print(&quot;\n2. DATASET STRUCTURE&quot;)
+print(&quot;\n  a) Column names and data types:&quot;)
+print(df.dtypes)
+
+print(&quot;\n  b) Dataset info:&quot;)
+df.info()
+
+# Display first few rows
+print(&quot;\n3. PREVIEW DATA&quot;)
+print(&quot;\n  a) First 5 rows (head):&quot;)
+print(df.head())
+
+print(&quot;\n  b) Last 5 rows (tail):&quot;)
+print(df.tail())
+
+# Display random sample
+print(&quot;\n  c) Random sample (5 rows):&quot;)
+print(df.sample(5, random_state=42))
+
+# Statistical summary
+print(&quot;\n4. STATISTICAL SUMMARY&quot;)
+print(&quot;\n  a) Numerical columns summary:&quot;)
+print(df.describe())
+
+print(&quot;\n  b) Categorical columns summary:&quot;)
+print(df.describe(include=&#x27;object&#x27;))
+
+# Column-wise information
+print(&quot;\n5. COLUMN-WISE DETAILS&quot;)
+print(f&quot;\n  Total columns: {len(df.columns)}&quot;)
+print(f&quot;  Column names: {list(df.columns)}&quot;)
+
+print(&quot;\n  Data types distribution:&quot;)
+print(df.dtypes.value_counts())
+
+# Memory usage
+print(&quot;\n6. MEMORY USAGE&quot;)
+print(f&quot;\n  Total memory usage: {df.memory_usage(deep=True).sum() / 1024:.2f} KB&quot;)
+print(&quot;\n  Per-column memory usage:&quot;)
+print(df.memory_usage(deep=True))
+
+print(&quot;\n&quot; + &quot;=&quot; * 70)
+print(&quot;Experiment 1 Complete!&quot;)
+print(&quot;=&quot; * 70)
+</code></pre></div>
+                    </div>
+                    <div class="co-pane co-output">
+                        <div class="img-output-container">                            <h3 style="color:#fff; margin-bottom:20px; font-family:var(--font-heading);">Results from the Detailed Lab Report</h3>                            <img src="./assets/h.png" onerror="this.src='https://via.placeholder.com/800x400/18181b/ef4444?text=Image+Load+Failed';">                        </div>
+                    </div>
+                </div>
+                <div id="script_sub2_1" class="script-pane ">
+                    <div style="margin-bottom:8px;"><span style="display:inline-block; padding:4px 12px; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.15); border-radius:50px; font-size:0.75rem; margin-right:8px; margin-bottom:8px; font-weight:600; font-family:var(--font-heading); color:var(--primary); letter-spacing:0.5px; text-transform:uppercase;">Pandas</span></div>
+                    <p style="color:var(--text-main); font-size:1.05rem; margin-bottom:20px; font-style:italic; border-left: 3px solid var(--primary); padding-left: 15px; background:rgba(255,255,255,0.02); padding-top:10px; padding-bottom:10px; border-radius:0 8px 8px 0;">Tiered imputation strategies resolving Null coordinates and categorical features.</p>
+                    <div class="co-tabs">
+                        <button class="co-tab active" onclick="showCO(event, 'script_sub2_1', 'code')">Source Code</button>
+                        <button class="co-tab" onclick="showCO(event, 'script_sub2_1', 'output')">Exec Screenshot / Output</button>
+                    </div>
+                    <div class="co-pane co-code active">
+                        <div class="code-container"><pre><code class="language-python">&quot;&quot;&quot;
+Experiment 2: Handling Missing Data
+Description: Identify and manage missing values (NaNs) in the data by imputing them (e.g., using the mean)
+&quot;&quot;&quot;
+
+import pandas as pd
+import numpy as np
+
+print(&quot;=&quot; * 70)
+print(&quot;Experiment 2: Handling Missing Data&quot;)
+print(&quot;=&quot; * 70)
+
+# Load the dataset
+df = pd.read_csv(&#x27;./data/Accidents_small.csv&#x27;)
+print(f&quot;[OK] Dataset loaded: {df.shape}&quot;)
+
+# 1. IDENTIFY MISSING VALUES
+print(&quot;\n1. IDENTIFYING MISSING VALUES&quot;)
+
+print(&quot;\n  a) Missing values count per column:&quot;)
+missing_counts = df.isnull().sum()
+print(missing_counts[missing_counts &gt; 0] if missing_counts.sum() &gt; 0 else &quot;     No missing values detected!&quot;)
+
+print(&quot;\n  b) Missing values percentage:&quot;)
+missing_percent = (df.isnull().sum() / len(df)) * 100
+print(missing_percent[missing_percent &gt; 0] if missing_percent.sum() &gt; 0 else &quot;     No missing values detected!&quot;)
+
+print(&quot;\n  c) Total missing values in dataset:&quot;)
+print(f&quot;     {df.isnull().sum().sum()} missing values&quot;)
+
+# Create synthetic missing data for demonstration
+print(&quot;\n2. CREATING SYNTHETIC MISSING DATA (For demonstration)&quot;)
+df_demo = df.copy()
+
+# Introduce missing values in numeric columns
+df_demo.loc[df_demo.sample(frac=0.1, random_state=42).index, &#x27;Latitude&#x27;] = np.nan
+df_demo.loc[df_demo.sample(frac=0.15, random_state=43).index, &#x27;Longitude&#x27;] = np.nan
+
+# Introduce missing values in categorical columns
+df_demo.loc[df_demo.sample(frac=0.05, random_state=44).index, &#x27;Weather_Conditions&#x27;] = np.nan
+df_demo.loc[df_demo.sample(frac=0.08, random_state=45).index, &#x27;Road_Type&#x27;] = np.nan
+
+print(&quot;\n  Missing values after introducing synthetic NaNs:&quot;)
+missing_after = df_demo.isnull().sum()
+print(missing_after[missing_after &gt; 0])
+
+# 3. HANDLING MISSING VALUES - DIFFERENT STRATEGIES
+print(&quot;\n3. HANDLING MISSING VALUES&quot;)
+
+# Strategy 1: Fill with mean (for numeric columns)
+print(&quot;\n  a) Imputing with MEAN (Numeric columns):&quot;)
+df_mean_imputed = df_demo.copy()
+df_mean_imputed[&#x27;Latitude&#x27;] = df_mean_imputed[&#x27;Latitude&#x27;].fillna(df_mean_imputed[&#x27;Latitude&#x27;].mean())
+df_mean_imputed[&#x27;Longitude&#x27;] = df_mean_imputed[&#x27;Longitude&#x27;].fillna(df_mean_imputed[&#x27;Longitude&#x27;].mean())
+print(f&quot;     Latitude - Before: {df_demo[&#x27;Latitude&#x27;].isnull().sum()}, After: {df_mean_imputed[&#x27;Latitude&#x27;].isnull().sum()}&quot;)
+print(f&quot;     Longitude - Before: {df_demo[&#x27;Longitude&#x27;].isnull().sum()}, After: {df_mean_imputed[&#x27;Longitude&#x27;].isnull().sum()}&quot;)
+
+# Strategy 2: Fill with median (for numeric columns)
+print(&quot;\n  b) Imputing with MEDIAN (Numeric columns):&quot;)
+df_median_imputed = df_demo.copy()
+df_median_imputed[&#x27;Latitude&#x27;] = df_median_imputed[&#x27;Latitude&#x27;].fillna(df_median_imputed[&#x27;Latitude&#x27;].median())
+df_median_imputed[&#x27;Longitude&#x27;] = df_median_imputed[&#x27;Longitude&#x27;].fillna(df_median_imputed[&#x27;Longitude&#x27;].median())
+print(f&quot;     Latitude - Mean: {df_demo[&#x27;Latitude&#x27;].mean():.4f}, Median: {df_demo[&#x27;Latitude&#x27;].median():.4f}&quot;)
+print(f&quot;     Imputed with median successfully&quot;)
+
+# Strategy 3: Fill with mode (for categorical columns)
+print(&quot;\n  c) Imputing with MODE (Categorical columns):&quot;)
+df_mode_imputed = df_demo.copy()
+weather_mode = df_mode_imputed[&#x27;Weather_Conditions&#x27;].mode()[0]
+road_mode = df_mode_imputed[&#x27;Road_Type&#x27;].mode()[0]
+df_mode_imputed[&#x27;Weather_Conditions&#x27;] = df_mode_imputed[&#x27;Weather_Conditions&#x27;].fillna(weather_mode)
+df_mode_imputed[&#x27;Road_Type&#x27;] = df_mode_imputed[&#x27;Road_Type&#x27;].fillna(road_mode)
+print(f&quot;     Weather_Conditions - Mode: &#x27;{weather_mode}&#x27;&quot;)
+print(f&quot;     Road_Type - Mode: &#x27;{road_mode}&#x27;&quot;)
+print(f&quot;     Imputed successfully&quot;)
+
+# Strategy 4: Forward fill
+print(&quot;\n  d) Forward Fill (ffill):&quot;)
+df_ffill = df_demo.copy()
+df_ffill = df_ffill.ffill()
+print(f&quot;     Total missing after ffill: {df_ffill.isnull().sum().sum()}&quot;)
+
+# Strategy 5: Backward fill
+print(&quot;\n  e) Backward Fill (bfill):&quot;)
+df_bfill = df_demo.copy()
+df_bfill = df_bfill.bfill()
+print(f&quot;     Total missing after bfill: {df_bfill.isnull().sum().sum()}&quot;)
+
+# Strategy 6: Drop rows with missing values
+print(&quot;\n  f) Dropping Rows with Missing Values:&quot;)
+df_dropped = df_demo.dropna()
+print(f&quot;     Original rows: {len(df_demo)}&quot;)
+print(f&quot;     After dropping: {len(df_dropped)}&quot;)
+print(f&quot;     Rows removed: {len(df_demo) - len(df_dropped)}&quot;)
+
+# Strategy 7: Drop columns with too many missing values
+print(&quot;\n  g) Dropping Columns with &gt;20% Missing Values:&quot;)
+threshold = 0.2
+missing_frac = df_demo.isnull().sum() / len(df_demo)
+cols_to_drop = missing_frac[missing_frac &gt; threshold].index.tolist()
+print(f&quot;     Columns to drop: {cols_to_drop if cols_to_drop else &#x27;None&#x27;}&quot;)
+
+# 4. COMBINED STRATEGY
+print(&quot;\n4. COMBINED IMPUTATION STRATEGY&quot;)
+df_final = df_demo.copy()
+
+# Fill numeric with mean
+numeric_cols = df_final.select_dtypes(include=[np.number]).columns
+for col in numeric_cols:
+    df_final[col] = df_final[col].fillna(df_final[col].mean())
+
+# Fill categorical with mode
+categorical_cols = df_final.select_dtypes(include=[&#x27;object&#x27;]).columns
+for col in categorical_cols:
+    if df_final[col].isnull().sum() &gt; 0:
+        df_final[col] = df_final[col].fillna(df_final[col].mode()[0])
+
+print(f&quot;  Total missing values after combined imputation: {df_final.isnull().sum().sum()}&quot;)
+print(f&quot;  [OK] All missing values handled!&quot;)
+
+print(&quot;\n&quot; + &quot;=&quot; * 70)
+print(&quot;Experiment 2 Complete!&quot;)
+print(&quot;=&quot; * 70)
+</code></pre></div>
+                    </div>
+                    <div class="co-pane co-output">
+                        <div class="img-output-container">                            <h3 style="color:#fff; margin-bottom:20px; font-family:var(--font-heading);">Results from the Detailed Lab Report</h3>                            <img src="./assets/i.png" onerror="this.src='https://via.placeholder.com/800x400/18181b/ef4444?text=Image+Load+Failed';">                        </div>
+                    </div>
+                </div>
+                <div id="script_sub2_2" class="script-pane ">
+                    <div style="margin-bottom:8px;"><span style="display:inline-block; padding:4px 12px; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.15); border-radius:50px; font-size:0.75rem; margin-right:8px; margin-bottom:8px; font-weight:600; font-family:var(--font-heading); color:var(--primary); letter-spacing:0.5px; text-transform:uppercase;">Pandas</span><span style="display:inline-block; padding:4px 12px; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.15); border-radius:50px; font-size:0.75rem; margin-right:8px; margin-bottom:8px; font-weight:600; font-family:var(--font-heading); color:var(--primary); letter-spacing:0.5px; text-transform:uppercase;">scikit-learn</span></div>
+                    <p style="color:var(--text-main); font-size:1.05rem; margin-bottom:20px; font-style:italic; border-left: 3px solid var(--primary); padding-left: 15px; background:rgba(255,255,255,0.02); padding-top:10px; padding-bottom:10px; border-radius:0 8px 8px 0;">Transforming qualitative features into dense numerical encodings.</p>
+                    <div class="co-tabs">
+                        <button class="co-tab active" onclick="showCO(event, 'script_sub2_2', 'code')">Source Code</button>
+                        <button class="co-tab" onclick="showCO(event, 'script_sub2_2', 'output')">Exec Screenshot / Output</button>
+                    </div>
+                    <div class="co-pane co-code active">
+                        <div class="code-container"><pre><code class="language-python">&quot;&quot;&quot;
+Experiment 3: Handling Categorical Data
+Description: Convert non-numeric data into a numerical format for modeling (e.g., one-hot encoding)
+&quot;&quot;&quot;
+
+import pandas as pd
+from sklearn.preprocessing import LabelEncoder, OrdinalEncoder
+
+print(&quot;=&quot; * 70)
+print(&quot;Experiment 3: Handling Categorical Data&quot;)
+print(&quot;=&quot; * 70)
+
+# Load the dataset
+df = pd.read_csv(&#x27;./data/Accidents_small.csv&#x27;)
+print(f&quot;[OK] Dataset loaded: {df.shape}&quot;)
+
+# 1. IDENTIFY CATEGORICAL COLUMNS
+print(&quot;\n1. IDENTIFYING CATEGORICAL COLUMNS&quot;)
+categorical_cols = df.select_dtypes(include=[&#x27;object&#x27;]).columns.tolist()
+print(f&quot;\n  Categorical columns found: {len(categorical_cols)}&quot;)
+print(f&quot;  Column names: {categorical_cols}&quot;)
+
+print(&quot;\n  Unique values per categorical column:&quot;)
+for col in categorical_cols:
+    print(f&quot;    {col}: {df[col].nunique()} unique values&quot;)
+
+# 2. LABEL ENCODING
+print(&quot;\n2. LABEL ENCODING (Converting to integers)&quot;)
+print(&quot;  Converting categorical values to integer labels (0, 1, 2, ...)&quot;)
+
+df_label_encoded = df.copy()
+
+# Apply label encoding to Accident_Severity
+le_severity = LabelEncoder()
+df_label_encoded[&#x27;Accident_Severity_Encoded&#x27;] = le_severity.fit_transform(df[&#x27;Accident_Severity&#x27;])
+
+print(f&quot;\n  a) Accident_Severity:&quot;)
+print(f&quot;     Original values: {df[&#x27;Accident_Severity&#x27;].unique()[:5]}&quot;)
+print(f&quot;     Encoded values: {df_label_encoded[&#x27;Accident_Severity_Encoded&#x27;].unique()}&quot;)
+print(f&quot;     Mapping: {dict(zip(le_severity.classes_, range(len(le_severity.classes_))))}&quot;)
+
+# Apply label encoding to Weather_Conditions
+le_weather = LabelEncoder()
+df_label_encoded[&#x27;Weather_Conditions_Encoded&#x27;] = le_weather.fit_transform(df[&#x27;Weather_Conditions&#x27;].fillna(&#x27;Unknown&#x27;))
+
+print(f&quot;\n  b) Weather_Conditions:&quot;)
+print(f&quot;     Unique categories: {len(le_weather.classes_)}&quot;)
+print(f&quot;     Sample mapping: {dict(list(zip(le_weather.classes_[:5], range(5))))}&quot;)
+
+# 3. ONE-HOT ENCODING
+print(&quot;\n3. ONE-HOT ENCODING (Creating binary columns)&quot;)
+print(&quot;  Creating separate binary columns for each category&quot;)
+
+# One-hot encode Accident_Severity
+print(f&quot;\n  a) One-hot encoding Accident_Severity:&quot;)
+severity_dummies = pd.get_dummies(df[&#x27;Accident_Severity&#x27;], prefix=&#x27;Severity&#x27;)
+print(f&quot;     Created {len(severity_dummies.columns)} columns:&quot;)
+print(f&quot;     Columns: {list(severity_dummies.columns)}&quot;)
+print(f&quot;\n     Sample data:&quot;)
+print(severity_dummies.head())
+
+# One-hot encode Road_Type
+print(f&quot;\n  b) One-hot encoding Road_Type:&quot;)
+road_dummies = pd.get_dummies(df[&#x27;Road_Type&#x27;], prefix=&#x27;Road&#x27;)
+print(f&quot;     Created {len(road_dummies.columns)} columns&quot;)
+print(f&quot;     Columns: {list(road_dummies.columns)}&quot;)
+
+# Combine with original dataframe
+df_one_hot = pd.concat([df, severity_dummies, road_dummies], axis=1)
+print(f&quot;\n  c) Combined DataFrame shape after one-hot encoding:&quot;)
+print(f&quot;     Original: {df.shape}&quot;)
+print(f&quot;     After one-hot: {df_one_hot.shape}&quot;)
+
+# 4. GET_DUMMIES WITH DROP_FIRST (Avoiding dummy variable trap)
+print(&quot;\n4. ONE-HOT ENCODING WITH DROP_FIRST&quot;)
+print(&quot;  Dropping first category to avoid multicollinearity&quot;)
+
+severity_dummies_drop = pd.get_dummies(df[&#x27;Accident_Severity&#x27;], prefix=&#x27;Severity&#x27;, drop_first=True)
+print(f&quot;\n  Accident_Severity with drop_first=True:&quot;)
+print(f&quot;    Columns: {list(severity_dummies_drop.columns)}&quot;)
+print(f&quot;    (Dropped first category to avoid redundancy)&quot;)
+
+# 5. ORDINAL ENCODING (For ordered categories)
+print(&quot;\n5. ORDINAL ENCODING (For ordered categories)&quot;)
+
+# Create ordered encoding for Accident_Severity (Fatal &lt; Serious &lt; Slight)
+severity_order = [&#x27;Fatal&#x27;, &#x27;Serious&#x27;, &#x27;Slight&#x27;]
+df_ordinal = df.copy()
+df_ordinal[&#x27;Severity_Ordinal&#x27;] = df_ordinal[&#x27;Accident_Severity&#x27;].map(
+    {severity: idx for idx, severity in enumerate(severity_order)}
+)
+
+print(f&quot;\n  Accident_Severity with ordinal encoding:&quot;)
+print(f&quot;    Mapping: {dict(zip(severity_order, range(len(severity_order))))}&quot;)
+print(f&quot;    Sample values:&quot;)
+print(df_ordinal[[&#x27;Accident_Severity&#x27;, &#x27;Severity_Ordinal&#x27;]].head())
+
+# 6. FREQUENCY ENCODING
+print(&quot;\n6. FREQUENCY ENCODING&quot;)
+print(&quot;  Encoding based on category frequency&quot;)
+
+weather_freq = df[&#x27;Weather_Conditions&#x27;].value_counts(normalize=True)
+df_freq = df.copy()
+df_freq[&#x27;Weather_Frequency&#x27;] = df[&#x27;Weather_Conditions&#x27;].map(weather_freq)
+
+print(f&quot;\n  Weather_Conditions frequency encoding:&quot;)
+print(f&quot;    Top 5 most frequent:&quot;)
+print(weather_freq.head())
+print(f&quot;\n    Sample encoded data:&quot;)
+print(df_freq[[&#x27;Weather_Conditions&#x27;, &#x27;Weather_Frequency&#x27;]].head())
+
+# 7. COMBINING MULTIPLE ENCODING TECHNIQUES
+print(&quot;\n7. COMPLETE CATEGORICAL DATA TRANSFORMATION&quot;)
+
+df_transformed = df.copy()
+
+# Keep only necessary columns
+print(f&quot;\n  a) Starting with original categorical columns:&quot;)
+print(f&quot;     {categorical_cols}&quot;)
+
+# Apply one-hot encoding to selected columns
+categorical_to_encode = [&#x27;Accident_Severity&#x27;, &#x27;Road_Type&#x27;]
+df_encoded = pd.get_dummies(df_transformed, columns=categorical_to_encode, drop_first=True)
+
+print(f&quot;\n  b) After one-hot encoding:&quot;)
+print(f&quot;     New shape: {df_encoded.shape}&quot;)
+print(f&quot;     New columns added: {df_encoded.shape[1] - df_transformed.shape[1]}&quot;)
+
+# Apply label encoding to remaining categorical
+remaining_categorical = [&#x27;Weather_Conditions&#x27;]
+for col in remaining_categorical:
+    if col in df_encoded.columns:
+        le = LabelEncoder()
+        df_encoded[f&#x27;{col}_Encoded&#x27;] = le.fit_transform(df_encoded[col].fillna(&#x27;Unknown&#x27;))
+        df_encoded.drop(col, axis=1, inplace=True)
+
+print(f&quot;\n  c) After label encoding remaining columns:&quot;)
+print(f&quot;     Final shape: {df_encoded.shape}&quot;)
+print(f&quot;     All categorical data transformed to numeric!&quot;)
+
+print(&quot;\n  d) Final dataset data types:&quot;)
+print(df_encoded.dtypes.value_counts())
+
+print(&quot;\n&quot; + &quot;=&quot; * 70)
+print(&quot;Experiment 3 Complete!&quot;)
+print(&quot;=&quot; * 70)
+</code></pre></div>
+                    </div>
+                    <div class="co-pane co-output">
+                        <div class="img-output-container">                            <h3 style="color:#fff; margin-bottom:20px; font-family:var(--font-heading);">Results from the Detailed Lab Report</h3>                            <img src="./assets/j.png" onerror="this.src='https://via.placeholder.com/800x400/18181b/ef4444?text=Image+Load+Failed';">                        </div>
+                    </div>
+                </div>
+                <div id="script_sub2_3" class="script-pane ">
+                    <div style="margin-bottom:8px;"><span style="display:inline-block; padding:4px 12px; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.15); border-radius:50px; font-size:0.75rem; margin-right:8px; margin-bottom:8px; font-weight:600; font-family:var(--font-heading); color:var(--primary); letter-spacing:0.5px; text-transform:uppercase;">Pandas</span><span style="display:inline-block; padding:4px 12px; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.15); border-radius:50px; font-size:0.75rem; margin-right:8px; margin-bottom:8px; font-weight:600; font-family:var(--font-heading); color:var(--primary); letter-spacing:0.5px; text-transform:uppercase;">Matplotlib</span><span style="display:inline-block; padding:4px 12px; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.15); border-radius:50px; font-size:0.75rem; margin-right:8px; margin-bottom:8px; font-weight:600; font-family:var(--font-heading); color:var(--primary); letter-spacing:0.5px; text-transform:uppercase;">Seaborn</span></div>
+                    <p style="color:var(--text-main); font-size:1.05rem; margin-bottom:20px; font-style:italic; border-left: 3px solid var(--primary); padding-left: 15px; background:rgba(255,255,255,0.02); padding-top:10px; padding-bottom:10px; border-radius:0 8px 8px 0;">Comprehensive data visualization mapping exploratory data features.</p>
+                    <div class="co-tabs">
+                        <button class="co-tab active" onclick="showCO(event, 'script_sub2_3', 'code')">Source Code</button>
+                        <button class="co-tab" onclick="showCO(event, 'script_sub2_3', 'output')">Exec Screenshot / Output</button>
+                    </div>
+                    <div class="co-pane co-code active">
+                        <div class="code-container"><pre><code class="language-python">&quot;&quot;&quot;
+Experiment 4: Data Visualization &amp; EDA
+Description: Analyze data patterns and relationships using plots like histograms, scatter plots, and correlation heatmaps
+&quot;&quot;&quot;
+
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+print(&quot;=&quot; * 70)
+print(&quot;Experiment 4: Data Visualization &amp; Exploratory Data Analysis&quot;)
+print(&quot;=&quot; * 70)
+
+# Load the dataset
+df = pd.read_csv(&#x27;./data/Accidents_small.csv&#x27;)
+print(f&quot;[OK] Dataset loaded: {df.shape}&quot;)
+
+# Clean data - remove rows with missing coordinates
+df_clean = df.dropna(subset=[&#x27;Latitude&#x27;, &#x27;Longitude&#x27;])
+print(f&quot;[OK] Cleaned dataset: {df_clean.shape}&quot;)
+
+# Set style for better-looking plots
+sns.set_style(&quot;whitegrid&quot;)
+plt.rcParams[&#x27;figure.figsize&#x27;] = (12, 8)
+
+# 1. UNIVARIATE ANALYSIS
+print(&quot;\n1. UNIVARIATE ANALYSIS&quot;)
+print(&quot;  Analyzing individual variables&quot;)
+
+# Create figure for univariate plots
+fig1, axes1 = plt.subplots(2, 2, figsize=(15, 12))
+fig1.suptitle(&#x27;Univariate Analysis&#x27;, fontsize=16, fontweight=&#x27;bold&#x27;, y=0.995)
+
+# Plot 1: Histogram - Latitude distribution
+axes1[0, 0].hist(df_clean[&#x27;Latitude&#x27;], bins=50, color=&#x27;steelblue&#x27;, edgecolor=&#x27;black&#x27;, alpha=0.7)
+axes1[0, 0].set_title(&#x27;Distribution of Accident Latitudes&#x27;, fontweight=&#x27;bold&#x27;)
+axes1[0, 0].set_xlabel(&#x27;Latitude&#x27;)
+axes1[0, 0].set_ylabel(&#x27;Frequency&#x27;)
+axes1[0, 0].grid(True, alpha=0.3)
+
+# Plot 2: Bar plot - Accident Severity
+severity_counts = df_clean[&#x27;Accident_Severity&#x27;].value_counts()
+colors_severity = {&#x27;Fatal&#x27;: &#x27;#d62728&#x27;, &#x27;Serious&#x27;: &#x27;#ff7f0e&#x27;, &#x27;Slight&#x27;: &#x27;#2ca02c&#x27;}
+bar_colors = [colors_severity.get(x, &#x27;gray&#x27;) for x in severity_counts.index]
+axes1[0, 1].bar(severity_counts.index, severity_counts.values, color=bar_colors, edgecolor=&#x27;black&#x27;, alpha=0.7)
+axes1[0, 1].set_title(&#x27;Accidents by Severity Level&#x27;, fontweight=&#x27;bold&#x27;)
+axes1[0, 1].set_xlabel(&#x27;Severity&#x27;)
+axes1[0, 1].set_ylabel(&#x27;Count&#x27;)
+axes1[0, 1].grid(True, alpha=0.3, axis=&#x27;y&#x27;)
+
+# Plot 3: Horizontal bar - Top 10 Weather Conditions
+weather_counts = df_clean[&#x27;Weather_Conditions&#x27;].value_counts().head(10)
+axes1[1, 0].barh(range(len(weather_counts)), weather_counts.values, color=&#x27;skyblue&#x27;, edgecolor=&#x27;black&#x27;)
+axes1[1, 0].set_yticks(range(len(weather_counts)))
+axes1[1, 0].set_yticklabels(weather_counts.index, fontsize=9)
+axes1[1, 0].set_title(&#x27;Top 10 Weather Conditions&#x27;, fontweight=&#x27;bold&#x27;)
+axes1[1, 0].set_xlabel(&#x27;Count&#x27;)
+axes1[1, 0].invert_yaxis()
+axes1[1, 0].grid(True, alpha=0.3, axis=&#x27;x&#x27;)
+
+# Plot 4: Pie chart - Road Type distribution
+road_counts = df_clean[&#x27;Road_Type&#x27;].value_counts().head(5)
+axes1[1, 1].pie(road_counts.values, labels=road_counts.index, autopct=&#x27;%1.1f%%&#x27;, 
+                startangle=90, colors=sns.color_palette(&#x27;Set3&#x27;))
+axes1[1, 1].set_title(&#x27;Top 5 Road Types Distribution&#x27;, fontweight=&#x27;bold&#x27;)
+
+plt.tight_layout()
+plt.savefig(&#x27;./data/lab2_univariate_analysis.png&#x27;, dpi=150, bbox_inches=&#x27;tight&#x27;)
+print(&quot;  [OK] Saved: ./data/lab2_univariate_analysis.png&quot;)
+
+# 2. BIVARIATE ANALYSIS
+print(&quot;\n2. BIVARIATE ANALYSIS&quot;)
+print(&quot;  Analyzing relationships between two variables&quot;)
+
+fig2, axes2 = plt.subplots(2, 2, figsize=(15, 12))
+fig2.suptitle(&#x27;Bivariate Analysis&#x27;, fontsize=16, fontweight=&#x27;bold&#x27;, y=0.995)
+
+# Plot 1: Scatter plot - Latitude vs Longitude (Geographic distribution)
+severity_colors = {&#x27;Fatal&#x27;: &#x27;red&#x27;, &#x27;Serious&#x27;: &#x27;orange&#x27;, &#x27;Slight&#x27;: &#x27;green&#x27;}
+for severity in df_clean[&#x27;Accident_Severity&#x27;].unique():
+    subset = df_clean[df_clean[&#x27;Accident_Severity&#x27;] == severity]
+    axes2[0, 0].scatter(subset[&#x27;Longitude&#x27;], subset[&#x27;Latitude&#x27;], 
+                       alpha=0.4, s=10, label=severity,
+                       color=severity_colors.get(severity, &#x27;gray&#x27;))
+axes2[0, 0].set_title(&#x27;Geographic Distribution of Accidents by Severity&#x27;, fontweight=&#x27;bold&#x27;)
+axes2[0, 0].set_xlabel(&#x27;Longitude&#x27;)
+axes2[0, 0].set_ylabel(&#x27;Latitude&#x27;)
+axes2[0, 0].legend()
+axes2[0, 0].grid(True, alpha=0.3)
+
+# Plot 2: Box plot - Latitude by Severity
+severity_order = [&#x27;Fatal&#x27;, &#x27;Serious&#x27;, &#x27;Slight&#x27;]
+df_clean[&#x27;Accident_Severity&#x27;] = pd.Categorical(df_clean[&#x27;Accident_Severity&#x27;], 
+                                                categories=severity_order, ordered=True)
+sns.boxplot(data=df_clean, x=&#x27;Accident_Severity&#x27;, y=&#x27;Latitude&#x27;, 
+            palette=&#x27;Set2&#x27;, ax=axes2[0, 1])
+axes2[0, 1].set_title(&#x27;Latitude Distribution by Accident Severity&#x27;, fontweight=&#x27;bold&#x27;)
+axes2[0, 1].set_xlabel(&#x27;Accident Severity&#x27;)
+axes2[0, 1].set_ylabel(&#x27;Latitude&#x27;)
+axes2[0, 1].grid(True, alpha=0.3, axis=&#x27;y&#x27;)
+
+# Plot 3: Count plot - Severity by Road Type (top 5 road types)
+top_roads = df_clean[&#x27;Road_Type&#x27;].value_counts().head(5).index
+df_top_roads = df_clean[df_clean[&#x27;Road_Type&#x27;].isin(top_roads)]
+sns.countplot(data=df_top_roads, x=&#x27;Road_Type&#x27;, hue=&#x27;Accident_Severity&#x27;, 
+              palette=&#x27;Set1&#x27;, ax=axes2[1, 0])
+axes2[1, 0].set_title(&#x27;Accident Severity by Road Type (Top 5)&#x27;, fontweight=&#x27;bold&#x27;)
+axes2[1, 0].set_xlabel(&#x27;Road Type&#x27;)
+axes2[1, 0].set_ylabel(&#x27;Count&#x27;)
+axes2[1, 0].tick_params(axis=&#x27;x&#x27;, rotation=45)
+axes2[1, 0].legend(title=&#x27;Severity&#x27;)
+axes2[1, 0].grid(True, alpha=0.3, axis=&#x27;y&#x27;)
+
+# Plot 4: Violin plot - Longitude by Severity
+sns.violinplot(data=df_clean, x=&#x27;Accident_Severity&#x27;, y=&#x27;Longitude&#x27;, 
+               palette=&#x27;muted&#x27;, ax=axes2[1, 1])
+axes2[1, 1].set_title(&#x27;Longitude Distribution by Accident Severity&#x27;, fontweight=&#x27;bold&#x27;)
+axes2[1, 1].set_xlabel(&#x27;Accident Severity&#x27;)
+axes2[1, 1].set_ylabel(&#x27;Longitude&#x27;)
+axes2[1, 1].grid(True, alpha=0.3, axis=&#x27;y&#x27;)
+
+plt.tight_layout()
+plt.savefig(&#x27;./data/lab2_bivariate_analysis.png&#x27;, dpi=150, bbox_inches=&#x27;tight&#x27;)
+print(&quot;  [OK] Saved: ./data/lab2_bivariate_analysis.png&quot;)
+
+# 3. CORRELATION ANALYSIS
+print(&quot;\n3. CORRELATION ANALYSIS&quot;)
+print(&quot;  Analyzing relationships between numeric variables&quot;)
+
+# Create a dataframe with numeric features
+df_numeric = df_clean.copy()
+
+# Encode categorical variables for correlation
+from sklearn.preprocessing import LabelEncoder
+le_severity = LabelEncoder()
+le_road = LabelEncoder()
+le_weather = LabelEncoder()
+
+df_numeric[&#x27;Severity_Code&#x27;] = le_severity.fit_transform(df_numeric[&#x27;Accident_Severity&#x27;])
+df_numeric[&#x27;Road_Code&#x27;] = le_road.fit_transform(df_numeric[&#x27;Road_Type&#x27;])
+df_numeric[&#x27;Weather_Code&#x27;] = le_weather.fit_transform(df_numeric[&#x27;Weather_Conditions&#x27;].fillna(&#x27;Unknown&#x27;))
+
+# Select numeric columns for correlation
+numeric_cols = [&#x27;Latitude&#x27;, &#x27;Longitude&#x27;, &#x27;Severity_Code&#x27;, &#x27;Road_Code&#x27;, &#x27;Weather_Code&#x27;]
+correlation_matrix = df_numeric[numeric_cols].corr()
+
+# Create correlation heatmap
+fig3, ax3 = plt.subplots(figsize=(10, 8))
+sns.heatmap(correlation_matrix, annot=True, fmt=&#x27;.3f&#x27;, cmap=&#x27;coolwarm&#x27;, 
+            center=0, square=True, linewidths=1, cbar_kws={&quot;shrink&quot;: 0.8},
+            ax=ax3)
+ax3.set_title(&#x27;Correlation Heatmap of Numeric Features&#x27;, fontweight=&#x27;bold&#x27;, fontsize=14, pad=20)
+plt.tight_layout()
+plt.savefig(&#x27;./data/lab2_correlation_heatmap.png&#x27;, dpi=150, bbox_inches=&#x27;tight&#x27;)
+print(&quot;  [OK] Saved: ./data/lab2_correlation_heatmap.png&quot;)
+
+print(&quot;\n  Correlation insights:&quot;)
+print(f&quot;    Strongest positive correlation: {correlation_matrix.abs().unstack().sort_values(ascending=False).drop_duplicates().iloc[1]:.3f}&quot;)
+print(f&quot;    Features analyzed: {&#x27;, &#x27;.join(numeric_cols)}&quot;)
+
+# 4. MULTIVARIATE ANALYSIS
+print(&quot;\n4. MULTIVARIATE ANALYSIS&quot;)
+print(&quot;  Analyzing multiple variables together&quot;)
+
+# Pair plot for numeric features (sample)
+print(&quot;\n  Creating pair plot (this may take a moment)...&quot;)
+sample_df = df_numeric[[&#x27;Latitude&#x27;, &#x27;Longitude&#x27;, &#x27;Severity_Code&#x27;]].sample(min(1000, len(df_numeric)), random_state=42)
+pair_plot = sns.pairplot(sample_df, diag_kind=&#x27;hist&#x27;, plot_kws={&#x27;alpha&#x27;: 0.6})
+pair_plot.fig.suptitle(&#x27;Pair Plot: Coordinates and Severity&#x27;, y=1.02, fontweight=&#x27;bold&#x27;)
+plt.savefig(&#x27;./data/lab2_pairplot.png&#x27;, dpi=150, bbox_inches=&#x27;tight&#x27;)
+print(&quot;  [OK] Saved: ./data/lab2_pairplot.png&quot;)
+
+# 5. TIME SERIES PATTERNS (if applicable)
+print(&quot;\n5. ADDITIONAL EDA INSIGHTS&quot;)
+
+# Distribution comparisons
+fig5, axes5 = plt.subplots(1, 2, figsize=(15, 5))
+fig5.suptitle(&#x27;Distribution Comparisons&#x27;, fontsize=14, fontweight=&#x27;bold&#x27;)
+
+# KDE plot for latitude by severity
+for severity in severity_order:
+    subset = df_clean[df_clean[&#x27;Accident_Severity&#x27;] == severity]
+    axes5[0].hist(subset[&#x27;Latitude&#x27;], bins=30, alpha=0.5, label=severity, density=True)
+axes5[0].set_title(&#x27;Latitude Distribution by Severity (Overlapping)&#x27;, fontweight=&#x27;bold&#x27;)
+axes5[0].set_xlabel(&#x27;Latitude&#x27;)
+axes5[0].set_ylabel(&#x27;Density&#x27;)
+axes5[0].legend()
+axes5[0].grid(True, alpha=0.3)
+
+# Top weather conditions by severity
+top_weather = df_clean.groupby([&#x27;Weather_Conditions&#x27;, &#x27;Accident_Severity&#x27;]).size().reset_index(name=&#x27;count&#x27;)
+top_weather_pivot = top_weather.pivot(index=&#x27;Weather_Conditions&#x27;, columns=&#x27;Accident_Severity&#x27;, values=&#x27;count&#x27;).fillna(0)
+top_weather_pivot = top_weather_pivot.nlargest(8, severity_order).loc[:, severity_order]
+top_weather_pivot.plot(kind=&#x27;barh&#x27;, stacked=True, ax=axes5[1], color=[&#x27;red&#x27;, &#x27;orange&#x27;, &#x27;green&#x27;])
+axes5[1].set_title(&#x27;Top Weather Conditions by Severity (Stacked)&#x27;, fontweight=&#x27;bold&#x27;)
+axes5[1].set_xlabel(&#x27;Count&#x27;)
+axes5[1].set_ylabel(&#x27;Weather Condition&#x27;)
+axes5[1].legend(title=&#x27;Severity&#x27;)
+axes5[1].grid(True, alpha=0.3, axis=&#x27;x&#x27;)
+
+plt.tight_layout()
+plt.savefig(&#x27;./data/lab2_additional_eda.png&#x27;, dpi=150, bbox_inches=&#x27;tight&#x27;)
+print(&quot;  [OK] Saved: ./data/lab2_additional_eda.png&quot;)
+
+# Summary statistics
+print(&quot;\n6. SUMMARY STATISTICS&quot;)
+print(&quot;\n  a) Key insights from the dataset:&quot;)
+print(f&quot;     Total accidents: {len(df_clean)}&quot;)
+print(f&quot;     Severity distribution:&quot;)
+for severity in severity_order:
+    count = len(df_clean[df_clean[&#x27;Accident_Severity&#x27;] == severity])
+    pct = (count / len(df_clean)) * 100
+    print(f&quot;       {severity}: {count} ({pct:.1f}%)&quot;)
+
+print(f&quot;\n  b) Geographic coverage:&quot;)
+print(f&quot;     Latitude range: {df_clean[&#x27;Latitude&#x27;].min():.3f} to {df_clean[&#x27;Latitude&#x27;].max():.3f}&quot;)
+print(f&quot;     Longitude range: {df_clean[&#x27;Longitude&#x27;].min():.3f} to {df_clean[&#x27;Longitude&#x27;].max():.3f}&quot;)
+
+print(f&quot;\n  c) Data diversity:&quot;)
+print(f&quot;     Unique weather conditions: {df_clean[&#x27;Weather_Conditions&#x27;].nunique()}&quot;)
+print(f&quot;     Unique road types: {df_clean[&#x27;Road_Type&#x27;].nunique()}&quot;)
+
+print(&quot;\n&quot; + &quot;=&quot; * 70)
+print(&quot;Experiment 4 Complete!&quot;)
+print(&quot;All visualizations saved to ./data/ directory&quot;)
+print(&quot;=&quot; * 70)
+
+# Display plots
+print(&quot;\nDisplaying plots...&quot;)
+plt.show()
+</code></pre></div>
+                    </div>
+                    <div class="co-pane co-output">
+                        <div class="img-output-container">                            <h3 style="color:#fff; margin-bottom:20px; font-family:var(--font-heading);">Results from the Detailed Lab Report</h3>                            <img src="./assets/lab2_univariate_analysis.png" onerror="this.src='https://via.placeholder.com/800x400/18181b/ef4444?text=Image+Load+Failed';"><br>                            <img src="./assets/lab2_correlation_heatmap.png" onerror="this.src='https://via.placeholder.com/800x400/18181b/ef4444?text=Image+Load+Failed';"><br>                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="sub3" class="subtask-pane ">
+                <div class="script-tabs">
+                    <button class="s-tab active" onclick="showScript(event, 'sub3', 'script_sub3_0')">exp1_spatial_data_preparation.py</button>
+                    <button class="s-tab " onclick="showScript(event, 'sub3', 'script_sub3_1')">exp2_kernel_density_estimation.py</button>
+                    <button class="s-tab " onclick="showScript(event, 'sub3', 'script_sub3_2')">exp3_kmeans_clustering.py</button>
+                    <button class="s-tab " onclick="showScript(event, 'sub3', 'script_sub3_3')">exp4_hotspot_profiling.py</button>
+                    <button class="s-tab " onclick="showScript(event, 'sub3', 'script_sub3_4')">exp5_integrated_analysis.py</button>
+                </div>
+
+                <div id="script_sub3_0" class="script-pane active">
+                    <div style="margin-bottom:8px;"><span style="display:inline-block; padding:4px 12px; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.15); border-radius:50px; font-size:0.75rem; margin-right:8px; margin-bottom:8px; font-weight:600; font-family:var(--font-heading); color:var(--primary); letter-spacing:0.5px; text-transform:uppercase;">Pandas</span><span style="display:inline-block; padding:4px 12px; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.15); border-radius:50px; font-size:0.75rem; margin-right:8px; margin-bottom:8px; font-weight:600; font-family:var(--font-heading); color:var(--primary); letter-spacing:0.5px; text-transform:uppercase;">NumPy</span></div>
+                    <p style="color:var(--text-main); font-size:1.05rem; margin-bottom:20px; font-style:italic; border-left: 3px solid var(--primary); padding-left: 15px; background:rgba(255,255,255,0.02); padding-top:10px; padding-bottom:10px; border-radius:0 8px 8px 0;">Extracting clean coordinate matrices optimized for clustering execution.</p>
+                    <div class="co-tabs">
+                        <button class="co-tab active" onclick="showCO(event, 'script_sub3_0', 'code')">Source Code</button>
+                        <button class="co-tab" onclick="showCO(event, 'script_sub3_0', 'output')">Exec Screenshot / Output</button>
+                    </div>
+                    <div class="co-pane co-code active">
+                        <div class="code-container"><pre><code class="language-python">&quot;&quot;&quot;
+Lab 2 Part 2 - Experiment 1: Spatial Data Preparation &amp; Exploration
+Paper: Kernel density estimation and K-means clustering to profile road accident hotspots
+
+This script prepares and explores the spatial distribution of accident data.
+&quot;&quot;&quot;
+
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+from datetime import datetime
+
+# Set style
+sns.set_style(&quot;whitegrid&quot;)
+plt.rcParams[&#x27;figure.figsize&#x27;] = (12, 8)
+
+print(&quot;=&quot;*70)
+print(&quot;EXPERIMENT 1: SPATIAL DATA PREPARATION &amp; EXPLORATION&quot;)
+print(&quot;=&quot;*70)
+
+# Load the dataset
+print(&quot;\n1. Loading Accident Dataset...&quot;)
+df = pd.read_csv(&#x27;./data/Accident_Information.csv&#x27;)
+print(f&quot;   Loaded {len(df)} accident records&quot;)
+print(f&quot;   Columns: {list(df.columns)}&quot;)
+
+# Display basic information
+print(&quot;\n2. Dataset Info:&quot;)
+print(df.info())
+
+# Check for missing values in spatial columns
+print(&quot;\n3. Missing Values in Key Columns:&quot;)
+print(df[[&#x27;Latitude&#x27;, &#x27;Longitude&#x27;, &#x27;Accident_Severity&#x27;, &#x27;Date&#x27;]].isnull().sum())
+
+# Remove rows with missing spatial coordinates
+print(&quot;\n4. Cleaning Data...&quot;)
+original_count = len(df)
+df = df.dropna(subset=[&#x27;Latitude&#x27;, &#x27;Longitude&#x27;])
+print(f&quot;   Removed {original_count - len(df)} records with missing coordinates&quot;)
+print(f&quot;   Remaining records: {len(df)}&quot;)
+
+# Basic statistics for spatial coordinates
+print(&quot;\n5. Spatial Coordinate Statistics:&quot;)
+print(df[[&#x27;Latitude&#x27;, &#x27;Longitude&#x27;]].describe())
+
+# Severity distribution
+print(&quot;\n6. Accident Severity Distribution:&quot;)
+severity_counts = df[&#x27;Accident_Severity&#x27;].value_counts()
+print(severity_counts)
+
+# Road type distribution
+print(&quot;\n7. Road Type Distribution (Top 10):&quot;)
+road_counts = df[&#x27;Road_Type&#x27;].value_counts().head(10)
+print(road_counts)
+
+# Weather conditions distribution
+print(&quot;\n8. Weather Conditions Distribution (Top 10):&quot;)
+weather_counts = df[&#x27;Weather_Conditions&#x27;].value_counts().head(10)
+print(weather_counts)
+
+# Parse date for temporal analysis
+print(&quot;\n9. Temporal Analysis...&quot;)
+df[&#x27;Date&#x27;] = pd.to_datetime(df[&#x27;Date&#x27;], errors=&#x27;coerce&#x27;)
+df[&#x27;Year&#x27;] = df[&#x27;Date&#x27;].dt.year
+df[&#x27;Month&#x27;] = df[&#x27;Date&#x27;].dt.month
+df[&#x27;DayOfWeek&#x27;] = df[&#x27;Date&#x27;].dt.dayofweek
+
+print(&quot;   Accidents by Year:&quot;)
+print(df[&#x27;Year&#x27;].value_counts().sort_index())
+
+# =============================================================================
+# VISUALIZATIONS
+# =============================================================================
+
+print(&quot;\n10. Generating Visualizations...&quot;)
+
+# Create figure with subplots
+fig = plt.figure(figsize=(16, 12))
+
+# 1. Scatter plot of accident locations
+ax1 = plt.subplot(2, 3, 1)
+scatter = ax1.scatter(df[&#x27;Longitude&#x27;], df[&#x27;Latitude&#x27;], 
+                     c=&#x27;red&#x27;, alpha=0.3, s=1, edgecolors=&#x27;none&#x27;)
+ax1.set_xlabel(&#x27;Longitude&#x27;, fontsize=10)
+ax1.set_ylabel(&#x27;Latitude&#x27;, fontsize=10)
+ax1.set_title(&#x27;Geographic Distribution of Accidents&#x27;, fontsize=12, fontweight=&#x27;bold&#x27;)
+ax1.grid(True, alpha=0.3)
+
+# 2. Severity distribution pie chart
+ax2 = plt.subplot(2, 3, 2)
+severity_counts.plot(kind=&#x27;pie&#x27;, ax=ax2, autopct=&#x27;%1.1f%%&#x27;, startangle=90)
+ax2.set_ylabel(&#x27;&#x27;)
+ax2.set_title(&#x27;Accident Severity Distribution&#x27;, fontsize=12, fontweight=&#x27;bold&#x27;)
+
+# 3. Road type distribution (top 10)
+ax3 = plt.subplot(2, 3, 3)
+road_counts.plot(kind=&#x27;barh&#x27;, ax=ax3, color=&#x27;steelblue&#x27;)
+ax3.set_xlabel(&#x27;Number of Accidents&#x27;, fontsize=10)
+ax3.set_title(&#x27;Top 10 Road Types&#x27;, fontsize=12, fontweight=&#x27;bold&#x27;)
+ax3.invert_yaxis()
+
+# 4. Weather conditions (top 10)
+ax4 = plt.subplot(2, 3, 4)
+weather_counts.plot(kind=&#x27;barh&#x27;, ax=ax4, color=&#x27;coral&#x27;)
+ax4.set_xlabel(&#x27;Number of Accidents&#x27;, fontsize=10)
+ax4.set_title(&#x27;Top 10 Weather Conditions&#x27;, fontsize=12, fontweight=&#x27;bold&#x27;)
+ax4.invert_yaxis()
+
+# 5. Accidents by year
+ax5 = plt.subplot(2, 3, 5)
+year_counts = df[&#x27;Year&#x27;].value_counts().sort_index()
+year_counts.plot(kind=&#x27;bar&#x27;, ax=ax5, color=&#x27;green&#x27;, alpha=0.7)
+ax5.set_xlabel(&#x27;Year&#x27;, fontsize=10)
+ax5.set_ylabel(&#x27;Number of Accidents&#x27;, fontsize=10)
+ax5.set_title(&#x27;Accidents by Year&#x27;, fontsize=12, fontweight=&#x27;bold&#x27;)
+ax5.tick_params(axis=&#x27;x&#x27;, rotation=45)
+
+# 6. Accidents by month
+ax6 = plt.subplot(2, 3, 6)
+month_counts = df[&#x27;Month&#x27;].value_counts().sort_index()
+month_names = [&#x27;Jan&#x27;, &#x27;Feb&#x27;, &#x27;Mar&#x27;, &#x27;Apr&#x27;, &#x27;May&#x27;, &#x27;Jun&#x27;, 
+               &#x27;Jul&#x27;, &#x27;Aug&#x27;, &#x27;Sep&#x27;, &#x27;Oct&#x27;, &#x27;Nov&#x27;, &#x27;Dec&#x27;]
+ax6.bar(range(1, 13), [month_counts.get(i, 0) for i in range(1, 13)], 
+        color=&#x27;purple&#x27;, alpha=0.7)
+ax6.set_xlabel(&#x27;Month&#x27;, fontsize=10)
+ax6.set_ylabel(&#x27;Number of Accidents&#x27;, fontsize=10)
+ax6.set_title(&#x27;Accidents by Month&#x27;, fontsize=12, fontweight=&#x27;bold&#x27;)
+ax6.set_xticks(range(1, 13))
+ax6.set_xticklabels(month_names, rotation=45)
+
+plt.tight_layout()
+plt.savefig(&#x27;./data/lab2part2_spatial_exploration.png&#x27;, dpi=300, bbox_inches=&#x27;tight&#x27;)
+print(f&quot;   Saved: lab2part2_spatial_exploration.png&quot;)
+
+# Additional: Hexbin plot for spatial density
+fig2, ax = plt.subplots(figsize=(12, 10))
+hexbin = ax.hexbin(df[&#x27;Longitude&#x27;], df[&#x27;Latitude&#x27;], gridsize=50, 
+                   cmap=&#x27;YlOrRd&#x27;, mincnt=1)
+ax.set_xlabel(&#x27;Longitude&#x27;, fontsize=12)
+ax.set_ylabel(&#x27;Latitude&#x27;, fontsize=12)
+ax.set_title(&#x27;Accident Density (Hexbin)&#x27;, fontsize=14, fontweight=&#x27;bold&#x27;)
+plt.colorbar(hexbin, ax=ax, label=&#x27;Number of Accidents&#x27;)
+plt.savefig(&#x27;./data/lab2part2_hexbin_density.png&#x27;, dpi=300, bbox_inches=&#x27;tight&#x27;)
+print(f&quot;   Saved: lab2part2_hexbin_density.png&quot;)
+
+# Save cleaned dataset for next experiments
+print(&quot;\n11. Saving Cleaned Dataset...&quot;)
+df.to_csv(&#x27;./data/lab2part2_cleaned_data.csv&#x27;, index=False)
+print(f&quot;    Saved: lab2part2_cleaned_data.csv ({len(df)} records)&quot;)
+
+# Summary statistics
+print(&quot;\n&quot; + &quot;=&quot;*70)
+print(&quot;SUMMARY&quot;)
+print(&quot;=&quot;*70)
+print(f&quot;Total Accidents Analyzed: {len(df)}&quot;)
+print(f&quot;Latitude Range: [{df[&#x27;Latitude&#x27;].min():.4f}, {df[&#x27;Latitude&#x27;].max():.4f}]&quot;)
+print(f&quot;Longitude Range: [{df[&#x27;Longitude&#x27;].min():.4f}, {df[&#x27;Longitude&#x27;].max():.4f}]&quot;)
+print(f&quot;Most Common Severity: {severity_counts.index[0]} ({severity_counts.iloc[0]} accidents)&quot;)
+print(f&quot;Most Common Road Type: {road_counts.index[0]} ({road_counts.iloc[0]} accidents)&quot;)
+print(f&quot;Most Common Weather: {weather_counts.index[0]} ({weather_counts.iloc[0]} accidents)&quot;)
+print(&quot;=&quot;*70)
+
+plt.show()
+</code></pre></div>
+                    </div>
+                    <div class="co-pane co-output">
+                        <div class="terminal-output">
+<span class="prompt">$ python scripts/lab2part2/exp1_spatial_data_preparation.py</span>
+
+[INFO] Initializing exp1_spatial_data_preparation.py ...
+[INFO] Loading dataset operations...
+
+Processing required DataFrame manipulations and utility operations...
+[OK] Execution finished successfully with exit code 0.
+
+<span style="color:#8b949e;">(Console output emulated. The detailed Lab Report highlights the primary execution outputs.)</span></div>
+                    </div>
+                </div>
+                <div id="script_sub3_1" class="script-pane ">
+                    <div style="margin-bottom:8px;"><span style="display:inline-block; padding:4px 12px; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.15); border-radius:50px; font-size:0.75rem; margin-right:8px; margin-bottom:8px; font-weight:600; font-family:var(--font-heading); color:var(--primary); letter-spacing:0.5px; text-transform:uppercase;">Scipy</span><span style="display:inline-block; padding:4px 12px; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.15); border-radius:50px; font-size:0.75rem; margin-right:8px; margin-bottom:8px; font-weight:600; font-family:var(--font-heading); color:var(--primary); letter-spacing:0.5px; text-transform:uppercase;">scikit-learn</span><span style="display:inline-block; padding:4px 12px; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.15); border-radius:50px; font-size:0.75rem; margin-right:8px; margin-bottom:8px; font-weight:600; font-family:var(--font-heading); color:var(--primary); letter-spacing:0.5px; text-transform:uppercase;">Matplotlib</span></div>
+                    <p style="color:var(--text-main); font-size:1.05rem; margin-bottom:20px; font-style:italic; border-left: 3px solid var(--primary); padding-left: 15px; background:rgba(255,255,255,0.02); padding-top:10px; padding-bottom:10px; border-radius:0 8px 8px 0;">Applying Kernel Density Estimation for mapping continuous risk probabilities.</p>
+                    <div class="co-tabs">
+                        <button class="co-tab active" onclick="showCO(event, 'script_sub3_1', 'code')">Source Code</button>
+                        <button class="co-tab" onclick="showCO(event, 'script_sub3_1', 'output')">Exec Screenshot / Output</button>
+                    </div>
+                    <div class="co-pane co-code active">
+                        <div class="code-container"><pre><code class="language-python">&quot;&quot;&quot;
+Lab 2 Part 2 - Experiment 2: Kernel Density Estimation (KDE) Analysis
+Paper: Kernel density estimation and K-means clustering to profile road accident hotspots
+
+This script applies Kernel Density Estimation to identify accident density patterns.
+&quot;&quot;&quot;
+
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+from scipy.stats import gaussian_kde
+from scipy import stats
+
+# Set style
+sns.set_style(&quot;whitegrid&quot;)
+plt.rcParams[&#x27;figure.figsize&#x27;] = (14, 10)
+
+print(&quot;=&quot;*70)
+print(&quot;EXPERIMENT 2: KERNEL DENSITY ESTIMATION (KDE) ANALYSIS&quot;)
+print(&quot;=&quot;*70)
+
+# Load cleaned dataset
+print(&quot;\n1. Loading Cleaned Dataset...&quot;)
+df = pd.read_csv(&#x27;./data/lab2part2_cleaned_data.csv&#x27;)
+print(f&quot;   Loaded {len(df)} accident records&quot;)
+
+# Extract spatial coordinates
+print(&quot;\n2. Extracting Spatial Coordinates...&quot;)
+coordinates = df[[&#x27;Longitude&#x27;, &#x27;Latitude&#x27;]].values
+longitudes = df[&#x27;Longitude&#x27;].values
+latitudes = df[&#x27;Latitude&#x27;].values
+
+print(f&quot;   Longitude range: [{longitudes.min():.4f}, {longitudes.max():.4f}]&quot;)
+print(f&quot;   Latitude range: [{latitudes.min():.4f}, {latitudes.max():.4f}]&quot;)
+
+# =============================================================================
+# 2D KERNEL DENSITY ESTIMATION
+# =============================================================================
+
+print(&quot;\n3. Computing 2D Kernel Density Estimation...&quot;)
+print(&quot;   This may take a moment...&quot;)
+
+# Create KDE
+try:
+    kde = gaussian_kde(coordinates.T)
+    print(&quot;   KDE computation successful&quot;)
+    
+    # Create grid for evaluation
+    x_min, x_max = longitudes.min() - 0.5, longitudes.max() + 0.5
+    y_min, y_max = latitudes.min() - 0.5, latitudes.max() + 0.5
+    
+    # Create meshgrid (reduce resolution for performance)
+    xx, yy = np.meshgrid(np.linspace(x_min, x_max, 200),
+                         np.linspace(y_min, y_max, 200))
+    
+    # Evaluate KDE on grid
+    print(&quot;   Evaluating KDE on grid...&quot;)
+    grid_coords = np.vstack([xx.ravel(), yy.ravel()])
+    density = kde(grid_coords).reshape(xx.shape)
+    
+    print(f&quot;   Density range: [{density.min():.6f}, {density.max():.6f}]&quot;)
+    
+except Exception as e:
+    print(f&quot;   Error in KDE computation: {e}&quot;)
+    print(&quot;   Falling back to histogram-based density estimation&quot;)
+    kde = None
+
+# =============================================================================
+# VISUALIZATIONS
+# =============================================================================
+
+print(&quot;\n4. Generating KDE Visualizations...&quot;)
+
+# Create comprehensive figure
+fig = plt.figure(figsize=(18, 12))
+
+# 1. KDE Contour Plot
+ax1 = plt.subplot(2, 3, 1)
+if kde is not None:
+    contour = ax1.contourf(xx, yy, density, levels=20, cmap=&#x27;YlOrRd&#x27;, alpha=0.8)
+    ax1.scatter(longitudes, latitudes, c=&#x27;black&#x27;, s=0.5, alpha=0.2, label=&#x27;Accidents&#x27;)
+    plt.colorbar(contour, ax=ax1, label=&#x27;Density&#x27;)
+    ax1.set_xlabel(&#x27;Longitude&#x27;, fontsize=10)
+    ax1.set_ylabel(&#x27;Latitude&#x27;, fontsize=10)
+    ax1.set_title(&#x27;KDE Contour Plot - Accident Density&#x27;, fontsize=12, fontweight=&#x27;bold&#x27;)
+    ax1.legend(markerscale=10)
+
+# 2. KDE Heatmap
+ax2 = plt.subplot(2, 3, 2)
+if kde is not None:
+    heatmap = ax2.imshow(density, extent=[x_min, x_max, y_min, y_max], 
+                         origin=&#x27;lower&#x27;, cmap=&#x27;hot&#x27;, aspect=&#x27;auto&#x27;, interpolation=&#x27;bilinear&#x27;)
+    ax2.scatter(longitudes, latitudes, c=&#x27;cyan&#x27;, s=0.3, alpha=0.3)
+    plt.colorbar(heatmap, ax=ax2, label=&#x27;Density&#x27;)
+    ax2.set_xlabel(&#x27;Longitude&#x27;, fontsize=10)
+    ax2.set_ylabel(&#x27;Latitude&#x27;, fontsize=10)
+    ax2.set_title(&#x27;KDE Heatmap - High-Density Areas&#x27;, fontsize=12, fontweight=&#x27;bold&#x27;)
+
+# 3. 3D-style contour
+ax3 = plt.subplot(2, 3, 3)
+if kde is not None:
+    contour_filled = ax3.contourf(xx, yy, density, levels=15, cmap=&#x27;plasma&#x27;)
+    contour_lines = ax3.contour(xx, yy, density, levels=10, colors=&#x27;white&#x27;, 
+                                linewidths=0.5, alpha=0.5)
+    plt.colorbar(contour_filled, ax=ax3, label=&#x27;Density&#x27;)
+    ax3.set_xlabel(&#x27;Longitude&#x27;, fontsize=10)
+    ax3.set_ylabel(&#x27;Latitude&#x27;, fontsize=10)
+    ax3.set_title(&#x27;KDE with Contour Lines&#x27;, fontsize=12, fontweight=&#x27;bold&#x27;)
+
+# 4. Histogram 2D
+ax4 = plt.subplot(2, 3, 4)
+hist2d = ax4.hist2d(longitudes, latitudes, bins=50, cmap=&#x27;YlOrRd&#x27;, cmin=1)
+plt.colorbar(hist2d[3], ax=ax4, label=&#x27;Count&#x27;)
+ax4.set_xlabel(&#x27;Longitude&#x27;, fontsize=10)
+ax4.set_ylabel(&#x27;Latitude&#x27;, fontsize=10)
+ax4.set_title(&#x27;2D Histogram - Accident Counts&#x27;, fontsize=12, fontweight=&#x27;bold&#x27;)
+
+# 5. Severity-based KDE
+ax5 = plt.subplot(2, 3, 5)
+severities = df[&#x27;Accident_Severity&#x27;].unique()
+colors_severity = [&#x27;green&#x27;, &#x27;orange&#x27;, &#x27;red&#x27;]
+for idx, severity in enumerate(sorted(severities)):
+    severity_df = df[df[&#x27;Accident_Severity&#x27;] == severity]
+    if len(severity_df) &gt; 10:
+        ax5.scatter(severity_df[&#x27;Longitude&#x27;], severity_df[&#x27;Latitude&#x27;], 
+                   c=colors_severity[idx % len(colors_severity)], 
+                   s=1, alpha=0.5, label=severity)
+ax5.set_xlabel(&#x27;Longitude&#x27;, fontsize=10)
+ax5.set_ylabel(&#x27;Latitude&#x27;, fontsize=10)
+ax5.set_title(&#x27;Accidents by Severity&#x27;, fontsize=12, fontweight=&#x27;bold&#x27;)
+ax5.legend(markerscale=10)
+ax5.grid(True, alpha=0.3)
+
+# 6. Density statistics
+ax6 = plt.subplot(2, 3, 6)
+ax6.axis(&#x27;off&#x27;)
+if kde is not None:
+    stats_text = f&quot;&quot;&quot;
+    KDE STATISTICS
+    {&#x27;=&#x27;*40}
+    
+    Total Accidents: {len(df):,}
+    
+    Density Statistics:
+    • Min Density: {density.min():.6f}
+    • Max Density: {density.max():.6f}
+    • Mean Density: {density.mean():.6f}
+    • Std Density: {density.std():.6f}
+    
+    Spatial Coverage:
+    • Longitude: [{longitudes.min():.2f}, {longitudes.max():.2f}]
+    • Latitude: [{latitudes.min():.2f}, {latitudes.max():.2f}]
+    
+    High Density Areas (top 5%):
+    • Threshold: {np.percentile(density, 95):.6f}
+    • Above threshold: {(density &gt; np.percentile(density, 95)).sum()} cells
+    
+    Bandwidth Used: Auto (Scott&#x27;s rule)
+    &quot;&quot;&quot;
+    ax6.text(0.1, 0.5, stats_text, fontsize=10, verticalalignment=&#x27;center&#x27;,
+             fontfamily=&#x27;monospace&#x27;, bbox=dict(boxstyle=&#x27;round&#x27;, facecolor=&#x27;wheat&#x27;, alpha=0.5))
+
+plt.tight_layout()
+plt.savefig(&#x27;./data/lab2part2_kde_analysis.png&#x27;, dpi=300, bbox_inches=&#x27;tight&#x27;)
+print(f&quot;   Saved: lab2part2_kde_analysis.png&quot;)
+
+# =============================================================================
+# HIGH-DENSITY HOTSPOT IDENTIFICATION
+# =============================================================================
+
+print(&quot;\n5. Identifying High-Density Hotspots...&quot;)
+if kde is not None:
+    # Calculate density for actual accident locations
+    accident_densities = kde(coordinates.T)
+    
+    # Add density values to dataframe
+    df[&#x27;KDE_Density&#x27;] = accident_densities
+    
+    # Identify hotspots (top 10% density)
+    threshold = np.percentile(accident_densities, 90)
+    df[&#x27;Is_Hotspot&#x27;] = df[&#x27;KDE_Density&#x27;] &gt; threshold
+    
+    print(f&quot;   Density threshold (90th percentile): {threshold:.6f}&quot;)
+    print(f&quot;   Hotspot accidents: {df[&#x27;Is_Hotspot&#x27;].sum()} ({df[&#x27;Is_Hotspot&#x27;].sum()/len(df)*100:.1f}%)&quot;)
+    
+    # Create hotspot visualization
+    fig2, ax = plt.subplots(figsize=(14, 10))
+    
+    # Plot all accidents
+    ax.scatter(df[~df[&#x27;Is_Hotspot&#x27;]][&#x27;Longitude&#x27;], 
+              df[~df[&#x27;Is_Hotspot&#x27;]][&#x27;Latitude&#x27;],
+              c=&#x27;lightblue&#x27;, s=2, alpha=0.3, label=&#x27;Normal Density&#x27;)
+    
+    # Plot hotspot accidents
+    ax.scatter(df[df[&#x27;Is_Hotspot&#x27;]][&#x27;Longitude&#x27;], 
+              df[df[&#x27;Is_Hotspot&#x27;]][&#x27;Latitude&#x27;],
+              c=&#x27;red&#x27;, s=10, alpha=0.7, label=&#x27;Hotspot (Top 10%)&#x27;, 
+              edgecolors=&#x27;darkred&#x27;, linewidths=0.5)
+    
+    # Overlay KDE contours
+    if kde is not None:
+        contour = ax.contour(xx, yy, density, levels=10, colors=&#x27;black&#x27;, 
+                            linewidths=0.5, alpha=0.3)
+    
+    ax.set_xlabel(&#x27;Longitude&#x27;, fontsize=12)
+    ax.set_ylabel(&#x27;Latitude&#x27;, fontsize=12)
+    ax.set_title(&#x27;Accident Hotspots Identified by KDE&#x27;, fontsize=14, fontweight=&#x27;bold&#x27;)
+    ax.legend()
+    ax.grid(True, alpha=0.3)
+    
+    plt.savefig(&#x27;./data/lab2part2_kde_hotspots.png&#x27;, dpi=300, bbox_inches=&#x27;tight&#x27;)
+    print(f&quot;   Saved: lab2part2_kde_hotspots.png&quot;)
+    
+    # Save dataset with densities
+    df.to_csv(&#x27;./data/lab2part2_with_kde.csv&#x27;, index=False)
+    print(f&quot;   Saved: lab2part2_with_kde.csv&quot;)
+
+# =============================================================================
+# SUMMARY
+# =============================================================================
+
+print(&quot;\n&quot; + &quot;=&quot;*70)
+print(&quot;SUMMARY&quot;)
+print(&quot;=&quot;*70)
+print(f&quot;Total Accidents: {len(df)}&quot;)
+if kde is not None:
+    print(f&quot;Hotspot Accidents (top 10%): {df[&#x27;Is_Hotspot&#x27;].sum()}&quot;)
+    print(f&quot;Hotspot Percentage: {df[&#x27;Is_Hotspot&#x27;].sum()/len(df)*100:.2f}%&quot;)
+    print(f&quot;Density Threshold: {threshold:.6f}&quot;)
+    print(&quot;\nHotspot Severity Distribution:&quot;)
+    print(df[df[&#x27;Is_Hotspot&#x27;]][&#x27;Accident_Severity&#x27;].value_counts())
+print(&quot;=&quot;*70)
+
+plt.show()
+</code></pre></div>
+                    </div>
+                    <div class="co-pane co-output">
+                        <div class="img-output-container">                            <h3 style="color:#fff; margin-bottom:20px; font-family:var(--font-heading);">Results from the Detailed Lab Report</h3>                            <img src="./assets/lab2part2_kde_hotspots.png" onerror="this.src='https://via.placeholder.com/800x400/18181b/ef4444?text=Image+Load+Failed';">                        </div>
+                    </div>
+                </div>
+                <div id="script_sub3_2" class="script-pane ">
+                    <div style="margin-bottom:8px;"><span style="display:inline-block; padding:4px 12px; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.15); border-radius:50px; font-size:0.75rem; margin-right:8px; margin-bottom:8px; font-weight:600; font-family:var(--font-heading); color:var(--primary); letter-spacing:0.5px; text-transform:uppercase;">scikit-learn</span><span style="display:inline-block; padding:4px 12px; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.15); border-radius:50px; font-size:0.75rem; margin-right:8px; margin-bottom:8px; font-weight:600; font-family:var(--font-heading); color:var(--primary); letter-spacing:0.5px; text-transform:uppercase;">Matplotlib</span></div>
+                    <p style="color:var(--text-main); font-size:1.05rem; margin-bottom:20px; font-style:italic; border-left: 3px solid var(--primary); padding-left: 15px; background:rgba(255,255,255,0.02); padding-top:10px; padding-bottom:10px; border-radius:0 8px 8px 0;">Applying K-Means to divide geographic space into segmented collision centers.</p>
+                    <div class="co-tabs">
+                        <button class="co-tab active" onclick="showCO(event, 'script_sub3_2', 'code')">Source Code</button>
+                        <button class="co-tab" onclick="showCO(event, 'script_sub3_2', 'output')">Exec Screenshot / Output</button>
+                    </div>
+                    <div class="co-pane co-code active">
+                        <div class="code-container"><pre><code class="language-python">&quot;&quot;&quot;
+Lab 2 Part 2 - Experiment 3: K-means Clustering for Hotspot Identification
+Paper: Kernel density estimation and K-means clustering to profile road accident hotspots
+
+This script applies K-means clustering to identify geographic accident hotspots.
+&quot;&quot;&quot;
+
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+from sklearn.cluster import KMeans
+from sklearn.preprocessing import StandardScaler
+from sklearn.metrics import silhouette_score, davies_bouldin_score
+
+# Set style
+sns.set_style(&quot;whitegrid&quot;)
+plt.rcParams[&#x27;figure.figsize&#x27;] = (14, 10)
+
+print(&quot;=&quot;*70)
+print(&quot;EXPERIMENT 3: K-MEANS CLUSTERING FOR HOTSPOT IDENTIFICATION&quot;)
+print(&quot;=&quot;*70)
+
+# Load dataset
+print(&quot;\n1. Loading Dataset...&quot;)
+df = pd.read_csv(&#x27;./data/lab2part2_cleaned_data.csv&#x27;)
+print(f&quot;   Loaded {len(df)} accident records&quot;)
+
+# Extract spatial coordinates
+print(&quot;\n2. Preparing Features for Clustering...&quot;)
+X = df[[&#x27;Longitude&#x27;, &#x27;Latitude&#x27;]].values
+print(f&quot;   Feature matrix shape: {X.shape}&quot;)
+
+# Standardize features
+scaler = StandardScaler()
+X_scaled = scaler.fit_transform(X)
+print(&quot;   Features standardized&quot;)
+
+# =============================================================================
+# ELBOW METHOD - DETERMINE OPTIMAL K
+# =============================================================================
+
+print(&quot;\n3. Determining Optimal Number of Clusters (Elbow Method)...&quot;)
+inertias = []
+silhouette_scores = []
+k_range = range(2, 16)
+
+for k in k_range:
+    kmeans = KMeans(n_clusters=k, init=&#x27;k-means++&#x27;, random_state=42, n_init=10)
+    kmeans.fit(X_scaled)
+    inertias.append(kmeans.inertia_)
+    silhouette_scores.append(silhouette_score(X_scaled, kmeans.labels_))
+    print(f&quot;   K={k:2d}: Inertia={kmeans.inertia_:10.2f}, Silhouette={silhouette_scores[-1]:.4f}&quot;)
+
+# Plot elbow curve
+fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(14, 5))
+
+# Inertia plot
+ax1.plot(k_range, inertias, &#x27;bo-&#x27;, linewidth=2, markersize=8)
+ax1.set_xlabel(&#x27;Number of Clusters (K)&#x27;, fontsize=12)
+ax1.set_ylabel(&#x27;Inertia (Within-cluster sum of squares)&#x27;, fontsize=12)
+ax1.set_title(&#x27;Elbow Method - Inertia&#x27;, fontsize=14, fontweight=&#x27;bold&#x27;)
+ax1.grid(True, alpha=0.3)
+
+# Silhouette score plot
+ax2.plot(k_range, silhouette_scores, &#x27;ro-&#x27;, linewidth=2, markersize=8)
+ax2.set_xlabel(&#x27;Number of Clusters (K)&#x27;, fontsize=12)
+ax2.set_ylabel(&#x27;Silhouette Score&#x27;, fontsize=12)
+ax2.set_title(&#x27;Silhouette Score by K&#x27;, fontsize=14, fontweight=&#x27;bold&#x27;)
+ax2.grid(True, alpha=0.3)
+
+plt.tight_layout()
+plt.savefig(&#x27;./data/lab2part2_elbow_method.png&#x27;, dpi=300, bbox_inches=&#x27;tight&#x27;)
+print(f&quot;\n   Saved: lab2part2_elbow_method.png&quot;)
+
+# Select optimal K (can be adjusted based on elbow)
+optimal_k = 8  # You can change this based on the elbow curve
+print(f&quot;\n4. Selected K = {optimal_k} clusters&quot;)
+
+# =============================================================================
+# APPLY K-MEANS CLUSTERING
+# =============================================================================
+
+print(&quot;\n5. Applying K-means Clustering...&quot;)
+kmeans = KMeans(n_clusters=optimal_k, init=&#x27;k-means++&#x27;, random_state=42, n_init=20)
+df[&#x27;Cluster&#x27;] = kmeans.fit_predict(X_scaled)
+
+# Get cluster centers (in original scale)
+cluster_centers_scaled = kmeans.cluster_centers_
+cluster_centers = scaler.inverse_transform(cluster_centers_scaled)
+
+print(f&quot;   Clustering complete&quot;)
+print(f&quot;   Silhouette Score: {silhouette_score(X_scaled, df[&#x27;Cluster&#x27;]):.4f}&quot;)
+print(f&quot;   Davies-Bouldin Index: {davies_bouldin_score(X_scaled, df[&#x27;Cluster&#x27;]):.4f}&quot;)
+
+# Print cluster information
+print(&quot;\n6. Cluster Statistics:&quot;)
+for cluster_id in range(optimal_k):
+    cluster_data = df[df[&#x27;Cluster&#x27;] == cluster_id]
+    center_lon, center_lat = cluster_centers[cluster_id]
+    print(f&quot;\n   Cluster {cluster_id}:&quot;)
+    print(f&quot;      Size: {len(cluster_data)} accidents ({len(cluster_data)/len(df)*100:.1f}%)&quot;)
+    print(f&quot;      Center: ({center_lon:.4f}, {center_lat:.4f})&quot;)
+    print(f&quot;      Severity: {cluster_data[&#x27;Accident_Severity&#x27;].value_counts().to_dict()}&quot;)
+
+# =============================================================================
+# VISUALIZATIONS
+# =============================================================================
+
+print(&quot;\n7. Generating Cluster Visualizations...&quot;)
+
+# Create color palette
+colors = sns.color_palette(&#x27;husl&#x27;, optimal_k)
+
+# Main cluster visualization
+fig = plt.figure(figsize=(18, 12))
+
+# 1. Clusters with centers
+ax1 = plt.subplot(2, 3, 1)
+for cluster_id in range(optimal_k):
+    cluster_data = df[df[&#x27;Cluster&#x27;] == cluster_id]
+    ax1.scatter(cluster_data[&#x27;Longitude&#x27;], cluster_data[&#x27;Latitude&#x27;],
+               c=[colors[cluster_id]], s=10, alpha=0.6, 
+               label=f&#x27;Cluster {cluster_id} (n={len(cluster_data)})&#x27;)
+
+# Plot cluster centers
+ax1.scatter(cluster_centers[:, 0], cluster_centers[:, 1],
+           c=&#x27;red&#x27;, s=300, alpha=0.9, marker=&#x27;*&#x27;, 
+           edgecolors=&#x27;black&#x27;, linewidths=2, label=&#x27;Centers&#x27;)
+
+ax1.set_xlabel(&#x27;Longitude&#x27;, fontsize=10)
+ax1.set_ylabel(&#x27;Latitude&#x27;, fontsize=10)
+ax1.set_title(&#x27;K-means Clustering Results&#x27;, fontsize=12, fontweight=&#x27;bold&#x27;)
+ax1.legend(loc=&#x27;best&#x27;, fontsize=8)
+ax1.grid(True, alpha=0.3)
+
+# 2. Cluster sizes
+ax2 = plt.subplot(2, 3, 2)
+cluster_sizes = df[&#x27;Cluster&#x27;].value_counts().sort_index()
+bars = ax2.bar(range(optimal_k), cluster_sizes.values, color=colors, alpha=0.7)
+ax2.set_xlabel(&#x27;Cluster ID&#x27;, fontsize=10)
+ax2.set_ylabel(&#x27;Number of Accidents&#x27;, fontsize=10)
+ax2.set_title(&#x27;Cluster Sizes&#x27;, fontsize=12, fontweight=&#x27;bold&#x27;)
+ax2.set_xticks(range(optimal_k))
+for i, bar in enumerate(bars):
+    height = bar.get_height()
+    ax2.text(bar.get_x() + bar.get_width()/2., height,
+            f&#x27;{int(height)}&#x27;, ha=&#x27;center&#x27;, va=&#x27;bottom&#x27;, fontsize=8)
+
+# 3. Severity distribution by cluster
+ax3 = plt.subplot(2, 3, 3)
+severity_by_cluster = pd.crosstab(df[&#x27;Cluster&#x27;], df[&#x27;Accident_Severity&#x27;], normalize=&#x27;index&#x27;) * 100
+severity_by_cluster.plot(kind=&#x27;bar&#x27;, stacked=True, ax=ax3, colormap=&#x27;RdYlGn_r&#x27;, alpha=0.8)
+ax3.set_xlabel(&#x27;Cluster ID&#x27;, fontsize=10)
+ax3.set_ylabel(&#x27;Percentage&#x27;, fontsize=10)
+ax3.set_title(&#x27;Severity Distribution by Cluster&#x27;, fontsize=12, fontweight=&#x27;bold&#x27;)
+ax3.legend(title=&#x27;Severity&#x27;, fontsize=8)
+ax3.set_xticklabels(ax3.get_xticklabels(), rotation=0)
+
+# 4. Voronoi-like regions (simplified)
+ax4 = plt.subplot(2, 3, 4)
+for cluster_id in range(optimal_k):
+    cluster_data = df[df[&#x27;Cluster&#x27;] == cluster_id]
+    ax4.scatter(cluster_data[&#x27;Longitude&#x27;], cluster_data[&#x27;Latitude&#x27;],
+               c=[colors[cluster_id]], s=5, alpha=0.4)
+
+# Draw lines from each center to nearby centers
+from scipy.spatial import Delaunay
+tri = Delaunay(cluster_centers)
+ax4.triplot(cluster_centers[:, 0], cluster_centers[:, 1], tri.simplices, 
+           &#x27;k-&#x27;, linewidth=1, alpha=0.3)
+ax4.scatter(cluster_centers[:, 0], cluster_centers[:, 1],
+           c=&#x27;red&#x27;, s=200, alpha=0.9, marker=&#x27;*&#x27;, 
+           edgecolors=&#x27;black&#x27;, linewidths=1.5)
+
+ax4.set_xlabel(&#x27;Longitude&#x27;, fontsize=10)
+ax4.set_ylabel(&#x27;Latitude&#x27;, fontsize=10)
+ax4.set_title(&#x27;Cluster Regions (Delaunay Triangulation)&#x27;, fontsize=12, fontweight=&#x27;bold&#x27;)
+ax4.grid(True, alpha=0.3)
+
+# 5. Road type distribution by cluster (top 5 road types)
+ax5 = plt.subplot(2, 3, 5)
+top_road_types = df[&#x27;Road_Type&#x27;].value_counts().head(5).index
+road_by_cluster = pd.crosstab(df[&#x27;Cluster&#x27;], df[&#x27;Road_Type&#x27;])
+road_by_cluster[top_road_types].plot(kind=&#x27;bar&#x27;, ax=ax5, alpha=0.7)
+ax5.set_xlabel(&#x27;Cluster ID&#x27;, fontsize=10)
+ax5.set_ylabel(&#x27;Count&#x27;, fontsize=10)
+ax5.set_title(&#x27;Top 5 Road Types by Cluster&#x27;, fontsize=12, fontweight=&#x27;bold&#x27;)
+ax5.legend(fontsize=7, loc=&#x27;best&#x27;)
+ax5.set_xticklabels(ax5.get_xticklabels(), rotation=0)
+
+# 6. Cluster statistics table
+ax6 = plt.subplot(2, 3, 6)
+ax6.axis(&#x27;off&#x27;)
+
+stats_text = &quot;CLUSTER STATISTICS\n&quot; + &quot;=&quot;*50 + &quot;\n\n&quot;
+for cluster_id in range(optimal_k):
+    cluster_data = df[df[&#x27;Cluster&#x27;] == cluster_id]
+    center_lon, center_lat = cluster_centers[cluster_id]
+    stats_text += f&quot;Cluster {cluster_id}:\n&quot;
+    stats_text += f&quot;  Size: {len(cluster_data)} ({len(cluster_data)/len(df)*100:.1f}%)\n&quot;
+    stats_text += f&quot;  Center: ({center_lon:.3f}, {center_lat:.3f})\n&quot;
+    most_severe = cluster_data[&#x27;Accident_Severity&#x27;].value_counts().index[0]
+    stats_text += f&quot;  Most Common Severity: {most_severe}\n\n&quot;
+
+ax6.text(0.1, 0.9, stats_text, fontsize=9, verticalalignment=&#x27;top&#x27;,
+         fontfamily=&#x27;monospace&#x27;, bbox=dict(boxstyle=&#x27;round&#x27;, facecolor=&#x27;lightyellow&#x27;, alpha=0.8))
+
+plt.tight_layout()
+plt.savefig(&#x27;./data/lab2part2_kmeans_clustering.png&#x27;, dpi=300, bbox_inches=&#x27;tight&#x27;)
+print(f&quot;   Saved: lab2part2_kmeans_clustering.png&quot;)
+
+# Additional detailed visualization
+fig2, ax = plt.subplots(figsize=(14, 10))
+for cluster_id in range(optimal_k):
+    cluster_data = df[df[&#x27;Cluster&#x27;] == cluster_id]
+    ax.scatter(cluster_data[&#x27;Longitude&#x27;], cluster_data[&#x27;Latitude&#x27;],
+              c=[colors[cluster_id]], s=15, alpha=0.5, 
+              label=f&#x27;Cluster {cluster_id}&#x27;)
+
+ax.scatter(cluster_centers[:, 0], cluster_centers[:, 1],
+          c=&#x27;red&#x27;, s=500, alpha=1.0, marker=&#x27;*&#x27;, 
+          edgecolors=&#x27;black&#x27;, linewidths=3, label=&#x27;Cluster Centers&#x27;, zorder=5)
+
+# Add cluster labels
+for i, (lon, lat) in enumerate(cluster_centers):
+    ax.annotate(f&#x27;C{i}&#x27;, (lon, lat), fontsize=14, fontweight=&#x27;bold&#x27;,
+               ha=&#x27;center&#x27;, va=&#x27;center&#x27;, color=&#x27;white&#x27;,
+               bbox=dict(boxstyle=&#x27;circle&#x27;, facecolor=&#x27;red&#x27;, alpha=0.7))
+
+ax.set_xlabel(&#x27;Longitude&#x27;, fontsize=12)
+ax.set_ylabel(&#x27;Latitude&#x27;, fontsize=12)
+ax.set_title(f&#x27;Accident Hotspots - {optimal_k} Clusters Identified by K-means&#x27;, 
+            fontsize=14, fontweight=&#x27;bold&#x27;)
+ax.legend(loc=&#x27;best&#x27;, fontsize=10)
+ax.grid(True, alpha=0.3)
+
+plt.savefig(&#x27;./data/lab2part2_kmeans_detailed.png&#x27;, dpi=300, bbox_inches=&#x27;tight&#x27;)
+print(f&quot;   Saved: lab2part2_kmeans_detailed.png&quot;)
+
+# Save results
+df.to_csv(&#x27;./data/lab2part2_with_clusters.csv&#x27;, index=False)
+print(f&quot;   Saved: lab2part2_with_clusters.csv&quot;)
+
+np.savetxt(&#x27;./data/lab2part2_cluster_centers.csv&#x27;, cluster_centers, 
+          delimiter=&#x27;,&#x27;, header=&#x27;Longitude,Latitude&#x27;, comments=&#x27;&#x27;)
+print(f&quot;   Saved: lab2part2_cluster_centers.csv&quot;)
+
+# =============================================================================
+# SUMMARY
+# =============================================================================
+
+print(&quot;\n&quot; + &quot;=&quot;*70)
+print(&quot;SUMMARY&quot;)
+print(&quot;=&quot;*70)
+print(f&quot;Total Accidents: {len(df)}&quot;)
+print(f&quot;Number of Clusters: {optimal_k}&quot;)
+print(f&quot;Silhouette Score: {silhouette_score(X_scaled, df[&#x27;Cluster&#x27;]):.4f}&quot;)
+print(f&quot;Davies-Bouldin Index: {davies_bouldin_score(X_scaled, df[&#x27;Cluster&#x27;]):.4f}&quot;)
+print(f&quot;\nCluster Size Range: {cluster_sizes.min()} - {cluster_sizes.max()} accidents&quot;)
+print(f&quot;Average Cluster Size: {cluster_sizes.mean():.0f} accidents&quot;)
+print(&quot;=&quot;*70)
+
+plt.show()
+</code></pre></div>
+                    </div>
+                    <div class="co-pane co-output">
+                        <div class="img-output-container">                            <h3 style="color:#fff; margin-bottom:20px; font-family:var(--font-heading);">Results from the Detailed Lab Report</h3>                            <img src="./assets/lab2part2_kmeans_clustering.png" onerror="this.src='https://via.placeholder.com/800x400/18181b/ef4444?text=Image+Load+Failed';">                        </div>
+                    </div>
+                </div>
+                <div id="script_sub3_3" class="script-pane ">
+                    <div style="margin-bottom:8px;"><span style="display:inline-block; padding:4px 12px; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.15); border-radius:50px; font-size:0.75rem; margin-right:8px; margin-bottom:8px; font-weight:600; font-family:var(--font-heading); color:var(--primary); letter-spacing:0.5px; text-transform:uppercase;">Pandas</span><span style="display:inline-block; padding:4px 12px; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.15); border-radius:50px; font-size:0.75rem; margin-right:8px; margin-bottom:8px; font-weight:600; font-family:var(--font-heading); color:var(--primary); letter-spacing:0.5px; text-transform:uppercase;">Seaborn</span></div>
+                    <p style="color:var(--text-main); font-size:1.05rem; margin-bottom:20px; font-style:italic; border-left: 3px solid var(--primary); padding-left: 15px; background:rgba(255,255,255,0.02); padding-top:10px; padding-bottom:10px; border-radius:0 8px 8px 0;">Conducting per-cluster statistical profiles focusing on vulnerability traits.</p>
+                    <div class="co-tabs">
+                        <button class="co-tab active" onclick="showCO(event, 'script_sub3_3', 'code')">Source Code</button>
+                        <button class="co-tab" onclick="showCO(event, 'script_sub3_3', 'output')">Exec Screenshot / Output</button>
+                    </div>
+                    <div class="co-pane co-code active">
+                        <div class="code-container"><pre><code class="language-python">&quot;&quot;&quot;
+Lab 2 Part 2 - Experiment 4: Hotspot Profiling &amp; Characterization
+Paper: Kernel density estimation and K-means clustering to profile road accident hotspots
+
+This script profiles and characterizes each identified accident hotspot cluster.
+&quot;&quot;&quot;
+
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+from datetime import datetime
+
+# Set style
+sns.set_style(&quot;whitegrid&quot;)
+plt.rcParams[&#x27;figure.figsize&#x27;] = (16, 12)
+
+print(&quot;=&quot;*70)
+print(&quot;EXPERIMENT 4: HOTSPOT PROFILING &amp; CHARACTERIZATION&quot;)
+print(&quot;=&quot;*70)
+
+# Load clustered dataset
+print(&quot;\n1. Loading Clustered Dataset...&quot;)
+df = pd.read_csv(&#x27;./data/lab2part2_with_clusters.csv&#x27;)
+cluster_centers = np.loadtxt(&#x27;./data/lab2part2_cluster_centers.csv&#x27;, delimiter=&#x27;,&#x27;, skiprows=1)
+
+print(f&quot;   Loaded {len(df)} accident records&quot;)
+print(f&quot;   Number of clusters: {df[&#x27;Cluster&#x27;].nunique()}&quot;)
+
+# Parse temporal data
+df[&#x27;Date&#x27;] = pd.to_datetime(df[&#x27;Date&#x27;], errors=&#x27;coerce&#x27;)
+df[&#x27;Year&#x27;] = df[&#x27;Date&#x27;].dt.year
+df[&#x27;Month&#x27;] = df[&#x27;Date&#x27;].dt.month
+df[&#x27;DayOfWeek&#x27;] = df[&#x27;Date&#x27;].dt.dayofweek
+df[&#x27;Hour&#x27;] = pd.to_datetime(df[&#x27;Time&#x27;], format=&#x27;%H:%M&#x27;, errors=&#x27;coerce&#x27;).dt.hour
+
+day_names = [&#x27;Mon&#x27;, &#x27;Tue&#x27;, &#x27;Wed&#x27;, &#x27;Thu&#x27;, &#x27;Fri&#x27;, &#x27;Sat&#x27;, &#x27;Sun&#x27;]
+
+num_clusters = df[&#x27;Cluster&#x27;].nunique()
+
+# =============================================================================
+# PROFILE EACH CLUSTER
+# =============================================================================
+
+print(&quot;\n2. Profiling Each Hotspot Cluster...\n&quot;)
+
+cluster_profiles = []
+
+for cluster_id in range(num_clusters):
+    cluster_data = df[df[&#x27;Cluster&#x27;] == cluster_id]
+    
+    profile = {
+        &#x27;Cluster_ID&#x27;: cluster_id,
+        &#x27;Total_Accidents&#x27;: len(cluster_data),
+        &#x27;Percentage&#x27;: len(cluster_data) / len(df) * 100,
+        &#x27;Center_Lon&#x27;: cluster_centers[cluster_id][0],
+        &#x27;Center_Lat&#x27;: cluster_centers[cluster_id][1],
+        &#x27;Most_Common_Severity&#x27;: cluster_data[&#x27;Accident_Severity&#x27;].mode()[0] if len(cluster_data) &gt; 0 else &#x27;N/A&#x27;,
+        &#x27;Fatal_Count&#x27;: (cluster_data[&#x27;Accident_Severity&#x27;] == &#x27;Fatal&#x27;).sum(),
+        &#x27;Serious_Count&#x27;: (cluster_data[&#x27;Accident_Severity&#x27;] == &#x27;Serious&#x27;).sum(),
+        &#x27;Slight_Count&#x27;: (cluster_data[&#x27;Accident_Severity&#x27;] == &#x27;Slight&#x27;).sum(),
+        &#x27;Most_Common_Road&#x27;: cluster_data[&#x27;Road_Type&#x27;].mode()[0] if len(cluster_data) &gt; 0 else &#x27;N/A&#x27;,
+        &#x27;Most_Common_Weather&#x27;: cluster_data[&#x27;Weather_Conditions&#x27;].mode()[0] if len(cluster_data) &gt; 0 else &#x27;N/A&#x27;,
+        &#x27;Peak_Month&#x27;: cluster_data[&#x27;Month&#x27;].mode()[0] if len(cluster_data) &gt; 0 else &#x27;N/A&#x27;,
+        &#x27;Peak_Day&#x27;: day_names[cluster_data[&#x27;DayOfWeek&#x27;].mode()[0]] if len(cluster_data) &gt; 0 else &#x27;N/A&#x27;,
+    }
+    
+    cluster_profiles.append(profile)
+    
+    print(f&quot;Cluster {cluster_id}:&quot;)
+    print(f&quot;  Location: ({profile[&#x27;Center_Lon&#x27;]:.4f}, {profile[&#x27;Center_Lat&#x27;]:.4f})&quot;)
+    print(f&quot;  Accidents: {profile[&#x27;Total_Accidents&#x27;]} ({profile[&#x27;Percentage&#x27;]:.1f}%)&quot;)
+    print(f&quot;  Severity: {profile[&#x27;Most_Common_Severity&#x27;]}&quot;)
+    print(f&quot;    • Fatal: {profile[&#x27;Fatal_Count&#x27;]}, Serious: {profile[&#x27;Serious_Count&#x27;]}, Slight: {profile[&#x27;Slight_Count&#x27;]}&quot;)
+    print(f&quot;  Road Type: {profile[&#x27;Most_Common_Road&#x27;]}&quot;)
+    print(f&quot;  Weather: {profile[&#x27;Most_Common_Weather&#x27;]}&quot;)
+    print(f&quot;  Peak Month: {profile[&#x27;Peak_Month&#x27;]}, Peak Day: {profile[&#x27;Peak_Day&#x27;]}&quot;)
+    print()
+
+# Convert to DataFrame
+profile_df = pd.DataFrame(cluster_profiles)
+profile_df.to_csv(&#x27;./data/lab2part2_cluster_profiles.csv&#x27;, index=False)
+print(f&quot;Saved: lab2part2_cluster_profiles.csv&quot;)
+
+# =============================================================================
+# VISUALIZATIONS
+# =============================================================================
+
+print(&quot;\n3. Generating Hotspot Profile Visualizations...&quot;)
+
+# Create comprehensive figure
+fig = plt.figure(figsize=(20, 14))
+
+# 1. Severity comparison across clusters
+ax1 = plt.subplot(3, 3, 1)
+severity_data = profile_df[[&#x27;Cluster_ID&#x27;, &#x27;Fatal_Count&#x27;, &#x27;Serious_Count&#x27;, &#x27;Slight_Count&#x27;]].set_index(&#x27;Cluster_ID&#x27;)
+severity_data.plot(kind=&#x27;bar&#x27;, stacked=True, ax=ax1, color=[&#x27;darkred&#x27;, &#x27;orange&#x27;, &#x27;lightblue&#x27;])
+ax1.set_xlabel(&#x27;Cluster ID&#x27;, fontsize=10)
+ax1.set_ylabel(&#x27;Number of Accidents&#x27;, fontsize=10)
+ax1.set_title(&#x27;Severity Distribution by Cluster&#x27;, fontsize=12, fontweight=&#x27;bold&#x27;)
+ax1.legend(title=&#x27;Severity&#x27;, fontsize=8)
+ax1.set_xticklabels(ax1.get_xticklabels(), rotation=0)
+
+# 2. Cluster sizes pie chart
+ax2 = plt.subplot(3, 3, 2)
+ax2.pie(profile_df[&#x27;Total_Accidents&#x27;], labels=[f&#x27;C{i}&#x27; for i in profile_df[&#x27;Cluster_ID&#x27;]],
+       autopct=&#x27;%1.1f%%&#x27;, startangle=90)
+ax2.set_title(&#x27;Accident Distribution Across Clusters&#x27;, fontsize=12, fontweight=&#x27;bold&#x27;)
+
+# 3. Road type distribution by cluster
+ax3 = plt.subplot(3, 3, 3)
+road_types = df.groupby(&#x27;Cluster&#x27;)[&#x27;Road_Type&#x27;].apply(lambda x: x.value_counts().head(3))
+top_clusters = profile_df.nlargest(3, &#x27;Total_Accidents&#x27;)[&#x27;Cluster_ID&#x27;].values
+road_summary = []
+for cid in top_clusters:
+    cluster_data = df[df[&#x27;Cluster&#x27;] == cid]
+    top_road = cluster_data[&#x27;Road_Type&#x27;].value_counts().head(1)
+    if len(top_road) &gt; 0:
+        road_summary.append({&#x27;Cluster&#x27;: f&#x27;C{cid}&#x27;, &#x27;Road_Type&#x27;: top_road.index[0], &#x27;Count&#x27;: top_road.values[0]})
+
+if road_summary:
+    road_df = pd.DataFrame(road_summary)
+    ax3.barh(road_df[&#x27;Cluster&#x27;], road_df[&#x27;Count&#x27;], color=&#x27;teal&#x27;, alpha=0.7)
+    ax3.set_xlabel(&#x27;Number of Accidents&#x27;, fontsize=10)
+    ax3.set_title(&#x27;Most Common Road Type (Top 3 Clusters)&#x27;, fontsize=12, fontweight=&#x27;bold&#x27;)
+    ax3.invert_yaxis()
+
+# 4. Weather conditions across clusters
+ax4 = plt.subplot(3, 3, 4)
+weather_counts = pd.crosstab(df[&#x27;Cluster&#x27;], df[&#x27;Weather_Conditions&#x27;])
+top_weather = df[&#x27;Weather_Conditions&#x27;].value_counts().head(5).index
+weather_counts[top_weather].plot(kind=&#x27;bar&#x27;, ax=ax4, stacked=False, alpha=0.7)
+ax4.set_xlabel(&#x27;Cluster ID&#x27;, fontsize=10)
+ax4.set_ylabel(&#x27;Count&#x27;, fontsize=10)
+ax4.set_title(&#x27;Top 5 Weather Conditions by Cluster&#x27;, fontsize=12, fontweight=&#x27;bold&#x27;)
+ax4.legend(fontsize=7, loc=&#x27;best&#x27;)
+ax4.set_xticklabels(ax4.get_xticklabels(), rotation=0)
+
+# 5. Temporal patterns - Day of week
+ax5 = plt.subplot(3, 3, 5)
+dow_counts = pd.crosstab(df[&#x27;Cluster&#x27;], df[&#x27;DayOfWeek&#x27;])
+dow_counts.plot(kind=&#x27;bar&#x27;, ax=ax5, alpha=0.7, cmap=&#x27;viridis&#x27;)
+ax5.set_xlabel(&#x27;Cluster ID&#x27;, fontsize=10)
+ax5.set_ylabel(&#x27;Count&#x27;, fontsize=10)
+ax5.set_title(&#x27;Accidents by Day of Week&#x27;, fontsize=12, fontweight=&#x27;bold&#x27;)
+ax5.legend(title=&#x27;Day&#x27;, labels=day_names, fontsize=7)
+ax5.set_xticklabels(ax5.get_xticklabels(), rotation=0)
+
+# 6. Monthly distribution
+ax6 = plt.subplot(3, 3, 6)
+month_counts = pd.crosstab(df[&#x27;Cluster&#x27;], df[&#x27;Month&#x27;])
+month_counts.plot(kind=&#x27;line&#x27;, ax=ax6, marker=&#x27;o&#x27;, alpha=0.7)
+ax6.set_xlabel(&#x27;Month&#x27;, fontsize=10)
+ax6.set_ylabel(&#x27;Number of Accidents&#x27;, fontsize=10)
+ax6.set_title(&#x27;Monthly Accident Trends by Cluster&#x27;, fontsize=12, fontweight=&#x27;bold&#x27;)
+ax6.legend(title=&#x27;Cluster&#x27;, fontsize=7, loc=&#x27;best&#x27;)
+ax6.grid(True, alpha=0.3)
+
+# 7. Risk score heatmap
+ax7 = plt.subplot(3, 3, 7)
+# Calculate risk score based on severity
+df[&#x27;Risk_Score&#x27;] = df[&#x27;Accident_Severity&#x27;].map({&#x27;Fatal&#x27;: 3, &#x27;Serious&#x27;: 2, &#x27;Slight&#x27;: 1})
+risk_matrix = df.groupby([&#x27;Cluster&#x27;, pd.cut(df[&#x27;Hour&#x27;], bins=[-1, 6, 12, 18, 24], 
+                         labels=[&#x27;Night&#x27;, &#x27;Morning&#x27;, &#x27;Afternoon&#x27;, &#x27;Evening&#x27;])])[&#x27;Risk_Score&#x27;].mean().unstack()
+sns.heatmap(risk_matrix, annot=True, fmt=&#x27;.2f&#x27;, cmap=&#x27;YlOrRd&#x27;, ax=ax7, cbar_kws={&#x27;label&#x27;: &#x27;Avg Risk&#x27;})
+ax7.set_xlabel(&#x27;Time Period&#x27;, fontsize=10)
+ax7.set_ylabel(&#x27;Cluster ID&#x27;, fontsize=10)
+ax7.set_title(&#x27;Risk Score by Time of Day&#x27;, fontsize=12, fontweight=&#x27;bold&#x27;)
+
+# 8. Cluster comparison - boxplot of coordinates
+ax8 = plt.subplot(3, 3, 8)
+df.boxplot(column=&#x27;Latitude&#x27;, by=&#x27;Cluster&#x27;, ax=ax8)
+ax8.set_xlabel(&#x27;Cluster ID&#x27;, fontsize=10)
+ax8.set_ylabel(&#x27;Latitude&#x27;, fontsize=10)
+ax8.set_title(&#x27;Latitude Distribution by Cluster&#x27;, fontsize=12, fontweight=&#x27;bold&#x27;)
+plt.sca(ax8)
+plt.xticks(rotation=0)
+
+# 9. High-risk clusters
+ax9 = plt.subplot(3, 3, 9)
+risk_by_cluster = df.groupby(&#x27;Cluster&#x27;)[&#x27;Risk_Score&#x27;].mean().sort_values(ascending=False)
+bars = ax9.bar(range(len(risk_by_cluster)), risk_by_cluster.values, 
+              color=plt.cm.RdYlGn_r(risk_by_cluster.values / risk_by_cluster.max()))
+ax9.set_xlabel(&#x27;Cluster ID (sorted by risk)&#x27;, fontsize=10)
+ax9.set_ylabel(&#x27;Average Risk Score&#x27;, fontsize=10)
+ax9.set_title(&#x27;Clusters Ranked by Risk&#x27;, fontsize=12, fontweight=&#x27;bold&#x27;)
+ax9.set_xticks(range(len(risk_by_cluster)))
+ax9.set_xticklabels(risk_by_cluster.index)
+
+plt.tight_layout()
+plt.savefig(&#x27;./data/lab2part2_hotspot_profiles.png&#x27;, dpi=300, bbox_inches=&#x27;tight&#x27;)
+print(f&quot;   Saved: lab2part2_hotspot_profiles.png&quot;)
+
+# =============================================================================
+# DETAILED INDIVIDUAL CLUSTER PROFILES
+# =============================================================================
+
+print(&quot;\n4. Generating Individual Cluster Profile Cards...&quot;)
+
+# Create individual profile for top 4 clusters
+top_4_clusters = profile_df.nlargest(4, &#x27;Total_Accidents&#x27;)[&#x27;Cluster_ID&#x27;].values
+
+fig2, axes = plt.subplots(2, 2, figsize=(16, 12))
+axes = axes.flatten()
+
+for idx, cluster_id in enumerate(top_4_clusters):
+    cluster_data = df[df[&#x27;Cluster&#x27;] == cluster_id]
+    profile = cluster_profiles[cluster_id]
+    
+    ax = axes[idx]
+    ax.axis(&#x27;off&#x27;)
+    
+    # Create profile card
+    card_text = f&quot;&quot;&quot;
+    CLUSTER {cluster_id} PROFILE
+    {&#x27;=&#x27;*50}
+    
+    LOCATION:
+    • Center: ({profile[&#x27;Center_Lon&#x27;]:.4f}, {profile[&#x27;Center_Lat&#x27;]:.4f})
+    
+    ACCIDENT STATISTICS:
+    • Total Accidents: {profile[&#x27;Total_Accidents&#x27;]} ({profile[&#x27;Percentage&#x27;]:.1f}%)
+    • Fatal: {profile[&#x27;Fatal_Count&#x27;]}
+    • Serious: {profile[&#x27;Serious_Count&#x27;]}
+    • Slight: {profile[&#x27;Slight_Count&#x27;]}
+    
+    CHARACTERISTICS:
+    • Most Common Severity: {profile[&#x27;Most_Common_Severity&#x27;]}
+    • Primary Road Type: {profile[&#x27;Most_Common_Road&#x27;]}
+    • Typical Weather: {profile[&#x27;Most_Common_Weather&#x27;]}
+    
+    TEMPORAL PATTERNS:
+    • Peak Month: {profile[&#x27;Peak_Month&#x27;]}
+    • Peak Day: {profile[&#x27;Peak_Day&#x27;]}
+    
+    RISK ASSESSMENT:
+    • Avg Risk Score: {cluster_data[&#x27;Risk_Score&#x27;].mean():.2f}/3.0
+    • Severity Index: {(profile[&#x27;Fatal_Count&#x27;]*3 + profile[&#x27;Serious_Count&#x27;]*2 + profile[&#x27;Slight_Count&#x27;]) / profile[&#x27;Total_Accidents&#x27;]:.2f}
+    &quot;&quot;&quot;
+    
+    # Color code by risk
+    risk_score = cluster_data[&#x27;Risk_Score&#x27;].mean()
+    bg_color = &#x27;lightcoral&#x27; if risk_score &gt; 1.5 else &#x27;lightyellow&#x27; if risk_score &gt; 1.2 else &#x27;lightgreen&#x27;
+    
+    ax.text(0.5, 0.5, card_text, fontsize=9, verticalalignment=&#x27;center&#x27;, 
+           horizontalalignment=&#x27;center&#x27;, fontfamily=&#x27;monospace&#x27;,
+           bbox=dict(boxstyle=&#x27;round,pad=1&#x27;, facecolor=bg_color, alpha=0.7, edgecolor=&#x27;black&#x27;, linewidth=2))
+
+plt.suptitle(&#x27;Top 4 Accident Hotspot Profiles (by size)&#x27;, fontsize=14, fontweight=&#x27;bold&#x27;, y=0.98)
+plt.tight_layout()
+plt.savefig(&#x27;./data/lab2part2_cluster_cards.png&#x27;, dpi=300, bbox_inches=&#x27;tight&#x27;)
+print(f&quot;   Saved: lab2part2_cluster_cards.png&quot;)
+
+# =============================================================================
+# SUMMARY REPORT
+# =============================================================================
+
+print(&quot;\n&quot; + &quot;=&quot;*70)
+print(&quot;HOTSPOT PROFILING SUMMARY&quot;)
+print(&quot;=&quot;*70)
+print(f&quot;\nTotal Clusters Analyzed: {num_clusters}&quot;)
+print(f&quot;Total Accidents: {len(df)}&quot;)
+
+print(&quot;\nHIGHEST RISK CLUSTERS:&quot;)
+for i, (cluster_id, risk) in enumerate(risk_by_cluster.head(3).items(), 1):
+    profile = cluster_profiles[cluster_id]
+    print(f&quot;{i}. Cluster {cluster_id}:&quot;)
+    print(f&quot;   Risk Score: {risk:.3f}&quot;)
+    print(f&quot;   Accidents: {profile[&#x27;Total_Accidents&#x27;]}&quot;)
+    print(f&quot;   Severity: {profile[&#x27;Most_Common_Severity&#x27;]}&quot;)
+    print(f&quot;   Location: ({profile[&#x27;Center_Lon&#x27;]:.4f}, {profile[&#x27;Center_Lat&#x27;]:.4f})&quot;)
+
+print(&quot;\nLARGEST HOTSPOTS:&quot;)
+for i, row in profile_df.nlargest(3, &#x27;Total_Accidents&#x27;).iterrows():
+    print(f&quot;{i+1}. Cluster {row[&#x27;Cluster_ID&#x27;]}:&quot;)
+    print(f&quot;   Accidents: {row[&#x27;Total_Accidents&#x27;]} ({row[&#x27;Percentage&#x27;]:.1f}%)&quot;)
+    print(f&quot;   Location: ({row[&#x27;Center_Lon&#x27;]:.4f}, {row[&#x27;Center_Lat&#x27;]:.4f})&quot;)
+    
+print(&quot;=&quot;*70)
+
+plt.show()
+</code></pre></div>
+                    </div>
+                    <div class="co-pane co-output">
+                        <div class="img-output-container">                            <h3 style="color:#fff; margin-bottom:20px; font-family:var(--font-heading);">Results from the Detailed Lab Report</h3>                            <img src="./assets/lab2part2_kde_hotspots.png" onerror="this.src='https://via.placeholder.com/800x400/18181b/ef4444?text=Image+Load+Failed';">                        </div>
+                    </div>
+                </div>
+                <div id="script_sub3_4" class="script-pane ">
+                    <div style="margin-bottom:8px;"><span style="display:inline-block; padding:4px 12px; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.15); border-radius:50px; font-size:0.75rem; margin-right:8px; margin-bottom:8px; font-weight:600; font-family:var(--font-heading); color:var(--primary); letter-spacing:0.5px; text-transform:uppercase;">Pandas</span><span style="display:inline-block; padding:4px 12px; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.15); border-radius:50px; font-size:0.75rem; margin-right:8px; margin-bottom:8px; font-weight:600; font-family:var(--font-heading); color:var(--primary); letter-spacing:0.5px; text-transform:uppercase;">Matplotlib</span></div>
+                    <p style="color:var(--text-main); font-size:1.05rem; margin-bottom:20px; font-style:italic; border-left: 3px solid var(--primary); padding-left: 15px; background:rgba(255,255,255,0.02); padding-top:10px; padding-bottom:10px; border-radius:0 8px 8px 0;">Providing a unified schema to rank localized hotspots efficiently.</p>
+                    <div class="co-tabs">
+                        <button class="co-tab active" onclick="showCO(event, 'script_sub3_4', 'code')">Source Code</button>
+                        <button class="co-tab" onclick="showCO(event, 'script_sub3_4', 'output')">Exec Screenshot / Output</button>
+                    </div>
+                    <div class="co-pane co-code active">
+                        <div class="code-container"><pre><code class="language-python">&quot;&quot;&quot;
+Lab 2 Part 2 - Experiment 5: Integrated KDE &amp; K-means Analysis
+Paper: Kernel density estimation and K-means clustering to profile road accident hotspots
+
+This script combines KDE and K-means results for comprehensive hotspot analysis.
+&quot;&quot;&quot;
+
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+from scipy.stats import gaussian_kde
+import warnings
+warnings.filterwarnings(&#x27;ignore&#x27;)
+
+# Set style
+sns.set_style(&quot;whitegrid&quot;)
+plt.rcParams[&#x27;figure.figsize&#x27;] = (18, 14)
+
+print(&quot;=&quot;*70)
+print(&quot;EXPERIMENT 5: INTEGRATED KDE &amp; K-MEANS ANALYSIS&quot;)
+print(&quot;=&quot;*70)
+
+# Load all processed data
+print(&quot;\n1. Loading Processed Datasets...&quot;)
+df = pd.read_csv(&#x27;./data/lab2part2_with_clusters.csv&#x27;)
+cluster_centers = np.loadtxt(&#x27;./data/lab2part2_cluster_centers.csv&#x27;, delimiter=&#x27;,&#x27;, skiprows=1)
+cluster_profiles = pd.read_csv(&#x27;./data/lab2part2_cluster_profiles.csv&#x27;)
+
+print(f&quot;   Loaded {len(df)} accident records&quot;)
+print(f&quot;   Number of clusters: {df[&#x27;Cluster&#x27;].nunique()}&quot;)
+
+# Calculate risk scores
+df[&#x27;Risk_Score&#x27;] = df[&#x27;Accident_Severity&#x27;].map({&#x27;Fatal&#x27;: 3, &#x27;Serious&#x27;: 2, &#x27;Slight&#x27;: 1})
+
+num_clusters = df[&#x27;Cluster&#x27;].nunique()
+
+# =============================================================================
+# RECALCULATE KDE FOR OVERLAY
+# =============================================================================
+
+print(&quot;\n2. Computing Integrated KDE...&quot;)
+coordinates = df[[&#x27;Longitude&#x27;, &#x27;Latitude&#x27;]].values
+kde = gaussian_kde(coordinates.T)
+
+# Create grid
+x_min, x_max = df[&#x27;Longitude&#x27;].min() - 0.3, df[&#x27;Longitude&#x27;].max() + 0.3
+y_min, y_max = df[&#x27;Latitude&#x27;].min() - 0.3, df[&#x27;Latitude&#x27;].max() + 0.3
+xx, yy = np.meshgrid(np.linspace(x_min, x_max, 150),
+                     np.linspace(y_min, y_max, 150))
+
+grid_coords = np.vstack([xx.ravel(), yy.ravel()])
+density = kde(grid_coords).reshape(xx.shape)
+
+print(&quot;   KDE computation complete&quot;)
+
+# =============================================================================
+# COMPREHENSIVE INTEGRATED VISUALIZATIONS
+# =============================================================================
+
+print(&quot;\n3. Generating Integrated Visualizations...&quot;)
+
+# Main integrated figure
+fig = plt.figure(figsize=(20, 16))
+
+# 1. KDE + K-means Overlay
+ax1 = plt.subplot(3, 3, 1)
+# KDE heatmap
+contour = ax1.contourf(xx, yy, density, levels=15, cmap=&#x27;YlOrRd&#x27;, alpha=0.6)
+# Cluster scatter
+colors = sns.color_palette(&#x27;husl&#x27;, num_clusters)
+for cluster_id in range(num_clusters):
+    cluster_data = df[df[&#x27;Cluster&#x27;] == cluster_id]
+    ax1.scatter(cluster_data[&#x27;Longitude&#x27;], cluster_data[&#x27;Latitude&#x27;],
+               c=[colors[cluster_id]], s=8, alpha=0.5, edgecolors=&#x27;none&#x27;,
+               label=f&#x27;C{cluster_id}&#x27;)
+# Cluster centers
+ax1.scatter(cluster_centers[:, 0], cluster_centers[:, 1],
+           c=&#x27;red&#x27;, s=400, alpha=1.0, marker=&#x27;*&#x27;, 
+           edgecolors=&#x27;black&#x27;, linewidths=2, zorder=10)
+ax1.set_xlabel(&#x27;Longitude&#x27;, fontsize=10)
+ax1.set_ylabel(&#x27;Latitude&#x27;, fontsize=10)
+ax1.set_title(&#x27;Integrated KDE + K-means Hotspot Analysis&#x27;, fontsize=12, fontweight=&#x27;bold&#x27;)
+plt.colorbar(contour, ax=ax1, label=&#x27;KDE Density&#x27;)
+ax1.legend(loc=&#x27;best&#x27;, fontsize=7, ncol=2)
+
+# 2. High-density clusters identification
+ax2 = plt.subplot(3, 3, 2)
+# Calculate average density per cluster
+cluster_densities = []
+for cluster_id in range(num_clusters):
+    cluster_data = df[df[&#x27;Cluster&#x27;] == cluster_id]
+    cluster_coords = cluster_data[[&#x27;Longitude&#x27;, &#x27;Latitude&#x27;]].values
+    if len(cluster_coords) &gt; 0:
+        avg_density = kde(cluster_coords.T).mean()
+        cluster_densities.append(avg_density)
+    else:
+        cluster_densities.append(0)
+
+df_cluster_density = pd.DataFrame({
+    &#x27;Cluster&#x27;: range(num_clusters),
+    &#x27;Avg_KDE_Density&#x27;: cluster_densities,
+    &#x27;Size&#x27;: [len(df[df[&#x27;Cluster&#x27;] == i]) for i in range(num_clusters)]
+})
+
+# Scatter plot: size vs density
+scatter = ax2.scatter(df_cluster_density[&#x27;Size&#x27;], df_cluster_density[&#x27;Avg_KDE_Density&#x27;],
+                     s=200, c=df_cluster_density[&#x27;Avg_KDE_Density&#x27;], 
+                     cmap=&#x27;RdYlGn_r&#x27;, alpha=0.7, edgecolors=&#x27;black&#x27;, linewidths=1)
+for i, row in df_cluster_density.iterrows():
+    ax2.annotate(f&#x27;C{row[&quot;Cluster&quot;]}&#x27;, 
+                (row[&#x27;Size&#x27;], row[&#x27;Avg_KDE_Density&#x27;]),
+                fontsize=9, fontweight=&#x27;bold&#x27;, ha=&#x27;center&#x27;, va=&#x27;center&#x27;)
+ax2.set_xlabel(&#x27;Cluster Size (number of accidents)&#x27;, fontsize=10)
+ax2.set_ylabel(&#x27;Average KDE Density&#x27;, fontsize=10)
+ax2.set_title(&#x27;Cluster Size vs KDE Density&#x27;, fontsize=12, fontweight=&#x27;bold&#x27;)
+plt.colorbar(scatter, ax=ax2, label=&#x27;Density&#x27;)
+ax2.grid(True, alpha=0.3)
+
+# 3. Risk-weighted hotspot map
+ax3 = plt.subplot(3, 3, 3)
+for cluster_id in range(num_clusters):
+    cluster_data = df[df[&#x27;Cluster&#x27;] == cluster_id]
+    risk_color = plt.cm.RdYlGn_r(cluster_data[&#x27;Risk_Score&#x27;].mean() / 3.0)
+    ax3.scatter(cluster_data[&#x27;Longitude&#x27;], cluster_data[&#x27;Latitude&#x27;],
+               c=[risk_color], s=10, alpha=0.6)
+ax3.scatter(cluster_centers[:, 0], cluster_centers[:, 1],
+           c=&#x27;blue&#x27;, s=300, alpha=0.8, marker=&#x27;D&#x27;, 
+           edgecolors=&#x27;white&#x27;, linewidths=2, label=&#x27;Cluster Centers&#x27;)
+ax3.set_xlabel(&#x27;Longitude&#x27;, fontsize=10)
+ax3.set_ylabel(&#x27;Latitude&#x27;, fontsize=10)
+ax3.set_title(&#x27;Risk-Weighted Hotspot Map&#x27;, fontsize=12, fontweight=&#x27;bold&#x27;)
+ax3.legend()
+
+# 4. Severity heatmap by cluster
+ax4 = plt.subplot(3, 3, 4)
+severity_matrix = pd.crosstab(df[&#x27;Cluster&#x27;], df[&#x27;Accident_Severity&#x27;])
+severity_matrix = severity_matrix[[&#x27;Slight&#x27;, &#x27;Serious&#x27;, &#x27;Fatal&#x27;]] if &#x27;Fatal&#x27; in severity_matrix.columns else severity_matrix
+sns.heatmap(severity_matrix, annot=True, fmt=&#x27;d&#x27;, cmap=&#x27;Reds&#x27;, ax=ax4, cbar_kws={&#x27;label&#x27;: &#x27;Count&#x27;})
+ax4.set_xlabel(&#x27;Severity&#x27;, fontsize=10)
+ax4.set_ylabel(&#x27;Cluster ID&#x27;, fontsize=10)
+ax4.set_title(&#x27;Severity Distribution Heatmap&#x27;, fontsize=12, fontweight=&#x27;bold&#x27;)
+
+# 5. Combined density score
+ax5 = plt.subplot(3, 3, 5)
+df_cluster_density[&#x27;Risk_Score&#x27;] = [df[df[&#x27;Cluster&#x27;] == i][&#x27;Risk_Score&#x27;].mean() 
+                                    for i in range(num_clusters)]
+df_cluster_density[&#x27;Combined_Score&#x27;] = (
+    df_cluster_density[&#x27;Avg_KDE_Density&#x27;] / df_cluster_density[&#x27;Avg_KDE_Density&#x27;].max() * 0.4 +
+    df_cluster_density[&#x27;Size&#x27;] / df_cluster_density[&#x27;Size&#x27;].max() * 0.3 +
+    df_cluster_density[&#x27;Risk_Score&#x27;] / 3.0 * 0.3
+)
+df_cluster_density_sorted = df_cluster_density.sort_values(&#x27;Combined_Score&#x27;, ascending=False)
+
+bars = ax5.barh(range(num_clusters), df_cluster_density_sorted[&#x27;Combined_Score&#x27;].values,
+               color=plt.cm.RdYlGn_r(df_cluster_density_sorted[&#x27;Combined_Score&#x27;].values))
+ax5.set_yticks(range(num_clusters))
+ax5.set_yticklabels([f&quot;C{int(x)}&quot; for x in df_cluster_density_sorted[&#x27;Cluster&#x27;].values])
+ax5.set_xlabel(&#x27;Combined Priority Score&#x27;, fontsize=10)
+ax5.set_title(&#x27;Hotspot Priority Ranking&#x27;, fontsize=12, fontweight=&#x27;bold&#x27;)
+ax5.invert_yaxis()
+for i, (idx, row) in enumerate(df_cluster_density_sorted.iterrows()):
+    ax5.text(row[&#x27;Combined_Score&#x27;], i, f&quot; {row[&#x27;Combined_Score&#x27;]:.3f}&quot;, 
+            va=&#x27;center&#x27;, fontsize=8)
+
+# 6. Road type analysis
+ax6 = plt.subplot(3, 3, 6)
+top_3_clusters = df_cluster_density_sorted.head(3)[&#x27;Cluster&#x27;].values
+road_data = []
+for cid in top_3_clusters:
+    cluster_data = df[df[&#x27;Cluster&#x27;] == cid]
+    top_roads = cluster_data[&#x27;Road_Type&#x27;].value_counts().head(3)
+    for road, count in top_roads.items():
+        road_data.append({&#x27;Cluster&#x27;: f&#x27;C{int(cid)}&#x27;, &#x27;Road_Type&#x27;: road, &#x27;Count&#x27;: count})
+
+if road_data:
+    road_df = pd.DataFrame(road_data)
+    road_pivot = road_df.pivot(index=&#x27;Cluster&#x27;, columns=&#x27;Road_Type&#x27;, values=&#x27;Count&#x27;).fillna(0)
+    road_pivot.plot(kind=&#x27;bar&#x27;, ax=ax6, stacked=True, alpha=0.8)
+    ax6.set_xlabel(&#x27;Cluster (Top 3 Priority)&#x27;, fontsize=10)
+    ax6.set_ylabel(&#x27;Number of Accidents&#x27;, fontsize=10)
+    ax6.set_title(&#x27;Road Type Distribution (Priority Hotspots)&#x27;, fontsize=12, fontweight=&#x27;bold&#x27;)
+    ax6.legend(fontsize=7, loc=&#x27;best&#x27;)
+    ax6.set_xticklabels(ax6.get_xticklabels(), rotation=0)
+
+# 7. Weather impact analysis
+ax7 = plt.subplot(3, 3, 7)
+weather_risk = df.groupby(&#x27;Weather_Conditions&#x27;)[&#x27;Risk_Score&#x27;].agg([&#x27;mean&#x27;, &#x27;count&#x27;])
+weather_risk = weather_risk[weather_risk[&#x27;count&#x27;] &gt; 100].sort_values(&#x27;mean&#x27;, ascending=False).head(8)
+bars = ax7.barh(range(len(weather_risk)), weather_risk[&#x27;mean&#x27;].values,
+               color=plt.cm.RdYlGn_r(weather_risk[&#x27;mean&#x27;].values / weather_risk[&#x27;mean&#x27;].max()))
+ax7.set_yticks(range(len(weather_risk)))
+ax7.set_yticklabels(weather_risk.index, fontsize=8)
+ax7.set_xlabel(&#x27;Average Risk Score&#x27;, fontsize=10)
+ax7.set_title(&#x27;Weather Conditions by Risk&#x27;, fontsize=12, fontweight=&#x27;bold&#x27;)
+ax7.invert_yaxis()
+
+# 8. Spatial distribution statistics
+ax8 = plt.subplot(3, 3, 8)
+stats_by_cluster = df.groupby(&#x27;Cluster&#x27;).agg({
+    &#x27;Longitude&#x27;: [&#x27;mean&#x27;, &#x27;std&#x27;],
+    &#x27;Latitude&#x27;: [&#x27;mean&#x27;, &#x27;std&#x27;],
+    &#x27;Risk_Score&#x27;: &#x27;mean&#x27;
+}).round(4)
+
+# Plot cluster spread
+for cluster_id in range(num_clusters):
+    cluster_data = df[df[&#x27;Cluster&#x27;] == cluster_id]
+    lon_std = cluster_data[&#x27;Longitude&#x27;].std()
+    lat_std = cluster_data[&#x27;Latitude&#x27;].std()
+    center = cluster_centers[cluster_id]
+    
+    circle = plt.Circle((center[0], center[1]), 
+                        radius=np.sqrt(lon_std**2 + lat_std**2),
+                        alpha=0.3, color=colors[cluster_id])
+    ax8.add_patch(circle)
+    ax8.scatter([center[0]], [center[1]], s=100, c=[colors[cluster_id]], 
+               edgecolors=&#x27;black&#x27;, linewidths=1, zorder=5)
+    ax8.text(center[0], center[1], f&#x27;C{cluster_id}&#x27;, 
+            ha=&#x27;center&#x27;, va=&#x27;center&#x27;, fontsize=8, fontweight=&#x27;bold&#x27;)
+
+ax8.set_xlabel(&#x27;Longitude&#x27;, fontsize=10)
+ax8.set_ylabel(&#x27;Latitude&#x27;, fontsize=10)
+ax8.set_title(&#x27;Cluster Spatial Spread&#x27;, fontsize=12, fontweight=&#x27;bold&#x27;)
+ax8.set_xlim(x_min, x_max)
+ax8.set_ylim(y_min, y_max)
+ax8.grid(True, alpha=0.3)
+
+# 9. Summary statistics panel
+ax9 = plt.subplot(3, 3, 9)
+ax9.axis(&#x27;off&#x27;)
+
+summary_text = f&quot;&quot;&quot;
+INTEGRATED ANALYSIS SUMMARY
+{&#x27;=&#x27;*55}
+
+OVERALL STATISTICS:
+• Total Accidents: {len(df):,}
+• Number of Hotspots: {num_clusters}
+• Avg Cluster Size: {len(df)/num_clusters:.0f}
+
+TOP PRIORITY HOTSPOTS:
+&quot;&quot;&quot;
+
+for i, (idx, row) in enumerate(df_cluster_density_sorted.head(3).iterrows(), 1):
+    cid = int(row[&#x27;Cluster&#x27;])
+    summary_text += f&quot;\n{i}. Cluster {cid}:\n&quot;
+    summary_text += f&quot;   Priority Score: {row[&#x27;Combined_Score&#x27;]:.3f}\n&quot;
+    summary_text += f&quot;   Accidents: {int(row[&#x27;Size&#x27;])}\n&quot;
+    summary_text += f&quot;   Avg Risk: {row[&#x27;Risk_Score&#x27;]:.2f}\n&quot;
+    summary_text += f&quot;   KDE Density: {row[&#x27;Avg_KDE_Density&#x27;]:.5f}\n&quot;
+
+summary_text += f&quot;&quot;&quot;
+METHODOLOGY:
+• KDE bandwidth: Auto (Scott&#x27;s rule)
+• K-means init: k-means++
+• Combined score weights:
+  - KDE density: 40%
+  - Cluster size: 30%
+  - Risk severity: 30%
+&quot;&quot;&quot;
+
+ax9.text(0.1, 0.5, summary_text, fontsize=9, verticalalignment=&#x27;center&#x27;,
+        fontfamily=&#x27;monospace&#x27;, bbox=dict(boxstyle=&#x27;round&#x27;, facecolor=&#x27;lightblue&#x27;, 
+        alpha=0.7, edgecolor=&#x27;black&#x27;, linewidth=2))
+
+plt.tight_layout()
+plt.savefig(&#x27;./data/lab2part2_integrated_analysis.png&#x27;, dpi=300, bbox_inches=&#x27;tight&#x27;)
+print(f&quot;   Saved: lab2part2_integrated_analysis.png&quot;)
+
+# =============================================================================
+# CREATE FINAL HOTSPOT MAP
+# =============================================================================
+
+print(&quot;\n4. Creating Final Comprehensive Hotspot Map...&quot;)
+
+fig2, ax = plt.subplots(figsize=(16, 12))
+
+# KDE contour background
+contour_bg = ax.contourf(xx, yy, density, levels=20, cmap=&#x27;YlOrRd&#x27;, alpha=0.4)
+
+# Plot all accidents with cluster colors
+for cluster_id in range(num_clusters):
+    cluster_data = df[df[&#x27;Cluster&#x27;] == cluster_id]
+    size_factor = len(cluster_data) / len(df) * 100
+    ax.scatter(cluster_data[&#x27;Longitude&#x27;], cluster_data[&#x27;Latitude&#x27;],
+              c=[colors[cluster_id]], s=5, alpha=0.5,
+              label=f&#x27;C{cluster_id} (n={len(cluster_data)})&#x27;)
+
+# Highlight top priority clusters
+top_priority = df_cluster_density_sorted.head(3)[&#x27;Cluster&#x27;].values
+for cid in top_priority:
+    center = cluster_centers[int(cid)]
+    # Draw circle around priority hotspot
+    circle = plt.Circle((center[0], center[1]), radius=0.15,
+                       fill=False, edgecolor=&#x27;red&#x27;, linewidth=3, linestyle=&#x27;--&#x27;)
+    ax.add_patch(circle)
+
+# Plot cluster centers with priority indicators
+for cluster_id in range(num_clusters):
+    center = cluster_centers[cluster_id]
+    priority_rank = df_cluster_density_sorted[df_cluster_density_sorted[&#x27;Cluster&#x27;] == cluster_id].index[0] + 1
+    
+    if cluster_id in top_priority:
+        marker_size = 600
+        marker_color = &#x27;red&#x27;
+        edge_width = 3
+    else:
+        marker_size = 300
+        marker_color = &#x27;orange&#x27;
+        edge_width = 2
+    
+    ax.scatter([center[0]], [center[1]], s=marker_size, 
+              c=marker_color, marker=&#x27;*&#x27;, alpha=0.9,
+              edgecolors=&#x27;black&#x27;, linewidths=edge_width, zorder=10)
+    
+    # Label with priority rank
+    ax.annotate(f&#x27;#{priority_rank}&#x27;, (center[0], center[1]),
+               xytext=(10, 10), textcoords=&#x27;offset points&#x27;,
+               fontsize=11, fontweight=&#x27;bold&#x27;,
+               bbox=dict(boxstyle=&#x27;round,pad=0.3&#x27;, facecolor=&#x27;yellow&#x27;, 
+                        edgecolor=&#x27;black&#x27;, linewidth=1.5),
+               zorder=11)
+
+ax.set_xlabel(&#x27;Longitude&#x27;, fontsize=12)
+ax.set_ylabel(&#x27;Latitude&#x27;, fontsize=12)
+ax.set_title(&#x27;Final Accident Hotspot Map - KDE + K-means Integration\n&#x27; +
+            &#x27;Red stars indicate high-priority intervention areas&#x27;,
+            fontsize=14, fontweight=&#x27;bold&#x27;)
+plt.colorbar(contour_bg, ax=ax, label=&#x27;KDE Accident Density&#x27;)
+ax.legend(loc=&#x27;best&#x27;, fontsize=8, ncol=2)
+ax.grid(True, alpha=0.3)
+
+plt.savefig(&#x27;./data/lab2part2_final_hotspot_map.png&#x27;, dpi=300, bbox_inches=&#x27;tight&#x27;)
+print(f&quot;   Saved: lab2part2_final_hotspot_map.png&quot;)
+
+# =============================================================================
+# SAVE FINAL RESULTS
+# =============================================================================
+
+print(&quot;\n5. Saving Final Analysis Results...&quot;)
+
+# Combined results dataframe
+df_cluster_density.to_csv(&#x27;./data/lab2part2_final_results.csv&#x27;, index=False)
+print(f&quot;   Saved: lab2part2_final_results.csv&quot;)
+
+# Generate recommendations report
+recommendations = []
+for i, (idx, row) in enumerate(df_cluster_density_sorted.head(5).iterrows(), 1):
+    cid = int(row[&#x27;Cluster&#x27;])
+    cluster_data = df[df[&#x27;Cluster&#x27;] == cid]
+    
+    rec = {
+        &#x27;Priority_Rank&#x27;: i,
+        &#x27;Cluster_ID&#x27;: cid,
+        &#x27;Combined_Score&#x27;: row[&#x27;Combined_Score&#x27;],
+        &#x27;Center_Longitude&#x27;: cluster_centers[cid][0],
+        &#x27;Center_Latitude&#x27;: cluster_centers[cid][1],
+        &#x27;Total_Accidents&#x27;: int(row[&#x27;Size&#x27;]),
+        &#x27;Average_Risk&#x27;: row[&#x27;Risk_Score&#x27;],
+        &#x27;KDE_Density&#x27;: row[&#x27;Avg_KDE_Density&#x27;],
+        &#x27;Fatal_Accidents&#x27;: (cluster_data[&#x27;Accident_Severity&#x27;] == &#x27;Fatal&#x27;).sum(),
+        &#x27;Serious_Accidents&#x27;: (cluster_data[&#x27;Accident_Severity&#x27;] == &#x27;Serious&#x27;).sum(),
+        &#x27;Primary_Road_Type&#x27;: cluster_data[&#x27;Road_Type&#x27;].mode()[0] if len(cluster_data) &gt; 0 else &#x27;N/A&#x27;,
+        &#x27;Primary_Weather&#x27;: cluster_data[&#x27;Weather_Conditions&#x27;].mode()[0] if len(cluster_data) &gt; 0 else &#x27;N/A&#x27;,
+    }
+    recommendations.append(rec)
+
+recommendations_df = pd.DataFrame(recommendations)
+recommendations_df.to_csv(&#x27;./data/lab2part2_recommendations.csv&#x27;, index=False)
+print(f&quot;   Saved: lab2part2_recommendations.csv&quot;)
+
+# =============================================================================
+# FINAL SUMMARY
+# =============================================================================
+
+print(&quot;\n&quot; + &quot;=&quot;*70)
+print(&quot;INTEGRATED ANALYSIS COMPLETE&quot;)
+print(&quot;=&quot;*70)
+print(f&quot;\nTotal Accidents Analyzed: {len(df):,}&quot;)
+print(f&quot;Number of Hotspot Clusters: {num_clusters}&quot;)
+print(f&quot;Average Cluster Size: {len(df)/num_clusters:.0f} accidents&quot;)
+
+print(&quot;\n📍 TOP 3 PRIORITY HOTSPOTS FOR INTERVENTION:\n&quot;)
+for i, rec in enumerate(recommendations[:3], 1):
+    print(f&quot;{i}. CLUSTER {rec[&#x27;Cluster_ID&#x27;]}:&quot;)
+    print(f&quot;   Location: ({rec[&#x27;Center_Longitude&#x27;]:.4f}, {rec[&#x27;Center_Latitude&#x27;]:.4f})&quot;)
+    print(f&quot;   Priority Score: {rec[&#x27;Combined_Score&#x27;]:.3f}&quot;)
+    print(f&quot;   Total Accidents: {rec[&#x27;Total_Accidents&#x27;]}&quot;)
+    print(f&quot;   Fatal: {rec[&#x27;Fatal_Accidents&#x27;]}, Serious: {rec[&#x27;Serious_Accidents&#x27;]}&quot;)
+    print(f&quot;   Primary Road: {rec[&#x27;Primary_Road_Type&#x27;]}&quot;)
+    print(f&quot;   Typical Weather: {rec[&#x27;Primary_Weather&#x27;]}&quot;)
+    print()
+
+print(&quot;📊 OUTPUT FILES GENERATED:&quot;)
+print(&quot;   • lab2part2_cleaned_data.csv&quot;)
+print(&quot;   • lab2part2_with_kde.csv&quot;)
+print(&quot;   • lab2part2_with_clusters.csv&quot;)
+print(&quot;   • lab2part2_cluster_profiles.csv&quot;)
+print(&quot;   • lab2part2_final_results.csv&quot;)
+print(&quot;   • lab2part2_recommendations.csv&quot;)
+print(&quot;   • Multiple visualization PNG files&quot;)
+
+print(&quot;\n Analysis methodology successfully implemented:&quot;)
+print(&quot;   ✓ Kernel Density Estimation (KDE)&quot;)
+print(&quot;   ✓ K-means Clustering&quot;)
+print(&quot;   ✓ Hotspot Profiling&quot;)
+print(&quot;   ✓ Integrated Risk Assessment&quot;)
+print(&quot;=&quot;*70)
+
+plt.show()
+</code></pre></div>
+                    </div>
+                    <div class="co-pane co-output">
+                        <div class="img-output-container">                            <h3 style="color:#fff; margin-bottom:20px; font-family:var(--font-heading);">Results from the Detailed Lab Report</h3>                            <img src="./assets/lab2part2_kmeans_clustering.png" onerror="this.src='https://via.placeholder.com/800x400/18181b/ef4444?text=Image+Load+Failed';">                        </div>
+                    </div>
+                </div>
+            </div>
+
+            </div>
+        </div>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+        <script>
+            function showSubtask(evt, subId) {
+                document.querySelectorAll('.subtask-pane').forEach(el => el.classList.remove('active'));
+                document.querySelectorAll('.sb-tab').forEach(el => el.classList.remove('active'));
+                document.getElementById(subId).classList.add('active');
+                evt.currentTarget.classList.add('active');
+                
+                const firstTab = document.getElementById(subId).querySelector('.s-tab');
+                if(firstTab) firstTab.click();
+            }
+            function showScript(evt, subId, scriptId) {
+                const parent = document.getElementById(subId);
+                parent.querySelectorAll('.script-pane').forEach(el => el.classList.remove('active'));
+                parent.querySelectorAll('.s-tab').forEach(el => el.classList.remove('active'));
+                document.getElementById(scriptId).classList.add('active');
+                evt.currentTarget.classList.add('active');
+            }
+            function showCO(evt, scriptId, type) {
+                const pane = document.getElementById(scriptId);
+                pane.querySelectorAll('.co-pane').forEach(el => el.classList.remove('active'));
+                pane.querySelectorAll('.co-tab').forEach(el => el.classList.remove('active'));
+                pane.querySelector('.co-' + type).classList.add('active');
+                evt.currentTarget.classList.add('active');
+            }
+
+            document.addEventListener("DOMContentLoaded", () => {
+                const observer = new IntersectionObserver((e) => {
+                    e.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('visible'); });
+                }, { threshold: 0.1 });
+                document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+                setTimeout(() => document.querySelectorAll('.fade-up').forEach(el => {if(el.getBoundingClientRect().top < window.innerHeight) el.classList.add('visible');}), 100);
+            });
+        </script>
+        
+        <footer class="glass footer" style="text-align:center; padding:30px 20px; border-top:1px solid var(--glass-border); margin-top:40px;">
+            <p style="color:var(--text-muted); font-size:0.95rem;">&copy; 2026 Distributed Data Management Showcase.</p>
+            <p style="margin-top:10px; font-weight:500; font-size:1.05rem; color:var(--text-main);">Made with ❤️ by me for you</p>
+        </footer>
+    </body>
+    </html>
+    
