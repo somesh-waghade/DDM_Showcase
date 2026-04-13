@@ -87,6 +87,18 @@ body {
 }
 
 /* Navigation */
+
+/* City Map Canvas Background */
+#city-canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 0;
+    pointer-events: none;
+    opacity: 0.4;
+}
 .navbar {
     position: fixed;
     top: 0;
@@ -533,3 +545,183 @@ section {
     .modal-header { padding: 2rem 2rem 1.5rem; }
     .modal-body { padding: 2rem; }
 }
+
+/* Book Mode Styles */
+.book-layout {
+    display: flex;
+    gap: 40px;
+    max-width: 1400px;
+    margin: 0 auto;
+    position: relative;
+    padding-top: 120px;
+}
+
+.book-toc {
+    width: 280px;
+    position: sticky;
+    top: 120px;
+    height: fit-content;
+    max-height: calc(100vh - 160px);
+    overflow-y: auto;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 12px;
+    border: 1px solid var(--glass-border);
+}
+
+.book-toc h4 {
+    font-family: var(--font-heading);
+    color: var(--primary);
+    margin-bottom: 20px;
+    text-transform: uppercase;
+    font-size: 0.9rem;
+    letter-spacing: 1px;
+}
+
+.book-toc ul {
+    list-style: none;
+}
+
+.book-toc li {
+    margin-bottom: 12px;
+}
+
+.book-toc a {
+    color: var(--text-muted);
+    text-decoration: none;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+    display: block;
+    line-height: 1.4;
+}
+
+.book-toc a:hover, .book-toc a.active {
+    color: var(--primary);
+    transform: translateX(5px);
+}
+
+.book-content {
+    flex: 1;
+    background: #fdfdfd;
+    color: #1a1a1a;
+    padding: 80px 100px;
+    border-radius: 4px;
+    box-shadow: 0 30px 60px rgba(0,0,0,0.4);
+    font-family: 'Libre Baskerville', 'Playfair Display', serif;
+    line-height: 1.8;
+    position: relative;
+}
+
+.book-content::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 20px; bottom: 0; width: 1px;
+    background: rgba(0,0,0,0.05);
+}
+
+.book-content h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 3.5rem;
+    line-height: 1.2;
+    margin-bottom: 2rem;
+    border-bottom: 2px solid #eee;
+    padding-bottom: 1rem;
+}
+
+.book-content h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.2rem;
+    margin: 3rem 0 1.5rem;
+    color: #333;
+}
+
+.book-content h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.6rem;
+    margin: 2rem 0 1rem;
+    color: #444;
+}
+
+.book-content p {
+    margin-bottom: 1.5rem;
+    font-size: 1.15rem;
+    text-align: justify;
+}
+
+.book-content .placeholder-fig {
+    background: #f1f1f1;
+    border: 2px dashed #ccc;
+    border-radius: 8px;
+    padding: 60px 20px;
+    text-align: center;
+    margin: 3rem 0;
+    position: relative;
+}
+
+.placeholder-fig::after {
+    content: 'Figure Placeholder';
+    display: block;
+    color: #888;
+    font-family: var(--font-body);
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.book-content figcaption {
+    font-family: var(--font-body);
+    font-size: 0.95rem;
+    color: #666;
+    text-align: center;
+    font-style: italic;
+    margin-top: 1.5rem;
+    margin-bottom: 4rem;
+}
+
+.book-content .table-wrapper {
+    overflow-x: auto;
+    margin: 2rem 0;
+}
+
+.book-content table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: var(--font-body);
+    font-size: 1rem;
+}
+
+.book-content th, .book-content td {
+    border: 1px solid #eee;
+    padding: 12px;
+    text-align: left;
+}
+
+.book-content th {
+    background: #f9f9f9;
+}
+
+@media (max-width: 1024px) {
+    .book-layout {
+        flex-direction: column;
+        padding: 100px 20px;
+    }
+    .book-toc {
+        width: 100%;
+        position: relative;
+        top: 0;
+        margin-bottom: 40px;
+    }
+    .book-content {
+        padding: 40px 30px;
+    }
+}
+
+.book-img { 
+    display: block; 
+    max-width: 100%; 
+    height: auto; 
+    margin: 3rem auto; 
+    border-radius: 8px; 
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1); 
+}
+
