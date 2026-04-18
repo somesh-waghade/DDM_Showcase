@@ -5,48 +5,48 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>All Lab Tasks | Distributed Data Management</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=Outfit:wght@400;600;800&family=Fira+Code&display=swap" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="style.css">
     <style>
-        body { overflow-y: scroll; }
+        body { overflow-y: scroll; background: #f8f9fa; }
         .page-container { max-width: 1200px; margin: 0 auto; padding: 0 20px; position: relative; z-index: 10; padding-top: 100px; }
         .page-header { text-align: center; margin-bottom: 40px; }
-        .page-header h1 { font-family: var(--font-heading); font-size: 3.5rem; color: #fff; margin-bottom: 10px;}
-        .glass-panel { padding: 40px; border-radius: 20px; margin-bottom: 40px; background: rgba(24, 24, 27, 0.6); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.08); }
-        
-        .subtask-tabs { display: flex; gap: 15px; margin-bottom: 30px; border-bottom: 2px solid var(--glass-border); padding-bottom: 15px;}
-        .sb-tab { padding: 12px 24px; font-weight: bold; cursor: pointer; border-radius: 8px; border: 1px solid var(--glass-border); background: transparent; color: var(--text-main); font-family: var(--font-heading); font-size: 1.1rem; transition: 0.3s;}
-        .sb-tab:hover { background: rgba(255,255,255,0.05); }
-        .sb-tab.active { background: var(--primary); color: #000; border-color: var(--primary); }
-        
+        .page-header h1 { font-family: var(--font-heading); font-size: 3.5rem; color: var(--text-main); margin-bottom: 10px; }
+        .glass-panel { padding: 40px; border-radius: 20px; margin-bottom: 40px; background: #ffffff; border: 1px solid var(--glass-border); box-shadow: 0 4px 20px rgba(0,0,0,0.05); }
+
+        .subtask-tabs { display: flex; gap: 15px; margin-bottom: 30px; border-bottom: 2px solid var(--glass-border); padding-bottom: 15px; }
+        .sb-tab { padding: 12px 24px; font-weight: bold; cursor: pointer; border-radius: 8px; border: 1px solid var(--glass-border); background: #ffffff; color: var(--text-main); font-family: var(--font-heading); font-size: 1.1rem; transition: 0.3s; box-shadow: 0 1px 4px rgba(0,0,0,0.05); }
+        .sb-tab:hover { background: #f8f9fa; border-color: var(--primary); }
+        .sb-tab.active { background: var(--primary); color: #ffffff; border-color: var(--primary); box-shadow: 0 4px 12px rgba(26,115,232,0.25); }
+
         .subtask-pane { display: none; }
         .subtask-pane.active { display: block; animation: fadeIn 0.4s; }
-        
+
         .script-tabs { display: flex; gap: 10px; overflow-x: auto; margin-bottom: 25px; padding-bottom: 15px; }
         .script-tabs::-webkit-scrollbar { height: 6px; }
-        .script-tabs::-webkit-scrollbar-thumb { background: var(--glass-border); border-radius: 10px; }
-        .s-tab { padding: 8px 16px; cursor: pointer; border-radius: 6px; border: 1px solid var(--glass-border); background: rgba(255,255,255,0.05); color: var(--text-muted); white-space: nowrap; transition: 0.3s; font-weight: 500;}
-        .s-tab:hover { background: rgba(255,255,255,0.1); }
-        .s-tab.active { background: var(--secondary); color: #fff; border-color: var(--secondary); }
-        
+        .script-tabs::-webkit-scrollbar-thumb { background: #dadce0; border-radius: 10px; }
+        .s-tab { padding: 8px 16px; cursor: pointer; border-radius: 6px; border: 1px solid var(--glass-border); background: #ffffff; color: var(--text-muted); white-space: nowrap; transition: 0.3s; font-weight: 500; }
+        .s-tab:hover { background: #f1f3f4; }
+        .s-tab.active { background: var(--primary); color: #fff; border-color: var(--primary); }
+
         .script-pane { display: none; }
         .script-pane.active { display: block; }
 
-        .co-tabs { display: inline-flex; gap: 5px; margin-bottom: 20px; background: rgba(0,0,0,0.4); padding: 6px; border-radius: 10px; border: 1px solid var(--glass-border);}
-        .co-tab { padding: 8px 20px; cursor: pointer; border: none; border-radius: 6px; background: transparent; color: var(--text-muted); font-weight: 500; transition: 0.3s;}
-        .co-tab.active { background: rgba(255,255,255,0.15); color: #fff; }
-        
-        .co-pane { display: none; background: #0d1117; border-radius: 12px; overflow: hidden; border: 1px solid var(--glass-border);}
+        .co-tabs { display: inline-flex; gap: 5px; margin-bottom: 20px; background: #f1f3f4; padding: 6px; border-radius: 10px; border: 1px solid var(--glass-border); }
+        .co-tab { padding: 8px 20px; cursor: pointer; border: none; border-radius: 6px; background: transparent; color: var(--text-muted); font-weight: 500; transition: 0.3s; }
+        .co-tab.active { background: #ffffff; color: var(--text-main); box-shadow: 0 1px 6px rgba(0,0,0,0.1); }
+
+        .co-pane { display: none; background: #f8f8f8; border-radius: 12px; overflow: hidden; border: 1px solid var(--glass-border); }
         .co-pane.active { display: block; }
 
         .code-container { margin: 0; max-height: 600px; overflow-y: auto; }
-        .code-container pre { margin: 0 !important; background: transparent !important; }
-        
-        .img-output-container { padding: 40px; text-align: center; background: #111; overflow-y: auto; max-height: 600px; }
-        .img-output-container img { max-width: 100%; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 10px 30px rgba(0,0,0,0.5); margin-bottom: 20px; }
+        .code-container pre { margin: 0 !important; background: #f7f7f9 !important; }
 
-        .terminal-output { padding: 25px; font-family: 'Fira Code', monospace; color: #56d364; max-height: 600px; overflow-y: auto; white-space: pre-wrap; font-size: 0.95rem; line-height: 1.6;}
-        
+        .img-output-container { padding: 40px; text-align: center; background: #fafafa; overflow-y: auto; max-height: 600px; }
+        .img-output-container img { max-width: 100%; border-radius: 8px; border: 1px solid var(--glass-border); box-shadow: 0 8px 24px rgba(0,0,0,0.08); margin-bottom: 20px; }
+
+        .terminal-output { padding: 25px; font-family: 'Fira Code', monospace; color: #1e7e34; background: #f0faf3; max-height: 600px; overflow-y: auto; white-space: pre-wrap; font-size: 0.95rem; line-height: 1.6; border-radius: 8px; }
+
         @keyframes fadeIn { from {opacity:0; transform: translateY(10px);} to {opacity:1; transform: translateY(0);} }
     </style>
 </head>

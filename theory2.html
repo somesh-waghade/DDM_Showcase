@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Theory 02: DDM Algorithms | End-to-End Data Solutions</title>
+    <meta name="description" content="Interactive survey of Distributed Data Management algorithms with comparison cards and our proposed Adaptive Gossip-Hierarchy algorithm.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Outfit:wght@400;600;800&family=Fira+Code&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body { background: #f8f9fa; }
+        .page-container { max-width: 1100px; margin: 0 auto; padding: 120px 20px 60px; position: relative; z-index: 1; }
+
+        /* ─── Filters ─── */
+        .algo-filters { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; margin-bottom: 40px; }
+        .algo-filter-btn {
+            padding: 8px 20px; border-radius: 50px; border: 1px solid var(--glass-border);
+            background: #fff; color: var(--text-muted); cursor: pointer; font-family: var(--font-body);
+            font-weight: 600; font-size: 0.85rem; transition: all 0.25s;
+        }
+        .algo-filter-btn:hover { border-color: var(--primary); color: var(--primary); }
+        .algo-filter-btn.active { background: var(--primary); color: #fff; border-color: var(--primary); box-shadow: 0 4px 14px rgba(26,115,232,.25); }
+
+        /* ─── Cards Grid ─── */
+        .algo-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(310px, 1fr)); gap: 24px; }
+        .algo-card {
+            background: #fff; border-radius: 20px; border: 1px solid var(--glass-border);
+            box-shadow: 0 4px 18px rgba(0,0,0,.04); overflow: hidden; cursor: pointer;
+            transition: all 0.35s cubic-bezier(0.4,0,0.2,1);
+            display: flex; flex-direction: column;
+        }
+        .algo-card:hover { transform: translateY(-10px); box-shadow: 0 20px 50px rgba(26,115,232,.12); border-color: var(--primary); }
+        .algo-card.highlight-card { border-color: #1a73e8; box-shadow: 0 8px 30px rgba(26,115,232,.18); }
+
+        .card-header { padding: 28px 28px 20px; position: relative; }
+        .card-tag { display: inline-block; padding: 4px 12px; border-radius: 50px; font-size: 0.7rem; font-weight: 700; letter-spacing: 1px; margin-bottom: 14px; }
+        .tag-structured { background: rgba(26,115,232,.1); color: #1a73e8; }
+        .tag-unstructured { background: rgba(156,39,176,.1); color: #9c27b0; }
+        .tag-hybrid { background: rgba(52,168,83,.1); color: #34a853; }
+        .tag-statistical { background: rgba(251,188,5,.15); color: #9a6700; }
+        .tag-our-proposal { background: linear-gradient(135deg, rgba(26,115,232,.15), rgba(156,39,176,.15)); color: #1a73e8; border: 1px solid rgba(26,115,232,.3); }
+
+        .algo-name { font-family: var(--font-heading); font-size: 1.5rem; font-weight: 800; color: var(--text-main); margin-bottom: 6px; }
+        .algo-subtitle { color: var(--text-muted); font-size: 0.9rem; }
+
+        .card-metrics { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; border-top: 1px solid var(--glass-border); }
+        .metric-cell { padding: 14px 12px; text-align: center; border-right: 1px solid var(--glass-border); }
+        .metric-cell:last-child { border-right: none; }
+        .metric-label { font-size: 0.65rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted); margin-bottom: 6px; }
+        .metric-bar { height: 4px; border-radius: 4px; background: #f1f3f4; overflow: hidden; }
+        .metric-fill { height: 100%; border-radius: 4px; transition: width 1s ease; }
+        .fill-blue { background: #1a73e8; }
+        .fill-green { background: #34a853; }
+        .fill-red { background: #ea4335; }
+        .fill-orange { background: #fbbc05; }
+        .fill-purple { background: #9c27b0; }
+
+        .card-body { padding: 20px 28px 24px; flex: 1; }
+        .algo-desc { color: var(--text-muted); font-size: 0.92rem; line-height: 1.7; margin-bottom: 16px; }
+        .algo-pros-cons { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; font-size: 0.82rem; }
+        .pros li, .cons li { margin-bottom: 4px; padding-left: 0; list-style: none; }
+        .pros li::before { content: "✓ "; color: #34a853; font-weight: 700; }
+        .cons li::before { content: "✗ "; color: #ea4335; font-weight: 700; }
+        .pros h5, .cons h5 { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; color: var(--text-muted); }
+
+        .complexity-badge {
+            display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px;
+            background: #f6f8fa; border-radius: 8px; font-family: var(--font-mono);
+            font-size: 0.8rem; color: #24292f; margin-top: 14px; border: 1px solid var(--glass-border);
+        }
+
+        /* ─── Featured "Our Proposal" Card ─── */
+        .proposal-card {
+            background: linear-gradient(135deg, #fff 60%, rgba(26,115,232,.04));
+            border: 2px solid #1a73e8;
+        }
+        .proposal-ribbon {
+            position: absolute; top: 0; right: 0;
+            background: linear-gradient(135deg, #1a73e8, #9c27b0);
+            color: #fff; font-size: 0.65rem; font-weight: 800; letter-spacing: 1px;
+            padding: 5px 14px; border-bottom-left-radius: 12px;
+        }
+        .agh-phases { margin-top: 16px; }
+        .agh-phase {
+            display: flex; align-items: center; gap: 12px; padding: 10px 14px;
+            border-radius: 10px; background: #f8f9fa; border: 1px solid var(--glass-border);
+            margin-bottom: 8px; font-size: 0.85rem;
+        }
+        .phase-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+        .phase-label { font-weight: 700; color: var(--text-main); min-width: 110px; }
+        .phase-mode { color: var(--text-muted); }
+
+        /* ─── Pipeline Section ─── */
+        .pipeline-section { margin-top: 60px; }
+        .pipeline-viz {
+            display: grid; grid-template-columns: repeat(4, 1fr) ; gap: 0;
+            border-radius: 16px; overflow: hidden; border: 1px solid var(--glass-border);
+            box-shadow: 0 4px 18px rgba(0,0,0,.04);
+        }
+        .pipeline-tier { padding: 28px 20px; text-align: center; position: relative; }
+        .pipeline-tier:not(:last-child)::after {
+            content: "→"; position: absolute; right: -12px; top: 50%;
+            transform: translateY(-50%); font-size: 1.5rem; color: #dadce0; z-index: 2;
+        }
+        .tier-1 { background: rgba(26,115,232,.06); }
+        .tier-2 { background: rgba(234,67,53,.05); }
+        .tier-3 { background: rgba(251,188,5,.06); }
+        .tier-4 { background: rgba(52,168,83,.06); }
+        .tier-icon { font-size: 2.2rem; margin-bottom: 10px; }
+        .tier-name { font-family: var(--font-heading); font-weight: 800; font-size: 1rem; color: var(--text-main); margin-bottom: 6px; }
+        .tier-algos { font-size: 0.78rem; color: var(--text-muted); line-height: 1.6; }
+        .tier-reduction { display: inline-block; margin-top: 10px; padding: 3px 10px; border-radius: 50px; font-size: 0.7rem; font-weight: 700; }
+        .red-badge { background: rgba(234,67,53,.1); color: #c5221f; }
+        .green-badge { background: rgba(52,168,83,.1); color: #1e7e34; }
+
+        /* ─── Comparison Table ─── */
+        .comparison-table { width: 100%; border-collapse: separate; border-spacing: 0; border-radius: 16px; overflow: hidden; border: 1px solid var(--glass-border); font-size: 0.9rem; }
+        .comparison-table th { background: #f8f9fa; padding: 14px 18px; text-align: left; font-weight: 700; color: var(--text-main); border-bottom: 1px solid var(--glass-border); }
+        .comparison-table td { padding: 14px 18px; border-bottom: 1px solid #f1f3f4; color: var(--text-muted); }
+        .comparison-table tr:last-child td { border-bottom: none; }
+        .comparison-table tr:hover td { background: #fafbff; }
+        .comparison-table .our-row td { background: rgba(26,115,232,.04); font-weight: 600; color: var(--text-main); }
+        .star-badge { display: inline-block; background: linear-gradient(135deg,#1a73e8,#9c27b0); color: #fff; border-radius: 50px; padding: 2px 10px; font-size: 0.7rem; font-weight: 700; margin-left: 6px; }
+
+        /* ─── Glasspanel ─── */
+        .glass-panel { padding: 40px; border-radius: 24px; background: #ffffff; border: 1px solid var(--glass-border); box-shadow: 0 4px 20px rgba(0,0,0,0.05); margin-bottom: 40px; }
+
+        @media (max-width: 768px) {
+            .pipeline-viz { grid-template-columns: 1fr 1fr; }
+            .algo-grid { grid-template-columns: 1fr; }
+            .card-metrics { grid-template-columns: repeat(3, 1fr); }
+        }
+        @media (max-width: 480px) {
+            .pipeline-viz { grid-template-columns: 1fr; }
+            .pipeline-tier::after { display: none; }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-orb orb-1"></div>
+    <div class="bg-orb orb-2"></div>
+    <div class="bg-orb orb-3"></div>
+    <canvas id="city-canvas"></canvas>
+
+    <nav class="navbar glass">
+        <div class="nav-content">
+            <div class="logo">DDM<span>.</span></div>
+            <ul class="nav-links">
+                <li><a href="index.html#home">Home</a></li>
+                <li><a href="index.html#assignments">← Back to Assignments</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="page-container">
+
+        <header class="section-header fade-up" style="text-align:center; margin-bottom: 20px;">
+            <div class="badge">THEORY 02 • ALGORITHM SURVEY</div>
+            <h1 style="font-family:var(--font-heading); font-size: 3.2rem; line-height: 1.1; margin-bottom: 1rem; color: var(--text-main);">
+                DDM Algorithms in<br><span class="gradient-text">End-to-End Data Solutions</span>
+            </h1>
+            <p style="color:var(--text-muted); font-size: 1.15rem; max-width: 650px; margin: 0 auto 2.5rem;">
+                A comprehensive survey of Distributed Data Management algorithms—from structured trees to gossip protocols—and our proposed <strong>Adaptive Gossip-Hierarchy (AGH)</strong> algorithm.
+            </p>
+        </header>
+
+        <!-- ─ Filters ─ -->
+        <div class="algo-filters fade-up delay-1">
+            <button class="algo-filter-btn active" data-filter="all">All Algorithms</button>
+            <button class="algo-filter-btn" data-filter="structured">🌲 Structured</button>
+            <button class="algo-filter-btn" data-filter="unstructured">🌐 Unstructured</button>
+            <button class="algo-filter-btn" data-filter="statistical">📊 Statistical</button>
+            <button class="algo-filter-btn" data-filter="hybrid">⚡ Hybrid</button>
+        </div>
+
+        <!-- ─ Algorithm Cards Grid ─ -->
+        <div class="algo-grid fade-up delay-2" id="algo-grid">
+
+            <!-- TAG -->
+            <div class="algo-card" data-category="structured" onclick="openModal('tag')">
+                <div class="card-header">
+                    <span class="card-tag tag-structured">STRUCTURED</span>
+                    <div class="algo-name">TAG</div>
+                    <div class="algo-subtitle">Tiny Aggregation Service</div>
+                </div>
+                <div class="card-metrics">
+                    <div class="metric-cell">
+                        <div class="metric-label">Efficiency</div>
+                        <div class="metric-bar"><div class="metric-fill fill-green" style="width:90%"></div></div>
+                    </div>
+                    <div class="metric-cell">
+                        <div class="metric-label">Accuracy</div>
+                        <div class="metric-bar"><div class="metric-fill fill-blue" style="width:100%"></div></div>
+                    </div>
+                    <div class="metric-cell">
+                        <div class="metric-label">Resilience</div>
+                        <div class="metric-bar"><div class="metric-fill fill-red" style="width:25%"></div></div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <p class="algo-desc">A tree-based aggregation service that treats the sensor network as a distributed database, answering SQL-like queries using slot-synchronized collection phases.</p>
+                    <div class="algo-pros-cons">
+                        <div class="pros">
+                            <h5>Strengths</h5>
+                            <ul>
+                                <li>Exact results</li>
+                                <li>Optimal energy use</li>
+                                <li>Scales with depth</li>
+                            </ul>
+                        </div>
+                        <div class="cons">
+                            <h5>Weaknesses</h5>
+                            <ul>
+                                <li>Single point of failure</li>
+                                <li>Static topology only</li>
+                                <li>Tree rebuild costly</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="complexity-badge">📦 Overhead: O(n) per epoch</div>
+                </div>
+            </div>
+
+            <!-- Push-Sum -->
+            <div class="algo-card" data-category="unstructured" onclick="openModal('pushsum')">
+                <div class="card-header">
+                    <span class="card-tag tag-unstructured">UNSTRUCTURED</span>
+                    <div class="algo-name">Push-Sum</div>
+                    <div class="algo-subtitle">Gossip-Based Average Estimation</div>
+                </div>
+                <div class="card-metrics">
+                    <div class="metric-cell">
+                        <div class="metric-label">Efficiency</div>
+                        <div class="metric-bar"><div class="metric-fill fill-orange" style="width:55%"></div></div>
+                    </div>
+                    <div class="metric-cell">
+                        <div class="metric-label">Accuracy</div>
+                        <div class="metric-bar"><div class="metric-fill fill-blue" style="width:75%"></div></div>
+                    </div>
+                    <div class="metric-cell">
+                        <div class="metric-label">Resilience</div>
+                        <div class="metric-bar"><div class="metric-fill fill-green" style="width:98%"></div></div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <p class="algo-desc">Based on mass conservation — each node splits its (sum, weight) pair and gossips half to a random neighbor. The ratio s/w at every node converges exponentially to the true global average.</p>
+                    <div class="algo-pros-cons">
+                        <div class="pros">
+                            <h5>Strengths</h5>
+                            <ul>
+                                <li>No single failure point</li>
+                                <li>Works in ad-hoc nets</li>
+                                <li>Fast convergence</li>
+                            </ul>
+                        </div>
+                        <div class="cons">
+                            <h5>Weaknesses</h5>
+                            <ul>
+                                <li>Higher message count</li>
+                                <li>Approx, not exact</li>
+                                <li>Slow in sparse nets</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="complexity-badge">📦 Overhead: O(n log n)</div>
+                </div>
+            </div>
+
+            <!-- Jaccard Similarity -->
+            <div class="algo-card" data-category="statistical" onclick="openModal('jaccard')">
+                <div class="card-header">
+                    <span class="card-tag tag-statistical">STATISTICAL</span>
+                    <div class="algo-name">Jaccard Similarity</div>
+                    <div class="algo-subtitle">Set-Overlap Redundancy Filter</div>
+                </div>
+                <div class="card-metrics">
+                    <div class="metric-cell">
+                        <div class="metric-label">Efficiency</div>
+                        <div class="metric-bar"><div class="metric-fill fill-green" style="width:85%"></div></div>
+                    </div>
+                    <div class="metric-cell">
+                        <div class="metric-label">Accuracy</div>
+                        <div class="metric-bar"><div class="metric-fill fill-blue" style="width:80%"></div></div>
+                    </div>
+                    <div class="metric-cell">
+                        <div class="metric-label">Resilience</div>
+                        <div class="metric-bar"><div class="metric-fill fill-orange" style="width:55%"></div></div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <p class="algo-desc">Cluster Heads compute J(A,B) = |A∩B| / |A∪B|. If similarity exceeds threshold δ (e.g., 0.85), redundant packets are suppressed and a single representative set is forwarded.</p>
+                    <div class="algo-pros-cons">
+                        <div class="pros">
+                            <h5>Strengths</h5>
+                            <ul>
+                                <li>Massive compression</li>
+                                <li>Handles categorical data</li>
+                                <li>Tunable threshold</li>
+                            </ul>
+                        </div>
+                        <div class="cons">
+                            <h5>Weaknesses</h5>
+                            <ul>
+                                <li>Threshold-dependent</li>
+                                <li>Needs CH processing</li>
+                                <li>Set intersect cost</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="complexity-badge">📦 Metric: J(A,B) = |A∩B| / |A∪B|</div>
+                </div>
+            </div>
+
+            <!-- ANOVA -->
+            <div class="algo-card" data-category="statistical" onclick="openModal('anova')">
+                <div class="card-header">
+                    <span class="card-tag tag-statistical">STATISTICAL</span>
+                    <div class="algo-name">ANOVA Aggregation</div>
+                    <div class="algo-subtitle">Variance-Based Data Reduction</div>
+                </div>
+                <div class="card-metrics">
+                    <div class="metric-cell">
+                        <div class="metric-label">Efficiency</div>
+                        <div class="metric-bar"><div class="metric-fill fill-green" style="width:95%"></div></div>
+                    </div>
+                    <div class="metric-cell">
+                        <div class="metric-label">Accuracy</div>
+                        <div class="metric-bar"><div class="metric-fill fill-blue" style="width:82%"></div></div>
+                    </div>
+                    <div class="metric-cell">
+                        <div class="metric-label">Resilience</div>
+                        <div class="metric-bar"><div class="metric-fill fill-orange" style="width:50%"></div></div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <p class="algo-desc">Cluster Heads apply the F-statistic to compare inter-group variance against intra-group noise. If H₀ is accepted (no significant difference), all readings are replaced by a single (μ, σ²) summary.</p>
+                    <div class="algo-pros-cons">
+                        <div class="pros">
+                            <h5>Strengths</h5>
+                            <ul>
+                                <li>Highest compression</li>
+                                <li>Statistical rigour</li>
+                                <li>Anomaly detection</li>
+                            </ul>
+                        </div>
+                        <div class="cons">
+                            <h5>Weaknesses</h5>
+                            <ul>
+                                <li>Assumes normality</li>
+                                <li>CH compute-heavy</li>
+                                <li>Not exact</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="complexity-badge">📦 State: (μ, σ²) summary per cluster</div>
+                </div>
+            </div>
+
+            <!-- AGH — Our Proposal -->
+            <div class="algo-card proposal-card highlight-card" data-category="hybrid" onclick="openModal('agh')" style="grid-column: span 1;">
+                <div class="card-header" style="position:relative;">
+                    <div class="proposal-ribbon">⭐ OUR PROPOSAL</div>
+                    <span class="card-tag tag-our-proposal">HYBRID ALGORITHM</span>
+                    <div class="algo-name">AGH Protocol</div>
+                    <div class="algo-subtitle">Adaptive Gossip-Hierarchy</div>
+                </div>
+                <div class="card-metrics">
+                    <div class="metric-cell">
+                        <div class="metric-label">Efficiency</div>
+                        <div class="metric-bar"><div class="metric-fill fill-blue" style="width:82%"></div></div>
+                    </div>
+                    <div class="metric-cell">
+                        <div class="metric-label">Accuracy</div>
+                        <div class="metric-bar"><div class="metric-fill fill-blue" style="width:88%"></div></div>
+                    </div>
+                    <div class="metric-cell">
+                        <div class="metric-label">Resilience</div>
+                        <div class="metric-bar"><div class="metric-fill fill-green" style="width:95%"></div></div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <p class="algo-desc">A self-healing hybrid that operates in TAG mode for optimal efficiency, then seamlessly transitions to gossip-based consensus during network failures and re-integrates automatically.</p>
+                    <div class="agh-phases">
+                        <div class="agh-phase"><div class="phase-dot" style="background:#34a853"></div><span class="phase-label">Phase 1: Optimal</span><span class="phase-mode">TAG mode, epoch-based sleep scheduling</span></div>
+                        <div class="agh-phase"><div class="phase-dot" style="background:#fbbc05"></div><span class="phase-label">Phase 2: Degraded</span><span class="phase-mode">3 missed heartbeats → Emergency Gossip</span></div>
+                        <div class="agh-phase"><div class="phase-dot" style="background:#ea4335"></div><span class="phase-label">Phase 3: Partitioned</span><span class="phase-mode">Push-Sum consensus in sub-cluster</span></div>
+                        <div class="agh-phase"><div class="phase-dot" style="background:#1a73e8"></div><span class="phase-label">Phase 4: Recovered</span><span class="phase-mode">Leader election → re-join tree</span></div>
+                    </div>
+                    <div class="complexity-badge">📦 Data Rate: 95% delivery at 20% failure</div>
+                </div>
+            </div>
+
+        </div><!-- /algo-grid -->
+
+        <!-- ─ Comparison Table ─ -->
+        <section class="glass-panel fade-up" style="margin-top: 60px;">
+            <h2 style="font-family:var(--font-heading); font-size:1.8rem; color:var(--text-main); margin-bottom: 8px;">Performance Comparison Matrix</h2>
+            <p style="color:var(--text-muted); margin-bottom: 28px;">Qualitative evaluation across critical deployment dimensions.</p>
+            <div style="overflow-x:auto;">
+                <table class="comparison-table">
+                    <thead>
+                        <tr>
+                            <th>Algorithm</th>
+                            <th>Network Overhead</th>
+                            <th>Data Accuracy</th>
+                            <th>Fault Tolerance</th>
+                            <th>Best For</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>TAG</strong> <span style="font-size:0.75rem;color:var(--primary);">(Structured)</span></td>
+                            <td>O(n) per epoch</td>
+                            <td>✅ Exact</td>
+                            <td>⚠️ Low</td>
+                            <td>Static, energy-critical deployments</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Push-Sum</strong> <span style="font-size:0.75rem;color:#9c27b0;">(Gossip)</span></td>
+                            <td>O(n log n)</td>
+                            <td>⚠️ Approximate</td>
+                            <td>✅ Highest</td>
+                            <td>Mobile networks, high churn</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Jaccard</strong> <span style="font-size:0.75rem;color:#9a6700;">(Statistical)</span></td>
+                            <td>Low (filtered)</td>
+                            <td>✅ High</td>
+                            <td>⚠️ Moderate</td>
+                            <td>Categorical / multiset redundancy</td>
+                        </tr>
+                        <tr>
+                            <td><strong>ANOVA</strong> <span style="font-size:0.75rem;color:#9a6700;">(Statistical)</span></td>
+                            <td>Moderate</td>
+                            <td>✅ Stat-significant</td>
+                            <td>⚠️ Moderate</td>
+                            <td>Dense sensor grids with redundancy</td>
+                        </tr>
+                        <tr class="our-row">
+                            <td><strong>AGH</strong> <span class="star-badge">Our Proposal</span></td>
+                            <td>Adaptive</td>
+                            <td>✅ High (hybrid)</td>
+                            <td>✅ 95% @ 20% failures</td>
+                            <td>Mission-critical IoT, dynamic nets</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- ─ End-to-End Pipeline ─ -->
+        <section class="glass-panel pipeline-section fade-up">
+            <h2 style="font-family:var(--font-heading); font-size:1.8rem; color:var(--text-main); margin-bottom: 8px;">End-to-End Pipeline Mapping</h2>
+            <p style="color:var(--text-muted); margin-bottom: 28px;">Different algorithms govern different architectural tiers of a production data solution.</p>
+            <div class="pipeline-viz">
+                <div class="pipeline-tier tier-1">
+                    <div class="tier-icon">📡</div>
+                    <div class="tier-name">Tier 1: Edge</div>
+                    <div class="tier-algos">Local Thresholding<br>TAG Slot Distribution</div>
+                    <span class="tier-reduction red-badge">10:1 reduction</span>
+                </div>
+                <div class="pipeline-tier tier-2">
+                    <div class="tier-icon">🖥️</div>
+                    <div class="tier-name">Tier 2: Cluster Heads</div>
+                    <div class="tier-algos">ANOVA Aggregation<br>Jaccard Similarity<br>K-Means Grouping</div>
+                    <span class="tier-reduction red-badge">100:1 reduction</span>
+                </div>
+                <div class="pipeline-tier tier-3">
+                    <div class="tier-icon">🌐</div>
+                    <div class="tier-name">Tier 3: Fog Gateway</div>
+                    <div class="tier-algos">Push-Sum Gossip<br><strong>AGH Protocol</strong></div>
+                    <span class="tier-reduction green-badge">Self-healing</span>
+                </div>
+                <div class="pipeline-tier tier-4">
+                    <div class="tier-icon">☁️</div>
+                    <div class="tier-name">Tier 4: Cloud</div>
+                    <div class="tier-algos">MapReduce / Spark<br>HyperLogLog Sketches</div>
+                    <span class="tier-reduction green-badge">Global analytics</span>
+                </div>
+            </div>
+        </section>
+
+        <footer class="footer">
+            <p>© 2026 Distributed Data Management Showcase • Theory Assignment 02</p>
+        </footer>
+    </div>
+
+    <!-- ─ Modal ─ -->
+    <div class="modal" id="algo-modal" onclick="if(event.target===this)closeModal()">
+        <div class="modal-content glass">
+            <span class="close-btn" onclick="closeModal()">×</span>
+            <div class="modal-header" id="modal-header-content"></div>
+            <div class="modal-body" id="modal-body-content"></div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+    // ─── Filter Logic ───
+    document.querySelectorAll('.algo-filter-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            document.querySelectorAll('.algo-filter-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            const filter = btn.dataset.filter;
+            document.querySelectorAll('.algo-card').forEach(card => {
+                const match = filter === 'all' || card.dataset.category === filter;
+                card.style.display = match ? 'flex' : 'none';
+                card.style.opacity = match ? '1' : '0';
+            });
+        });
+    });
+
+    // ─── Modal Data ───
+    const modalData = {
+        tag: {
+            badge: 'Structured Algorithm',
+            title: 'TAG — Tiny Aggregation Service',
+            body: `<div class="modal-section">
+                <h3>🌲 How It Works</h3>
+                <p>TAG treats the sensor network as a distributed database. A root node broadcasts a SQL-like query (e.g., SELECT AVG(temperature) FROM sensors). Nodes form a spanning tree and return aggregated partial results up the tree in synchronized time slots. The root receives a single aggregate packet representing the entire network.</p>
+            </div>
+            <div class="modal-section">
+                <h3>📐 Algebraic Foundation</h3>
+                <p>TAG works best with <strong>self-decomposable</strong> functions: f(X ∪ Y) = f(X) ◇ f(Y). This includes Sum, Count, Max, Min, and Average (using Sum+Count pair). Holistic functions like Median cannot be computed without global state.</p>
+            </div>
+            <div class="modal-section">
+                <h3>🏙️ Best Scenario</h3>
+                <p><strong>Smart City Environmental Monitoring</strong> — Static infrastructure sensors benefit from TAG's epoch-based sleep scheduling, extending battery life significantly while providing exact city-wide statistics.</p>
+            </div>`
+        },
+        pushsum: {
+            badge: 'Unstructured / Gossip Algorithm',
+            title: 'Push-Sum Protocol',
+            body: `<div class="modal-section">
+                <h3>🌐 Mass Conservation Principle</h3>
+                <p>Each node maintains (s, w). Initially s=reading, w=1. Each round: send half of (s,w) to a random neighbor; keep the other half. Update s and w by summing all received values. Total mass (∑s, ∑w) is always conserved, so each node's ratio s/w converges to the global average.</p>
+            </div>
+            <div class="modal-section">
+                <h3>⚡ Convergence Speed</h3>
+                <p>Typically converges in <strong>O(log n)</strong> rounds, making it fast for large-scale deployments. Even with node failures, remaining nodes converge to the average of the surviving population.</p>
+            </div>
+            <div class="modal-section">
+                <h3>🚗 Best Scenario</h3>
+                <p><strong>Precision Agriculture & V2X</strong> — When network topology changes constantly (vehicles, tilled soil), gossip is the only viable choice. No tree to maintain, no single point of failure.</p>
+            </div>`
+        },
+        jaccard: {
+            badge: 'Statistical Redundancy Filter',
+            title: 'Jaccard Similarity Aggregation',
+            body: `<div class="modal-section">
+                <h3>📊 The Metric</h3>
+                <p>J(A, B) = |A ∩ B| / |A ∪ B|. A Cluster Head computes this coefficient between data sets from neighboring sensors. If J > δ (threshold, e.g., 0.85), the data is deemed redundant — only one representative set is forwarded.</p>
+            </div>
+            <div class="modal-section">
+                <h3>🎯 Application</h3>
+                <p>Best suited for <strong>categorical or set-valued data</strong> (e.g., detected object types, event categories). Used within cluster heads to merge readings before forwarding to the cloud backbone.</p>
+            </div>
+            <div class="modal-section">
+                <h3>🏥 Best Scenario</h3>
+                <p><strong>Remote Healthcare (Body Area Networks)</strong> — Multiple wearable sensors may simultaneously detect the same physiological event (cardiac distress). Jaccard suppresses duplicates into a single urgent alert for the hospital gateway.</p>
+            </div>`
+        },
+        anova: {
+            badge: 'Statistical Aggregation Algorithm',
+            title: 'ANOVA-Based Aggregation',
+            body: `<div class="modal-section">
+                <h3>📐 Hypothesis Testing</h3>
+                <p><strong>H₀ (Null):</strong> No significant difference between sensor group means. The Cluster Head computes the F-statistic = (Between-group variance) / (Within-group variance). If F is below the critical value, H₀ is accepted and all readings collapse into one (μ, σ²) summary.</p>
+            </div>
+            <div class="modal-section">
+                <h3>🔥 Anomaly Detection</h3>
+                <p>When ANOVA <strong>rejects</strong> H₀, it signals a localized event (e.g., fire, gas leak). The CH immediately switches to transmitting unique readings for that cluster — building anomaly detection directly into the aggregation layer.</p>
+            </div>
+            <div class="modal-section">
+                <h3>🏭 Best Scenario</h3>
+                <p><strong>Industrial IoT / Predictive Maintenance</strong> — Thousands of vibration sensors on identical machines. ANOVA compares machines of the same type; a diverging variance profile instantly flags a machine approaching failure.</p>
+            </div>`
+        },
+        agh: {
+            badge: '⭐ Our Proposed Algorithm',
+            title: 'Adaptive Gossip-Hierarchy (AGH)',
+            body: `<div class="modal-section">
+                <h3>💡 Core Insight</h3>
+                <p>No single algorithm dominates in all conditions. AGH monitors a <strong>Network Health Score</strong> (derived from heartbeat acknowledgements) and dynamically switches between TAG's efficiency and gossip's robustness in real time.</p>
+            </div>
+            <div class="modal-section">
+                <h3>🔄 The Four Phases</h3>
+                <p><strong>Phase 1 (Synchronized):</strong> Standard TAG operation with epoch-based sleep scheduling for maximum energy efficiency.<br><br>
+                <strong>Phase 2 (Healing):</strong> 3 consecutive missed heartbeats from parent triggers Emergency Gossip mode.<br><br>
+                <strong>Phase 3 (Partitioned):</strong> Isolated subtree nodes run Push-Sum amongst themselves to preserve local consensus and prevent data loss.<br><br>
+                <strong>Phase 4 (Re-integrated):</strong> Energy-aware leader election selects a new parent; node transmits the gossip aggregate to bridge the data gap and returns to Phase 1.</p>
+            </div>
+            <div class="modal-section">
+                <h3>📈 Expected Performance</h3>
+                <p>AGH maintains <strong>95% data delivery</strong> in environments with 20% node failure — compared to TAG's sub-60% under the same conditions — while retaining ~70% of pure TAG's energy efficiency.</p>
+            </div>
+            <div class="modal-section">
+                <h3>🚀 Best Scenario</h3>
+                <p><strong>Mission-Critical IoT</strong> — Any system where both high reliability and energy efficiency are non-negotiable: military sensor grids, smart power grids, intelligent transport systems.</p>
+            </div>`
+        }
+    };
+
+    function openModal(key) {
+        const data = modalData[key];
+        document.getElementById('modal-header-content').innerHTML = `
+            <span class="modal-badge">${data.badge}</span>
+            <h2>${data.title}</h2>`;
+        document.getElementById('modal-body-content').innerHTML = data.body;
+        const modal = document.getElementById('algo-modal');
+        modal.style.display = 'block';
+        requestAnimationFrame(() => modal.classList.add('show'));
+    }
+
+    function closeModal() {
+        const modal = document.getElementById('algo-modal');
+        modal.classList.remove('show');
+        setTimeout(() => { modal.style.display = 'none'; }, 300);
+    }
+    </script>
+</body>
+</html>
